@@ -59,15 +59,17 @@ public final class RegionGenerator
     public final ThreadLocal<Area> rockArea;
 
     private final long seed;
+    private final long levelSeed;
     private final FastConcurrentCache<Region> cellCache;
     private final FastConcurrentCache<RegionPartition> partitionCache;
 
     private final ChunkDataGenerator chunkDataGenerator;
 
-    public RegionGenerator(Settings settings, RandomSource random)
+    public RegionGenerator(Settings settings, RandomSource random, long levelSeed)
     {
         this.settings = settings;
         this.seed = random.nextLong();
+        this.levelSeed = levelSeed;
 
         this.cellNoise = new Cellular2D(random.nextLong()).spread(1f / Units.CELL_WIDTH_IN_GRID);
 
@@ -114,6 +116,11 @@ public final class RegionGenerator
     public long seed()
     {
         return seed;
+    }
+
+    public long levelSeed()
+    {
+        return levelSeed;
     }
 
     public ChunkDataGenerator chunkDataGenerator()
@@ -259,6 +266,7 @@ public final class RegionGenerator
         ANNOTATE_DISTANCE_TO_WEST_COAST(AnnotateDistanceToWestCoast.INSTANCE),
         ADD_MOUNTAINS(AddMountains.INSTANCE),
         ANNOTATE_BIOME_ALTITUDE(AnnotateBiomeAltitude.INSTANCE),
+        ADD_HOTSPOTS(AddHotspots.INSTANCE),
         ANNOTATE_CLIMATE(AnnotateClimate.INSTANCE),
         CHOOSE_ROCKS(ChooseRocks.INSTANCE),
         ANNOTATE_KARST_SURFACE(KarstSurfaceRocks.INSTANCE),

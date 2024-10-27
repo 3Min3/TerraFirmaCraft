@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.world.region;
 
-import net.dries007.tfc.world.biome.TFCBiomes;
 import net.dries007.tfc.world.layer.framework.Area;
 
 import static net.dries007.tfc.world.layer.TFCLayers.*;
@@ -66,6 +65,19 @@ public enum ChooseBiomes implements RegionTask
             else
             {
                 point.biome = randomSeededFrom(rngSeed, areaSeed, MID_DEPTH_OCEAN_BIOMES);
+            }
+
+            // Add hot spot biomes
+            if (point.hotSpotAge > 0)
+            {
+                if (point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH)
+                {
+                    point.biome = getOceanicHotSpotBiome(point.hotSpotAge);
+                }
+                else
+                {
+                    point.biome = getLandHotSpotBiome(point.hotSpotAge);
+                }
             }
 
             // Adjust certain biome placements by climate. Low, freshwater biomes don't make much sense appearing in
@@ -134,26 +146,56 @@ public enum ChooseBiomes implements RegionTask
         }
     }
 
+
+    //TODO: Add actual biomes instead of just placing exiting stuff
+    private int getOceanicHotSpotBiome(int age)
+    {
+        if (age == 4)
+            return TOWER_KARST_LAKE;
+        if (age == 3)
+            return TOWER_KARST_PLAINS;
+        if (age == 2)
+            return TOWER_KARST_HIGHLANDS;
+        if (age == 1)
+            return TOWER_KARST_BAY;
+        return OCEAN;
+    }
+
+    private int getLandHotSpotBiome(int age)
+    {
+        if (age == 4)
+            return TOWER_KARST_LAKE;
+        if (age == 3)
+            return TOWER_KARST_PLAINS;
+        if (age == 2)
+            return TOWER_KARST_HIGHLANDS;
+        if (age == 1)
+            return TOWER_KARST_BAY;
+        return PLAINS;
+    }
+
+    // TODO: Revert. I overrode this to make biomes easier to find
     private int getTowerKarstBiome(int biome)
     {
-        if (biome == SALT_MARSH)
-            return TOWER_KARST_BAY;
-        else if (biome == LOWLANDS)
-            return TOWER_KARST_LAKE;
-        else if (biome == PLAINS || biome == LOW_CANYONS)
-            return TOWER_KARST_PLAINS;
-        else if (biome == CANYONS)
-            return TOWER_KARST_CANYONS;
-        else if (biome == HILLS || biome == ROLLING_HILLS || biome == BADLANDS)
-            return TOWER_KARST_HILLS;
-        else if (biome == HIGHLANDS || biome == INVERTED_BADLANDS)
-            return TOWER_KARST_HIGHLANDS;
-        else if (biome == PLATEAU)
-            return EXTREME_DOLINE_PLATEAU;
-        else if (biome == OLD_MOUNTAINS || biome == MOUNTAINS || biome == OCEANIC_MOUNTAINS)
-            return EXTREME_DOLINE_MOUNTAINS;
-        else
-            return biome;
+        return SALT_FLATS;
+//        if (biome == SALT_MARSH)
+//            return TOWER_KARST_BAY;
+//        else if (biome == LOWLANDS)
+//            return TOWER_KARST_LAKE;
+//        else if (biome == PLAINS || biome == LOW_CANYONS)
+//            return TOWER_KARST_PLAINS;
+//        else if (biome == CANYONS)
+//            return TOWER_KARST_CANYONS;
+//        else if (biome == HILLS || biome == ROLLING_HILLS || biome == BADLANDS)
+//            return TOWER_KARST_HILLS;
+//        else if (biome == HIGHLANDS || biome == INVERTED_BADLANDS)
+//            return TOWER_KARST_HIGHLANDS;
+//        else if (biome == PLATEAU)
+//            return EXTREME_DOLINE_PLATEAU;
+//        else if (biome == OLD_MOUNTAINS || biome == MOUNTAINS || biome == OCEANIC_MOUNTAINS)
+//            return EXTREME_DOLINE_MOUNTAINS;
+//        else
+//            return biome;
     }
 
     private int getShilinBiome(int biome)

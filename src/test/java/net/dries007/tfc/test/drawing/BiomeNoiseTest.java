@@ -98,4 +98,10 @@ public class BiomeNoiseTest implements TestSetup
     {
         terrain.draw("noise_fengcong", fengcong(seed(), BiomeNoise.hills(seed(), 22, 32)));
     }
+
+    @Test
+    public void testShieldVolcano()
+    {
+        terrain.draw("noise_shield_volcanoes", hotSpotIntensity(1234L).scaled(SEA_LEVEL_Y - 10, SEA_LEVEL_Y + 50));
+    }
 }

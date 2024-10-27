@@ -79,7 +79,7 @@ public class RegionGeneratorTests implements TestSetup
         Arrays.fill(taskData, -1);
 
         final Settings settings = BuiltinWorldPreset.defaultSettings();
-        final RegionGenerator generator = new RegionGenerator(settings, new XoroshiroRandomSource(seed));
+        final RegionGenerator generator = new RegionGenerator(settings, new XoroshiroRandomSource(seed), seed);
 
         for (int dx = 0; dx < size; dx++)
             for (int dz = 0; dz < size; dz++)
@@ -152,7 +152,10 @@ public class RegionGeneratorTests implements TestSetup
             case ANNOTATE_DISTANCE_TO_WEST_COAST -> point.land()
                 ? green.apply(point.distanceToWestCoast / 100f)
                 : cellColor(region);
-            case ANNOTATE_BIOME_ALTITUDE -> point.land()
+            case ANNOTATE_BIOME_ALTITUDE, ANNOTATE_BIOME_ALTITUDE_POST_HOTSPOTS -> point.land()
+                ? green.apply(Mth.clampedMap(point.discreteBiomeAltitude(), 0, 3, 0, 1))
+                : continentColor(point);
+            case ANNOTATE_HOT_SPOT_AGE -> point.hotSpotAge > 0 ? hotspot(point.hotSpotAge) : point.land()
                 ? green.apply(Mth.clampedMap(point.discreteBiomeAltitude(), 0, 3, 0, 1))
                 : continentColor(point);
             case TEMPERATURE -> temperatureGradient(point, point.temperature, -25f, 35f);
@@ -394,6 +397,20 @@ public class RegionGeneratorTests implements TestSetup
         };
     }
 
+    private Color hotspot(int age)
+    {
+        if (age == 4)
+            return new Color (190, 180, 0);
+        if (age == 3)
+            return new Color (220, 110, 0);
+        if (age == 2)
+            return new Color (240, 20, 0);
+        if (age == 1)
+            return new Color (240, 0, 180);
+
+        return new Color(150, 240, 150);
+    }
+
     /**
      * Allows drawing additional visualizations between generation tasks.
      */
@@ -408,6 +425,8 @@ public class RegionGeneratorTests implements TestSetup
         ANNOTATE_DISTANCE_TO_WEST_COAST(Task.ANNOTATE_DISTANCE_TO_WEST_COAST),
         ADD_MOUNTAINS(Task.ADD_MOUNTAINS),
         ANNOTATE_BIOME_ALTITUDE(Task.ANNOTATE_BIOME_ALTITUDE),
+        ANNOTATE_HOT_SPOT_AGE(Task.ADD_HOTSPOTS),
+        ANNOTATE_BIOME_ALTITUDE_POST_HOTSPOTS(Task.ADD_HOTSPOTS),
         // Multiple steps to draw temperature, rainfall, and rainfall variance
         TEMPERATURE(Task.ANNOTATE_CLIMATE),
         RAINFALL(Task.ANNOTATE_CLIMATE),

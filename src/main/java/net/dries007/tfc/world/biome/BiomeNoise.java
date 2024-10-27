@@ -9,7 +9,9 @@ package net.dries007.tfc.world.biome;
 import java.util.Random;
 import net.minecraft.util.Mth;
 
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.BiomeNoiseSampler;
+import net.dries007.tfc.world.noise.FastNoiseLite;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 
@@ -505,6 +507,78 @@ public final class BiomeNoise
     public static Noise2D tidalFlats(long seed)
     {
         return new OpenSimplex2D(seed).octaves(4).spread(0.17f).scaled(SEA_LEVEL_Y, SEA_LEVEL_Y + 1.8f);
+    }
+
+    public static Noise2D shieldVolcano(long seed)
+    {
+        final double maxElev = SEA_LEVEL_Y + 100;
+        final double minElev = SEA_LEVEL_Y - 30;
+        return hotSpotIntensity(seed).map(y ->
+            y < 0.5 ? Mth.map(y, 0, 0.5, minElev, maxElev)
+            : y < 0.53 ? Mth.map(y, 0.5, 0.53, maxElev - 4, maxElev - 18)
+            : Mth.map(y, 0.53, 1, maxElev - 18, minElev));
+    }
+
+    // Current idea with this is a cutoff noise map to generate islands, both the region generator and the biome noise would use this map at a different scale.
+    public static Noise2D hotSpotIntensity(long seed)
+    {
+        final double horizontalScale = 0.004;
+        final double cutoff = 0.5;
+        final double rescale = 2;
+
+        Noise2D youngest = new OpenSimplex2D(seed).map(y -> {
+            y = y > cutoff ? y - cutoff : 0;
+            y = (y * rescale);
+            return y;
+        }).octaves(3).spread(horizontalScale);
+
+        Noise2D young = youngest.islandWarp(-1000, 800);
+        Noise2D old = youngest.islandWarp(-1800, 1700);
+        Noise2D oldest = youngest.islandWarp(-2400, 2600);
+        return youngest.max(young).max(old).max(oldest);
+    }
+
+    // TODO: Structure code better, write comments explaining everything that must match the region generator
+    // This must mirror the hotSpotIntensity method exactly, but return an age
+    public static Noise2D hotSpotAge(long seed)
+    {
+        final double horizontalScale = 0.004;
+        final double cutoff = 0.5;
+        final double rescale = 2;
+
+        Noise2D youngest = new OpenSimplex2D(seed).map(y -> {
+            y = y > cutoff ? y - cutoff : 0;
+            y = (y * rescale);
+            return y;
+        }).octaves(3).spread(horizontalScale);
+
+        Noise2D young = youngest.islandWarp(-1000, 800);
+        Noise2D old = youngest.islandWarp(-1800, 1700);
+        Noise2D oldest = youngest.islandWarp(-2400, 2600);
+
+        return youngest.mapAges(young, old, oldest);
+    }
+
+    // Noise for hotspot velocity vectors
+    public static Noise2D islandHash(double scale, int seed)
+    {
+        return (x, z) -> {
+            x *= scale;
+            z *= scale;
+
+            final int primeX = 501125321;
+            final int primeY = 1136930381;
+
+            int xr = FastNoiseLite.FastFloor(x);
+            int yr = FastNoiseLite.FastFloor(z);
+
+            int xPrimed = (xr - 1) * primeX;
+            int yPrimed = (yr - 1) * primeY;
+
+            int hash = FastNoiseLite.Hash(seed, xPrimed, yPrimed);
+
+            return (hash & (255 << 1)) * 0.002 + 0.5;
+        };
     }
 
     /**

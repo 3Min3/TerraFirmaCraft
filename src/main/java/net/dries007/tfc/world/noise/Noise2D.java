@@ -130,6 +130,54 @@ public interface Noise2D
         };
     }
 
+    //TODO: Get better system
+    default Noise2D islandWarp(Noise2D dx, Noise2D dz)
+    {
+        return (x, z) -> {
+            x = x + dx.noise(x, z);
+            z = z + dz.noise(x, z);
+            return Noise2D.this.noise(x, z);
+        };
+    }
+
+    //TODO: Get better system
+    default Noise2D islandWarp(int dx, int dz)
+    {
+        return (x, z) -> {
+            x = x + dx;
+            z = z + dz;
+            return Noise2D.this.noise(x, z);
+        };
+    }
+
+    default Noise2D mapAges(Noise2D young, Noise2D old, Noise2D oldest)
+    {
+        return (x, z) -> {
+            if (this.max(young).max(old).max(oldest).noise(x, z) <= -0.8)
+            {
+                return 0;
+            }
+            else if (this.noise(x, z) > young.noise(x, z) && this.noise(x, z) > old.noise(x, z) && this.noise(x, z) > oldest.noise(x, z))
+            {
+                return 1;
+            }
+            else if (young.noise(x, z) > this.noise(x, z) && young.noise(x, z) > old.noise(x, z) && young.noise(x, z) > oldest.noise(x, z))
+            {
+                return 2;
+            }
+            else if (old.noise(x, z) > young.noise(x, z) && old.noise(x, z) > this.noise(x, z) && old.noise(x, z) > oldest.noise(x, z))
+            {
+                return 3;
+            }
+            else if (oldest.noise(x, z) > young.noise(x, z) && oldest.noise(x, z) > old.noise(x, z) && oldest.noise(x, z) > this.noise(x, z))
+            {
+                return 4;
+            }
+            else
+                return 0;
+        };
+    }
+
     /**
      * Creates clamped noise by cutting off values above or below a threshold
      *

@@ -224,6 +224,8 @@ public final class Region
         public int biome = TFCLayers.OCEAN;
         public int rock = 0;
         public boolean isSurfaceRockKarst = false;
+        public byte hotSpotIntensity = 0;
+        public byte hotSpotAge = 0;
 
         private short flags;
 
