@@ -215,7 +215,7 @@ public class SurfaceBuilderContext
     /**
      * Calculates a surface depth value, taking into account altitude and slope
      *
-     * @param y                  The y value. Values over sea level (96) are treated as lower depth
+     * @param y                  The y value. Values over sea level (63) are treated as lower depth
      * @param maxDepth           The maximum surface depth
      * @param minimumReturnValue The minimum possible slope. Typically 0, -1 is used as a flag value for not placing the top surface layer on occasion.
      * @return a surface depth in the range [minimumReturnValue, maxSlope]

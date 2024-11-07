@@ -262,4 +262,12 @@ public interface Noise2D
             }
         };
     }
+
+    // TODO: Description
+    default Noise2D pinch(double value, Noise2D intensity)
+    {
+        return (x, z) -> {
+            return Mth.lerp(intensity.noise(x, z), this.noise(x, z), value);
+        };
+    }
 }

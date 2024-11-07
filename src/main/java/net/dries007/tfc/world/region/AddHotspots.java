@@ -40,8 +40,10 @@ public enum AddHotspots implements RegionTask
             double val = hotspotIntensity.noise(shift(point.x), shift(point.z));
             if (val > threshold && edgeDist > 0.05)
             {
-                point.hotSpotAge = (byte) (int) hotspotAge.noise(shift(point.x), shift(point.z));
-                point.setLand();
+                final byte age = (byte) (int) hotspotAge.noise(shift(point.x), shift(point.z));
+                point.hotSpotAge = age;
+                if (age != 4)
+                    point.setLand();
                 queue.enqueue(point.index);
             }
         }
@@ -67,8 +69,9 @@ public enum AddHotspots implements RegionTask
                             if (intensityNoise.noise(shift(next.x), shift(next.z)) > expansionThreshold)
                             {
                                 queue.enqueue(next.index);
-                                next.setLand();
                                 next.hotSpotAge = lastAge;
+                                if (lastAge != 4)
+                                    next.setLand();
                             }
                             // This guarantees the 8 points around any caldera are filled in to keep biome blending away from the crater
                             else if (intensityNoise.noise(shift(next.x) - dx, shift(next.z) - dz ) > threshold)

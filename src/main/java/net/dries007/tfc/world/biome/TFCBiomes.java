@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.river.RiverBlendType;
-import net.dries007.tfc.world.surface.builder.ActiveShieldVolcanoSurfaceBuilder;
+import net.dries007.tfc.world.surface.builder.ShieldVolcanoSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.BadlandsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.DuneSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.GrassyDunesSurfaceBuilder;
@@ -146,15 +146,15 @@ public final class TFCBiomes
 
     // Shield Volcanoes
     //TODO: Custom surface builders
-    public static final BiomeExtension ACTIVE_OCEANIC_SHIELD_VOLCANO = register("active_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.activeShieldVolcano(seed, 0, BiomeNoise.activeHotSpots(seed))).surface(ActiveShieldVolcanoSurfaceBuilder.ACTIVE).volcanoes(4, 0, 20, 28, true).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension DORMANT_OCEANIC_SHIELD_VOLCANO = register("dormant_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, 0, BiomeNoise.dormantHotSpots(seed))).surface(NormalSurfaceBuilder.ROCKY).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension EXTINCT_OCEANIC_SHIELD_VOLCANO = register("extinct_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, 0, BiomeNoise.extinctHotSpots(seed))).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension ANCIENT_OCEANIC_SHIELD_VOLCANO = register("ancient_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.ancientShieldVolcano(seed, 45, 95, BiomeNoise.ancientHotSpots(seed))).surface(NormalSurfaceBuilder.INSTANCE).spawnable().salty().type(RiverBlendType.CAVE));
+    public static final BiomeExtension ACTIVE_OCEANIC_SHIELD_VOLCANO = register("active_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.activeShieldVolcano(seed, 0, BiomeNoise.activeHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.ACTIVE).volcanoes(4, 0, 20, 28, true).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension DORMANT_OCEANIC_SHIELD_VOLCANO = register("dormant_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, 0, BiomeNoise.dormantHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension EXTINCT_OCEANIC_SHIELD_VOLCANO = register("extinct_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.extinctShieldVolcano(seed, 0, BiomeNoise.extinctHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension ANCIENT_OCEANIC_SHIELD_VOLCANO = register("ancient_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.ancientShieldVolcano(seed, 45, 95, BiomeNoise.ancientHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).spawnable().salty().type(RiverBlendType.CAVE));
 
-    public static final BiomeExtension ACTIVE_CONTINENTAL_SHIELD_VOLCANO = register("active_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.activeShieldVolcano(seed, 0, BiomeNoise.activeHotSpots(seed))).surface(ActiveShieldVolcanoSurfaceBuilder.ACTIVE).volcanoes(4, 0, 20, 28, true).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension DORMANT_CONTINENTAL_SHIELD_VOLCANO = register("dormant_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, 0, BiomeNoise.dormantHotSpots(seed))).surface(NormalSurfaceBuilder.ROCKY).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension EXTINCT_CONTINENTAL_SHIELD_VOLCANO = register("extinct_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, 0, BiomeNoise.extinctHotSpots(seed))).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension ANCIENT_CONTINENTAL_SHIELD_VOLCANO = register("ancient_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.weatheredShieldVolcano(seed, 90, 130, BiomeNoise.ancientHotSpots(seed))).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension ACTIVE_CONTINENTAL_SHIELD_VOLCANO = register("active_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.activeShieldVolcano(seed, 0, BiomeNoise.activeHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.ACTIVE).volcanoes(4, 0, 20, 28, true).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension DORMANT_CONTINENTAL_SHIELD_VOLCANO = register("dormant_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, 0, BiomeNoise.dormantHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension EXTINCT_CONTINENTAL_SHIELD_VOLCANO = register("extinct_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.extinctShieldVolcano(seed, 0, BiomeNoise.extinctHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension ANCIENT_CONTINENTAL_SHIELD_VOLCANO = register("ancient_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.weatheredShieldVolcano(seed, 90, 130, BiomeNoise.ancientHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).spawnable().type(RiverBlendType.CAVE));
 
     public static final BiomeExtension SHIELD_VOLCANO_SHORE = register("shield_volcano_shore", builder().heightmap(seed -> BiomeNoise.shieldVolcanoShore(seed)).surface(ShoreSurfaceBuilder.INSTANCE).spawnable().salty().shore().type(RiverBlendType.CAVE));
 

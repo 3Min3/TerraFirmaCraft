@@ -1,0 +1,189 @@
+/*
+ * Licensed under the EUPL, Version 1.2.
+ * You may obtain a copy of the Licence at:
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ */
+
+package net.dries007.tfc.world.surface.builder;
+
+
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.monster.piglin.StopHoldingItemIfNoLongerAdmiring;
+import net.minecraft.world.level.block.state.BlockState;
+
+import net.dries007.tfc.world.biome.BiomeNoise;
+import net.dries007.tfc.world.noise.Noise2D;
+import net.dries007.tfc.world.noise.OpenSimplex2D;
+import net.dries007.tfc.world.surface.SurfaceBuilderContext;
+import net.dries007.tfc.world.surface.SurfaceState;
+import net.dries007.tfc.world.surface.SurfaceStates;
+
+public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
+{
+    public static final SurfaceBuilderFactory ACTIVE = seed -> new ShieldVolcanoSurfaceBuilder(seed, BiomeNoise.activeShieldVolcano(seed, 0, BiomeNoise.activeHotSpots(seed)), true);
+    public static final SurfaceBuilderFactory DORMANT = seed -> new ShieldVolcanoSurfaceBuilder(seed, BiomeNoise.activeShieldVolcano(seed, 0, BiomeNoise.activeHotSpots(seed)), false);
+
+    // TODO: Remove or use height noise
+    private final Noise2D heightNoise;
+    private final boolean hasLavaFlows;
+    private final long seed;
+
+    ShieldVolcanoSurfaceBuilder(long seed, Noise2D heightNoise, boolean hasLavaFlows)
+    {
+        this.heightNoise = heightNoise;
+        this.hasLavaFlows = hasLavaFlows;
+        this.seed = seed;
+    }
+
+    @Override
+    public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
+    {
+        final Noise2D noise = new OpenSimplex2D(seed).octaves(2).spread(0.25);
+
+        final int x = context.pos().getX();
+        final int z = context.pos().getZ();
+//        final double height = this.heightNoise.noise(x, z);
+//
+//        final int depth = height > 50 ? (int) (height - 50) : 0;
+//        final int newEndY = startY - depth;
+
+        if (!hasLavaFlows)
+        {
+            buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
+        }
+        else
+        {
+            final double noiseValue = noise.noise(x, z);
+            final Noise2D lavaFlows = BiomeNoise.lavaFlow(seed);
+            final double flowValue = lavaFlows.noise(x, z);
+
+            if (flowValue < 0.40)
+                // TODO: Should sand/sandstone be force-set to volcanic sand varieties?
+                buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
+            else if (flowValue < 0.50)
+            {
+                if (noiseValue > 0)
+                    buildSurface(context, startY, endY, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT, SurfaceStates.BASALT_GRAVEL);
+                else
+                    buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
+            }
+            else if (flowValue < 0.75)
+            {
+                if (noiseValue > 0)
+                    buildSurface(context, startY, endY, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT, SurfaceStates.BASALT_GRAVEL);
+                else
+                    buildSurface(context, startY, endY, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
+            }
+            else
+            {
+                if (noiseValue > -0.6)
+                    buildSurface(context, startY, endY, SurfaceStates.BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
+                else
+                    buildSurface(context, startY, endY, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
+            }
+        }
+    }
+
+    // TODO: Copied wholesale from NormalSurfaceBuilder, once this is working see if this can just be incorporated into that
+    // TODO: Though, the VolcanoesSurfaceBuilder seems to be organized similarly, so maybe it's whatever
+    public void buildSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topState, SurfaceState midState, SurfaceState underState, SurfaceState underWaterState)
+    {
+        int surfaceDepth = -1;
+        int surfaceY = 0;
+        boolean underwaterLayer = false, firstLayer = false;
+        SurfaceState surfaceState = SurfaceStates.BASALT;
+
+        //TODO: dynamic?
+        int basaltDepth = (int) (20 * context.weight());
+
+        for (int y = startY; y >= endY; --y)
+        {
+            final BlockState stateAt = context.getBlockState(y);
+            if (stateAt.isAir())
+            {
+                surfaceDepth = -1; // Reached air, reset surface depth
+            }
+            else if (context.isDefaultBlock(stateAt))
+            {
+                // All in this if statement only occurs on the first cycle/when air resets the cycle
+                if (surfaceDepth == -1)
+                {
+                    surfaceY = y; // Reached surface. Place top state and switch to subsurface layers
+                    firstLayer = true;
+                    if (y < context.getSeaLevel() - 1)
+                    {
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 2, -1);
+                        if (surfaceDepth < -1)
+                        {
+                            // No surface layers
+                            surfaceDepth = 0;
+                            context.setBlockState(y, SurfaceStates.BASALT);
+                        }
+                        else if (surfaceDepth == -1)
+                        {
+                            // Place one subsurface layer, skipping the top layer entirely
+                            surfaceDepth = 0;
+                            context.setBlockState(y, underWaterState);
+                        }
+                        else
+                        {
+                            context.setBlockState(y, underWaterState);
+                        }
+                        surfaceState = underWaterState;
+                        underwaterLayer = true;
+                    }
+                    else
+                    {
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, -3);
+                        if (surfaceDepth < -1)
+                        {
+                            // No surface layers
+                            context.setBlockState(y, SurfaceStates.BASALT);
+                            surfaceDepth = 0;
+                        }
+                        else if (surfaceDepth == -1)
+                        {
+                            // Place one subsurface layer, skipping the top layer entirely
+                            surfaceDepth = 0;
+                            context.setBlockState(y, underState);
+                        }
+                        else
+                        {
+                            context.setBlockState(y, topState);
+                        }
+                        surfaceState = midState;
+                        underwaterLayer = false;
+                    }
+                }
+                else if (surfaceDepth > 0)
+                {
+                    // Subsurface layers
+                    surfaceDepth--;
+                    context.setBlockState(y, surfaceState);
+                    if (surfaceDepth == 0)
+                    {
+                        // Next subsurface layer
+                        if (firstLayer)
+                        {
+                            firstLayer = false;
+                            if (underwaterLayer)
+                            {
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 4, 0);
+                            }
+                            else
+                            {
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 7, 0);
+                                surfaceState = underState;
+                            }
+                        }
+                    }
+                }
+                else if (basaltDepth > 0)
+                {
+                    context.setBlockState(y, SurfaceStates.BASALT);
+                    basaltDepth--;
+                }
+            }
+        }
+    }
+}
