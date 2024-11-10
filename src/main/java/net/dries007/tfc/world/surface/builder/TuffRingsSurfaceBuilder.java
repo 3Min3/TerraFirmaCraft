@@ -6,92 +6,59 @@
 
 package net.dries007.tfc.world.surface.builder;
 
-
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.monster.piglin.StopHoldingItemIfNoLongerAdmiring;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-import net.dries007.tfc.world.biome.BiomeNoise;
+import net.dries007.tfc.world.biome.TuffRingNoise;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
 
-public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
+public class TuffRingsSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory ACTIVE = seed -> new ShieldVolcanoSurfaceBuilder(seed, true);
-    public static final SurfaceBuilderFactory DORMANT = seed -> new ShieldVolcanoSurfaceBuilder(seed, false);
-
-    private final boolean hasLavaFlows;
-    private final long seed;
-
-    ShieldVolcanoSurfaceBuilder(long seed, boolean hasLavaFlows)
+    public static SurfaceBuilderFactory create(SurfaceBuilderFactory parent)
     {
-        this.hasLavaFlows = hasLavaFlows;
-        this.seed = seed;
+        return seed -> new TuffRingsSurfaceBuilder(parent.apply(seed), seed);
+    }
+
+    private final SurfaceBuilder parent;
+
+    private final TuffRingNoise tuffRingNoise;
+
+    public TuffRingsSurfaceBuilder(SurfaceBuilder parent, long seed)
+    {
+        this.parent = parent;
+        this.tuffRingNoise = new TuffRingNoise(seed);
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        final Noise2D noise = new OpenSimplex2D(seed).octaves(2).spread(0.25);
-
-        final int x = context.pos().getX();
-        final int z = context.pos().getZ();
-//        final double height = this.heightNoise.noise(x, z);
-//
-//        final int depth = height > 50 ? (int) (height - 50) : 0;
-//        final int newEndY = startY - depth;
-
-        if (!hasLavaFlows)
+        if (context.biome().hasTuffRings())
         {
-            buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
-        }
-        else
-        {
-            final double noiseValue = noise.noise(x, z);
-            final Noise2D lavaFlows = BiomeNoise.lavaFlow(seed);
-            final double flowValue = lavaFlows.noise(x, z);
-
-            if (flowValue < 0.40)
-                // TODO: Should sand/sandstone be force-set to volcanic sand varieties?
-                buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
-            else if (flowValue < 0.50)
+            // TODO: Add a tuff cone rarity to the biome extension rather than reusing volcano rarity?
+            final float easing = tuffRingNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), context.biome().getVolcanoRarity());
+            if (easing > 0.6f)
             {
-                if (noiseValue > 0)
-                    buildSurface(context, startY, endY, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT, SurfaceStates.BASALT_GRAVEL);
-                else
-                    buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
-            }
-            else if (flowValue < 0.75)
-            {
-                if (noiseValue > 0)
-                    buildSurface(context, startY, endY, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT, SurfaceStates.BASALT_GRAVEL);
-                else
-                    buildSurface(context, startY, endY, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
-            }
-            else
-            {
-                if (noiseValue > -0.6)
-                    buildSurface(context, startY, endY, SurfaceStates.BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
-                else
-                    buildSurface(context, startY, endY, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
+                buildTuffSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.TUFF, SurfaceStates.TUFF_GRAVEL);
+                return;
             }
         }
+        parent.buildSurface(context, startY, endY);
     }
 
-    // TODO: Copied wholesale from NormalSurfaceBuilder, once this is working see if this can just be incorporated into that
-    // TODO: Though, the VolcanoesSurfaceBuilder seems to be organized similarly, so maybe it's whatever
-    public void buildSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topState, SurfaceState midState, SurfaceState underState, SurfaceState underWaterState)
+    private void buildTuffSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topState, SurfaceState midState, SurfaceState underState, SurfaceState underWaterState)
     {
         int surfaceDepth = -1;
         int surfaceY = 0;
         boolean underwaterLayer = false, firstLayer = false;
-        SurfaceState surfaceState = SurfaceStates.BASALT;
+        SurfaceState surfaceState = underState;
 
         //TODO: dynamic?
-        int basaltDepth = (int) (20 * context.weight());
+        int tuffDepth = (int) (20 * context.weight());
 
         for (int y = startY; y >= endY; --y)
         {
@@ -114,7 +81,7 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
                         {
                             // No surface layers
                             surfaceDepth = 0;
-                            context.setBlockState(y, SurfaceStates.BASALT);
+                            context.setBlockState(y, SurfaceStates.TUFF);
                         }
                         else if (surfaceDepth == -1)
                         {
@@ -135,7 +102,7 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
                         if (surfaceDepth < -1)
                         {
                             // No surface layers
-                            context.setBlockState(y, SurfaceStates.BASALT);
+                            context.setBlockState(y, SurfaceStates.TUFF);
                             surfaceDepth = 0;
                         }
                         else if (surfaceDepth == -1)
@@ -175,10 +142,10 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
                         }
                     }
                 }
-                else if (basaltDepth > 0)
+                else if (tuffDepth > 0)
                 {
-                    context.setBlockState(y, SurfaceStates.BASALT);
-                    basaltDepth--;
+                    context.setBlockState(y, SurfaceStates.TUFF);
+                    tuffDepth--;
                 }
             }
         }

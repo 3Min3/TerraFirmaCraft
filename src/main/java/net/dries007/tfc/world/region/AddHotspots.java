@@ -73,9 +73,10 @@ public enum AddHotspots implements RegionTask
                                 if (lastAge != 4)
                                     next.setLand();
                             }
-                            // This guarantees the 8 points around any caldera are filled in to keep biome blending away from the crater
-                            else if (intensityNoise.noise(shift(next.x) - dx, shift(next.z) - dz ) > threshold)
+                            // This adds an extra layer outside where the hotspot exceeds the threshold as a buffer against oceans
+                            else if (!next.land() && intensityNoise.noise(shift(next.x) - dx, shift(next.z) - dz ) > expansionThreshold)
                             {
+                                // Do not set land on the outer layer
                                 next.hotSpotAge = lastAge;
                                 if (lastAge != 4)
                                     next.setLand();

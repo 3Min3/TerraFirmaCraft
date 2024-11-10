@@ -18,6 +18,7 @@ import net.dries007.tfc.world.TFCChunkGenerator;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.river.RiverBlendType;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
+import net.dries007.tfc.world.surface.builder.TuffRingsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.VolcanoesSurfaceBuilder;
 
 public class BiomeBuilder
@@ -36,6 +37,7 @@ public class BiomeBuilder
     private RiverBlendType riverBlendType;
     private boolean salty;
     private boolean volcanic;
+    private boolean hasTuffRings;
     private int volcanoFrequency;
     private int volcanoBasaltHeight;
     private boolean spawnable;
@@ -53,6 +55,7 @@ public class BiomeBuilder
         riverBlendType = RiverBlendType.NONE;
         salty = false;
         volcanic = false;
+        hasTuffRings = false;
         volcanoFrequency = 0;
         volcanoBasaltHeight = 0;
         spawnable = false;
@@ -171,11 +174,28 @@ public class BiomeBuilder
         return this;
     }
 
+    public BiomeBuilder tuffRings(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight)
+    {
+        this.hasTuffRings = true;
+        this.volcanoFrequency = frequency;
+        this.volcanoBasaltHeight = TFCChunkGenerator.SEA_LEVEL_Y + volcanoBasaltHeight;
+
+        assert heightNoiseFactory != null : "tuff rings must be called after setting a heightmap";
+        assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
+
+        final LongFunction<Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
+        this.heightNoiseFactory = seed -> BiomeNoise.addTuffRings(seed, baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight);
+        this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
+
+        this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(surfaceBuilderFactory);
+
+        return this;
+    }
 
     public BiomeExtension build(ResourceKey<Biome> key)
     {
         assert surfaceBuilderFactory != null : "missing surface builder";
 
-        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, salty, volcanic, volcanoFrequency, volcanoBasaltHeight, spawnable, rivers, shore, sandyRiverShores);
+        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, salty, volcanic, hasTuffRings, volcanoFrequency, volcanoBasaltHeight, spawnable, rivers, shore, sandyRiverShores);
     }
 }

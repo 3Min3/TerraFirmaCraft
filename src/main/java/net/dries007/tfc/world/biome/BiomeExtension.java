@@ -38,6 +38,7 @@ public final class BiomeExtension
     private final RiverBlendType riverBlendType;
     private final boolean salty;
     private final boolean volcanic;
+    private final boolean hasTuffCones;
     private final int volcanoRarity;
     private final int volcanoBasaltHeight;
     private final boolean spawnable;
@@ -49,7 +50,7 @@ public final class BiomeExtension
     @Nullable private Set<PlacedFeature> flattenedFeatureSet;
     @Nullable private Biome prevBiome;
 
-    BiomeExtension(ResourceKey<Biome> key, @Nullable LongFunction<BiomeNoiseSampler> noiseFactory, SurfaceBuilderFactory surfaceBuilderFactory, AquiferLookahead aquiferSurfaceHeight, BiomeBlendType biomeBlendType, RiverBlendType riverBlendType, boolean salty, boolean volcanic, int volcanoRarity, int volcanoBasaltHeight, boolean spawnable, boolean rivers, boolean shore, boolean sandyRiverShores)
+    BiomeExtension(ResourceKey<Biome> key, @Nullable LongFunction<BiomeNoiseSampler> noiseFactory, SurfaceBuilderFactory surfaceBuilderFactory, AquiferLookahead aquiferSurfaceHeight, BiomeBlendType biomeBlendType, RiverBlendType riverBlendType, boolean salty, boolean volcanic, boolean hasTuffCones, int volcanoRarity, int volcanoBasaltHeight, boolean spawnable, boolean rivers, boolean shore, boolean sandyRiverShores)
     {
         this.key = key;
         this.noiseFactory = noiseFactory;
@@ -59,6 +60,7 @@ public final class BiomeExtension
         this.riverBlendType = riverBlendType;
         this.salty = salty;
         this.volcanic = volcanic;
+        this.hasTuffCones = hasTuffCones;
         this.volcanoRarity = volcanoRarity;
         this.volcanoBasaltHeight = volcanoBasaltHeight;
         this.spawnable = spawnable;
@@ -95,6 +97,11 @@ public final class BiomeExtension
     public boolean isVolcanic()
     {
         return volcanic;
+    }
+
+    public boolean hasTuffRings()
+    {
+        return hasTuffCones;
     }
 
     public boolean isSpawnable()

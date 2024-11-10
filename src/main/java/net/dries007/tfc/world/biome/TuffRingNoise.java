@@ -16,7 +16,7 @@ import net.dries007.tfc.world.noise.OpenSimplex2D;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
-public final class VolcanoNoise
+public final class TuffRingNoise
 {
     private static float calculateEasing(float f1)
     {
@@ -29,20 +29,17 @@ public final class VolcanoNoise
     }
 
     /**
-     * @param t The unscaled square distance from the volcano, roughly in [0, 1.2]
-     * @return A noise function determining the volcano's height at any given position, in the range [0, 1]
+     * @param t The unscaled square distance from the tuff ring center, roughly in [0, 1.2]
+     * @return A noise function determining the tuff ring's height at any given position, in the range [0, 1]
      */
     private static float calculateShape(float t)
     {
-        if (t > 0.025f)
-        {
-            return (5f / (9f * t + 1) - 0.5f) * 0.279173646008f;
-        }
-        else
-        {
-            float a = (t * 9f + 0.05f);
-            return (8f * a * a + 2.97663265306f) * 0.279173646008f;
-        }
+        // TODO: Re-write with a proper scale instead of this garbage
+        return t < 0.03f ? 0 // Flat
+            : t < 0.10f ? t * 7f - 0.21f // Slope up to 0.5
+            : t < 0.15f ? t * 6.6667f // Cliff, 0.67 slope to 1.0
+            : t < 0.20f ? 1 - (t - 0.15f) * 6.6667f // Ridge, slope 1.0 down to 0.67
+            : 1.5f - (5 * t); // Cliff base, slope 0.5 down
     }
 
     private final Cellular2D cellNoise;
@@ -51,44 +48,32 @@ public final class VolcanoNoise
     /**
      * @param seed The level seed - important, this is used from multiple different locations (base noise, surface builder, placement/decorator), and must have the same seed.
      */
-    public VolcanoNoise(long seed)
+    public TuffRingNoise(long seed)
     {
-        cellNoise = new Cellular2D(seed).spread(0.009f);
-        jitterNoise = new OpenSimplex2D(seed + 1234123L).octaves(2).scaled(-0.0016f, 0.0016f).spread(0.128f);
+        cellNoise = new Cellular2D(seed).spread(0.003f);
+        jitterNoise = new OpenSimplex2D(seed + 1234123L).octaves(2).scaled(-0.032f, 0.032f).spread(0.064f);
     }
 
-    public double modifyHeight(double x, double z, double baseHeight, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight)
-    {
-        final Cellular2D.Cell cell = sampleCell(x, z, rarity);
-        if (cell != null)
-        {
-            final float easing = Mth.clamp(VolcanoNoise.calculateEasing((float) cell.f1()) + (float) jitterNoise.noise(x, z), 0, 1);
-            final float shape = VolcanoNoise.calculateShape(1 - easing);
-            final float volcanoHeight = SEA_LEVEL_Y + baseVolcanoHeight + shape * scaleVolcanoHeight;
-            final float volcanoAdditionalHeight = shape * scaleVolcanoHeight;
-            return Mth.lerp(easing, baseHeight, 0.5f * (volcanoHeight + Math.max(volcanoHeight, baseHeight + 0.4f * volcanoAdditionalHeight)));
-        }
-        return baseHeight;
-    }
-
-    // Alternate version of modifyHeight used for shield volcanoes that directly adds to the base noise
-    public double addHeight(double x, double z, Noise2D baseNoise, int rarity, int scaleVolcanoHeight)
+    public double modifyHeight(double x, double z, Noise2D baseNoise, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight, long seed)
     {
         final Cellular2D.Cell cell = sampleCell(x, z, rarity);
         final double baseHeight = baseNoise.noise(x, z);
-        final double baseCenterHeight = cell == null ? baseHeight : baseNoise.noise(cell.cx(), cell.cy());
-
         if (cell != null)
         {
             final float f1 = (float) cell.f1();
-            final float easing = Mth.clamp(VolcanoNoise.calculateEasing(f1) + (float) jitterNoise.noise(x, z), 0, 1);
-            final float shape = VolcanoNoise.calculateShape(1 - easing);
-            final float volcanoHeight = (float) (baseCenterHeight + shape * scaleVolcanoHeight);
-            final float volcanoAdditionalHeight = shape * scaleVolcanoHeight;
-            final float weight = 10f * Mth.clamp((float) cell.f2() - f1, 0f, 0.1f); // TODO: Do we want to apply this to all volcanoes? Avoids cliffs at edges of cells
-            return Mth.lerp(easing * weight, baseHeight, (0.6 * volcanoHeight + 0.4 * Math.max(volcanoHeight, baseHeight + 0.6f * volcanoAdditionalHeight)));
+            final float easing = Mth.clamp(TuffRingNoise.calculateEasing(f1) + (float) jitterNoise.noise(x, z), 0, 1);
+            final float shape = TuffRingNoise.calculateShape(1 - easing);
+            final float ringAdditionalHeight = shape * scaleVolcanoHeight + (shape > 0.5 ? addNoise(seed, x, z) : 0f);
+            final float ringHeight = SEA_LEVEL_Y + baseVolcanoHeight + ringAdditionalHeight;
+            //Linearly scales between baseHeight and the max of baseHeight and ringHeight near the edges of cells
+            return Mth.lerp(50 * Mth.clamp(cell.f2() - f1, 0, 0.02), baseHeight, Math.max(ringHeight, baseHeight));
         }
         return baseHeight;
+    }
+
+    public float addNoise(long seed, double x, double z)
+    {
+        return (float) new OpenSimplex2D(seed).octaves(2).spread(0.1).scaled(-2, 8).noise(x, z);
     }
 
     /**

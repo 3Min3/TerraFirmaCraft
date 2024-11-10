@@ -229,11 +229,24 @@ public class TFCLayers
         {
             return TOWER_KARST_BAY;
         }
-        if (value == ACTIVE_CONTINENTAL_SHIELD_VOLCANO || value == DORMANT_CONTINENTAL_SHIELD_VOLCANO || value == EXTINCT_CONTINENTAL_SHIELD_VOLCANO || value == ANCIENT_CONTINENTAL_SHIELD_VOLCANO
-        || value == ACTIVE_OCEANIC_SHIELD_VOLCANO || value == DORMANT_OCEANIC_SHIELD_VOLCANO || value == EXTINCT_OCEANIC_SHIELD_VOLCANO)
+        if (value == ACTIVE_CONTINENTAL_SHIELD_VOLCANO)
         {
-            return SHIELD_VOLCANO_SHORE;
+            return ACTIVE_OCEANIC_SHIELD_VOLCANO;
         }
+        if (value == DORMANT_CONTINENTAL_SHIELD_VOLCANO)
+        {
+            return DORMANT_OCEANIC_SHIELD_VOLCANO;
+        }
+        if (value == EXTINCT_CONTINENTAL_SHIELD_VOLCANO)
+        {
+            return EXTINCT_OCEANIC_SHIELD_VOLCANO;
+        }
+        // TODO: Cleanup
+//        if (value == ACTIVE_CONTINENTAL_SHIELD_VOLCANO || value == DORMANT_CONTINENTAL_SHIELD_VOLCANO || value == EXTINCT_CONTINENTAL_SHIELD_VOLCANO || value == ANCIENT_CONTINENTAL_SHIELD_VOLCANO
+//        || value == ACTIVE_OCEANIC_SHIELD_VOLCANO || value == DORMANT_OCEANIC_SHIELD_VOLCANO || value == EXTINCT_OCEANIC_SHIELD_VOLCANO)
+//        {
+//            return SHIELD_VOLCANO_SHORE;
+//        }
         return SHORE;
     }
 

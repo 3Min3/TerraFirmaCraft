@@ -8,6 +8,7 @@ package net.dries007.tfc.world.surface;
 
 import java.util.function.Supplier;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 
@@ -29,6 +30,10 @@ public final class SurfaceStates
     public static final SurfaceState BASALT = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.RAW).get().defaultBlockState();
     public static final SurfaceState BASALT_COBBLE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.COBBLE).get().defaultBlockState();
     public static final SurfaceState BASALT_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
+
+    // TODO: Make these TFC blocks
+    public static final SurfaceState TUFF = context -> Blocks.TUFF.defaultBlockState();
+    public static final SurfaceState TUFF_GRAVEL = context -> Blocks.GRAVEL.defaultBlockState();
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone
      */
