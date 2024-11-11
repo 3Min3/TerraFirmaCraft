@@ -22,7 +22,7 @@ public enum AddHotspots implements RegionTask
         final Region region = context.region;
         final long seed = context.generator().levelSeed();
         final double threshold = 0.65;
-        final double expansionThreshold = 0.05;
+        final double expansionThreshold = 0.15;
 
         final Noise2D hotspotAge = BiomeNoise.hotSpotAge(seed).spread(128);
         final Noise2D hotspotIntensity = BiomeNoise.hotSpotIntensity(seed).spread(128); //TODO: Remove the point.intensity, maybe even remove this noise map

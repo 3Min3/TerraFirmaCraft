@@ -538,11 +538,11 @@ public final class BiomeNoise
     // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
     public static Noise2D dormantShieldVolcano(long seed, Noise2D hotspot)
     {
-        final double seaElev = SEA_LEVEL_Y - 20;
+        final double seaElev = SEA_LEVEL_Y + 9;
         final double mtnBaseElev = SEA_LEVEL_Y + 40;
-        final double calderaEdgeElev = SEA_LEVEL_Y + 90;
-        final double cliffEdgeElev = SEA_LEVEL_Y + 55;
-        final double calderaCenterElev = SEA_LEVEL_Y;
+        final double calderaEdgeElev = SEA_LEVEL_Y + 70;
+        final double cliffEdgeElev = SEA_LEVEL_Y + 50;
+        final double calderaCenterElev = SEA_LEVEL_Y + 15;
 
         final Noise2D volcano = hotspot.map(y ->
             y < 0.45 ? Mth.map(y, 0, 0.45, seaElev, mtnBaseElev) // Coastal slopes
@@ -556,14 +556,14 @@ public final class BiomeNoise
             .spread(0.06f)
             .warped(warp)
             .map(x -> x > 0.4 ? x - 0.8f : -x)
-            .scaled(-0.4f, 0.8f, 0.9, 1);
+            .scaled(-0.4f, 0.8f, -12, 12);
 
-        return volcano.lazyProduct(surface);
+        return volcano.add(surface);
     }
 
     public static Noise2D extinctShieldVolcano(long seed, Noise2D hotspot)
     {
-        final double seaElev = SEA_LEVEL_Y - 20;
+        final double seaElev = SEA_LEVEL_Y + 6;
         final double mtnBaseElev = SEA_LEVEL_Y + 25;
         final double calderaEdgeElev = SEA_LEVEL_Y + 55;
         final double cliffEdgeElev = SEA_LEVEL_Y + 25;
@@ -575,25 +575,29 @@ public final class BiomeNoise
                 : y < 0.62 ? Mth.map(y, 0.6, 0.62, calderaEdgeElev, cliffEdgeElev) // Caldera cliff
                 : y < 0.75 ? Mth.map(y, 0.62, 0.75, cliffEdgeElev, calderaCenterElev) : calderaCenterElev); // Downward slope to flat bottom of caldera
 
+        final Noise2D cliffiness = new OpenSimplex2D(seed + 130993L).spread(0.025);
+
         final OpenSimplex2D warp = new OpenSimplex2D(seed + 43L).octaves(4).spread(0.03f).scaled(-100f, 100f);
         final Noise2D surface = new OpenSimplex2D(seed + 44L)
             .octaves(4)
             .spread(0.06f)
             .warped(warp)
             .map(x -> x > 0.4 ? x - 0.8f : -x)
-            .scaled(-0.4f, 0.8f, 0.9, 1);
+            .scaled(-0.4f, 0.8f, -9, 9);
 
-        return volcano.lazyProduct(surface);
+        return volcano.add(surface);
     }
 
     // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
+    // TODO: Re-write with constant values instead of parameters
     public static Noise2D ancientShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
     {
         final Noise2D volcano = hotspot.map(y ->
-            y < 0.25 ? Mth.map(y, 0, 0.25, minElev, SEA_LEVEL_Y)
-                : y < 0.4 ? Mth.map(y, 0.25, 0.4, SEA_LEVEL_Y, maxElev)
-                : y < 0.42 ? Mth.map(y, 0.4, 0.42, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
-                : y < 0.53 ? Mth.map(y, 0.42, 0.53, minElev * 0.5 + maxElev * 0.6, minElev) : minElev);
+                y < 0.25 ? minElev
+                : y < 0.45 ? Mth.map(y, 0.25, 0.45, minElev, SEA_LEVEL_Y)
+                : y < 0.6 ? Mth.map(y, 0.45, 0.6, SEA_LEVEL_Y, maxElev)
+                : y < 0.62 ? Mth.map(y, 0.6, 0.62, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
+                : y < 0.75 ? Mth.map(y, 0.62, 0.75, minElev * 0.5 + maxElev * 0.6, minElev) : minElev);
 
         final OpenSimplex2D warp = new OpenSimplex2D(seed + 43L).octaves(4).spread(0.03f).scaled(-100f, 100f);
         final Noise2D surface = new OpenSimplex2D(seed + 44L)

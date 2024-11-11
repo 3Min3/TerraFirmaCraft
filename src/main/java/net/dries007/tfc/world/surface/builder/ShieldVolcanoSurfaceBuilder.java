@@ -20,15 +20,18 @@ import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory ACTIVE = seed -> new ShieldVolcanoSurfaceBuilder(seed, true);
-    public static final SurfaceBuilderFactory DORMANT = seed -> new ShieldVolcanoSurfaceBuilder(seed, false);
+    public static final SurfaceBuilderFactory ACTIVE = seed -> new ShieldVolcanoSurfaceBuilder(seed, true, false);
+    public static final SurfaceBuilderFactory DORMANT = seed -> new ShieldVolcanoSurfaceBuilder(seed, false, false);
+    public static final SurfaceBuilderFactory SHORE = seed -> new ShieldVolcanoSurfaceBuilder(seed, false, true);
 
     private final boolean hasLavaFlows;
+    private final boolean sandy;
     private final long seed;
 
-    ShieldVolcanoSurfaceBuilder(long seed, boolean hasLavaFlows)
+    ShieldVolcanoSurfaceBuilder(long seed, boolean hasLavaFlows, boolean sandy)
     {
         this.hasLavaFlows = hasLavaFlows;
+        this.sandy = sandy;
         this.seed = seed;
     }
 
@@ -39,14 +42,29 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
 
         final int x = context.pos().getX();
         final int z = context.pos().getZ();
-//        final double height = this.heightNoise.noise(x, z);
-//
-//        final int depth = height > 50 ? (int) (height - 50) : 0;
-//        final int newEndY = startY - depth;
+        final SurfaceState top;
+        final SurfaceState mid;
+        final SurfaceState bot;
+        final SurfaceState underwater;
+
+        if (sandy)
+        {
+            top = SurfaceStates.RARE_SHORE_SAND;
+            mid = SurfaceStates.RARE_SHORE_SAND;
+            bot = SurfaceStates.RARE_SHORE_SANDSTONE;
+            underwater = SurfaceStates.RARE_SHORE_SAND;
+        }
+        else
+        {
+            top = SurfaceStates.GRASS;
+            mid = SurfaceStates.DIRT;
+            bot = SurfaceStates.BASALT_GRAVEL;
+            underwater = SurfaceStates.BASALT_GRAVEL;
+        }
 
         if (!hasLavaFlows)
         {
-            buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
+            buildSurface(context, startY, endY, top, mid, bot, underwater);
         }
         else
         {
@@ -55,14 +73,13 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
             final double flowValue = lavaFlows.noise(x, z);
 
             if (flowValue < 0.40)
-                // TODO: Should sand/sandstone be force-set to volcanic sand varieties?
-                buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
+                buildSurface(context, startY, endY, top, mid, bot, underwater);
             else if (flowValue < 0.50)
             {
                 if (noiseValue > 0)
                     buildSurface(context, startY, endY, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT, SurfaceStates.BASALT_GRAVEL);
                 else
-                    buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL);
+                    buildSurface(context, startY, endY, top, mid, bot, underwater);
             }
             else if (flowValue < 0.75)
             {
