@@ -25,7 +25,6 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
     }
 
     private final SurfaceBuilder parent;
-
     private final TuffRingNoise tuffRingNoise;
 
     public TuffRingsSurfaceBuilder(SurfaceBuilder parent, long seed)
@@ -39,11 +38,17 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
     {
         if (context.biome().hasTuffRings())
         {
-            // TODO: Add a tuff cone rarity to the biome extension rather than reusing volcano rarity?
-            final float easing = tuffRingNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), context.biome().getVolcanoRarity());
+            final float easing = tuffRingNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), context.biome().getTuffRingRarity());
             if (easing > 0.6f)
             {
-                buildTuffSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.TUFF, SurfaceStates.TUFF_GRAVEL);
+                if (startY < 66)
+                {
+                    buildTuffSurface(context, startY, endY, SurfaceStates.RARE_SHORE_SAND, SurfaceStates.RARE_SHORE_SAND, SurfaceStates.TUFF, SurfaceStates.TUFF_GRAVEL);
+                }
+                else
+                {
+                    buildTuffSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.TUFF, SurfaceStates.TUFF_GRAVEL);
+                }
                 return;
             }
         }
@@ -57,7 +62,6 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
         boolean underwaterLayer = false, firstLayer = false;
         SurfaceState surfaceState = underState;
 
-        //TODO: dynamic?
         int tuffDepth = (int) (20 * context.weight());
 
         for (int y = startY; y >= endY; --y)

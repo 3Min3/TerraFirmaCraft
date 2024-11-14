@@ -48,9 +48,6 @@ public enum ChooseRocks implements RegionTask
                 {
                     if (point.island() && dist < 4 || point.hotSpotAge > 0)
                     {
-                        // TODO: should there be some sort of special rock biome for shield volcanoes? Ocean works fine for
-                        //  oceanic ones, but maybe for land there should be a flood basalt type? This could replace the basalt top layer
-                        //  variant of "LAND" rocks
                         type = VOLCANIC;
                         minDist = dist;
                     }

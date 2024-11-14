@@ -589,15 +589,14 @@ public final class BiomeNoise
     }
 
     // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
-    // TODO: Re-write with constant values instead of parameters
-    public static Noise2D ancientShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
+    public static Noise2D sunkenShieldVolcano(long seed, Noise2D hotspot)
     {
         final Noise2D volcano = hotspot.map(y ->
-                y < 0.25 ? minElev
-                : y < 0.45 ? Mth.map(y, 0.25, 0.45, minElev, SEA_LEVEL_Y)
-                : y < 0.6 ? Mth.map(y, 0.45, 0.6, SEA_LEVEL_Y, maxElev)
-                : y < 0.62 ? Mth.map(y, 0.6, 0.62, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
-                : y < 0.75 ? Mth.map(y, 0.62, 0.75, minElev * 0.5 + maxElev * 0.6, minElev) : minElev);
+                y < 0.25 ? 50
+                : y < 0.45 ? Mth.map(y, 0.25, 0.45, 50, SEA_LEVEL_Y)
+                : y < 0.6 ? Mth.map(y, 0.45, 0.6, SEA_LEVEL_Y, 95)
+                : y < 0.62 ? Mth.map(y, 0.6, 0.62, 94, 80)
+                : y < 0.75 ? Mth.map(y, 0.62, 0.75, 80, 52) : 52);
 
         final OpenSimplex2D warp = new OpenSimplex2D(seed + 43L).octaves(4).spread(0.03f).scaled(-100f, 100f);
         final Noise2D surface = new OpenSimplex2D(seed + 44L)
@@ -607,33 +606,19 @@ public final class BiomeNoise
             .map(x -> x > 0.4 ? x - 0.8f : -x)
             .scaled(-0.4f, 0.8f, -6, 6);
 
-        final Noise2D scale = new OpenSimplex2D(seed + 789913L).octaves(2).spread(0.008f).scaled(0.6, 1);
+        final Noise2D scale = new OpenSimplex2D(seed + 789913L).octaves(2).spread(0.008f).scaled(0.45, 1);
 
         return volcano.lazyProduct(scale).add(surface);
     }
 
-    // Shield volcanoes with minimal erosion, recent lava flows on surface, no/small calderas
-    public static Noise2D shieldVolcanoShore(long seed)
-    {
-        final double edgeElev = SEA_LEVEL_Y - 15;
-        final double centerElev = SEA_LEVEL_Y + 15;
-
-        final Noise2D volcano = hotSpotIntensity(seed).map(y ->
-            y < 0.75 ? Mth.map(y, 0, 0.75, edgeElev, centerElev) // Slope upwards to mountain top or crater rim
-                : centerElev);
-
-        return volcano;
-
-    }
-
     // Shield volcanoes with heavily eroded calderas
-    public static Noise2D weatheredShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
+    public static Noise2D ancientShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
     {
         final Noise2D volcano = hotspot.map(y ->
-            y < 0.15 ? minElev
-                : y < 0.6 ? Mth.map(y, 0.15, 0.6, minElev, maxElev)
-                : y < 0.63 ? Mth.map(y, 0.6, 0.63, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
-                : y < 0.7 ? Mth.map(y, 0.63, 0.7, minElev * 0.5 + maxElev * 0.6, minElev) : minElev);
+            y < 0.15 ? 90
+                : y < 0.6 ? Mth.map(y, 0.15, 0.6, 90, 130)
+                : y < 0.63 ? Mth.map(y, 0.6, 0.63, 129, 108)
+                : y < 0.7 ? Mth.map(y, 0.63, 0.7, 108, 90) : 90);
 
         final OpenSimplex2D warp = new OpenSimplex2D(seed + 43L).octaves(4).spread(0.03f).scaled(-100f, 100f);
         final Noise2D surface = new OpenSimplex2D(seed + 44L)
@@ -645,7 +630,7 @@ public final class BiomeNoise
 
         final Noise2D valleys = new OpenSimplex2D(seed + 90183L).spread(0.01).ridged().octaves(3).scaled(maxElev * 2.2, minElev);
 
-        final Noise2D scale = new OpenSimplex2D(seed + 789913L).octaves(2).spread(0.008f).scaled(0.5, 1);
+        final Noise2D scale = new OpenSimplex2D(seed + 789913L).octaves(2).spread(0.008f).scaled(0.6, 1);
 
         return volcano.lazyProduct(scale).min(valleys).add(surface);
     }
@@ -655,12 +640,12 @@ public final class BiomeNoise
         return new OpenSimplex2D(seed + 23891L).ridged().spread(0.01);
     }
 
-    // Currently erupting location in a hotspot chain
+    // Currently erupting location in a hotspot chain, used for biome noise and regional hotspot placement
     public static Noise2D activeHotSpots(long seed)
     {
         final double horizontalScale = 0.003;
-        final double cutoff = 0.72;
-        final double rescale = 6.2;
+        final double cutoff = 0.75;
+        final double rescale = 7.2;
 
         Noise2D hotspots = new OpenSimplex2D(seed).map(y -> {
             y = y > cutoff ? y - cutoff : 0;
@@ -673,23 +658,22 @@ public final class BiomeNoise
     // Second location in a hotspot chain
     public static Noise2D dormantHotSpots(long seed)
     {
-        return activeHotSpots(seed).islandWarp(plateRegions(seed), 1024, 0).map(y -> Math.max(y - 0.1, 0) * 1.111);
+        return activeHotSpots(seed).hotSpotWarp(plateRegions(seed), 1024, 0).map(y -> Math.max(y - 0.1, 0) * 1.111);
     }
 
     // Third location in a hotspot chain
     public static Noise2D extinctHotSpots(long seed)
     {
-        return activeHotSpots(seed).islandWarp(plateRegions(seed), 2048, 0.25).map(y -> Math.max(y - 0.2, 0) * 1.25);
+        return activeHotSpots(seed).hotSpotWarp(plateRegions(seed), 2048, 0.25).map(y -> Math.max(y - 0.2, 0) * 1.25);
     }
 
     // Fourth location in a hotspot chain
     public static Noise2D ancientHotSpots(long seed)
     {
-        return activeHotSpots(seed).islandWarp(plateRegions(seed), 3072, 0.5).map(y -> Math.max(y - 0.3, 0) * 1.4286);
+        return activeHotSpots(seed).hotSpotWarp(plateRegions(seed), 3072, 0.5).map(y -> Math.max(y - 0.3, 0) * 1.4286);
     }
 
-
-    // TODO: Current idea with this is a cutoff noise map to generate islands, both the region generator and the biome noise would use this map at a different scale.
+    // Intensity of hotspots, regardless of age
     public static Noise2D hotSpotIntensity(long seed)
     {
         return activeHotSpots(seed).max(dormantHotSpots(seed)).max(extinctHotSpots(seed)).max(ancientHotSpots(seed));
@@ -715,10 +699,10 @@ public final class BiomeNoise
     /**
      * Adds volcanoes to a base noise height map
      */
-    public static Noise2D addVolcanoes(long seed, Noise2D baseNoise, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight, boolean additive)
+    public static Noise2D addVolcanoes(long seed, Noise2D baseNoise, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight, boolean onShieldVolcano)
     {
         final VolcanoNoise volcanoes = new VolcanoNoise(seed);
-        return (x, z) -> additive ? volcanoes.addHeight(x, z, baseNoise, rarity, scaleVolcanoHeight) : volcanoes.modifyHeight(x, z, baseNoise.noise(x, z), rarity, baseVolcanoHeight, scaleVolcanoHeight);
+        return (x, z) -> onShieldVolcano ? volcanoes.modifyShieldVolcanoHeight(x, z, baseNoise.noise(x, z), rarity, baseVolcanoHeight, scaleVolcanoHeight) : volcanoes.modifyHeight(x, z, baseNoise.noise(x, z), rarity, baseVolcanoHeight, scaleVolcanoHeight);
     }
 
     /**

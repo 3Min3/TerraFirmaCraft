@@ -13,7 +13,6 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import net.dries007.tfc.util.IArtist;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.TFCBiomes;
-import net.dries007.tfc.world.chunkdata.ForestType;
 import net.dries007.tfc.world.layer.framework.AreaFactory;
 import net.dries007.tfc.world.layer.framework.TypedAreaFactory;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
@@ -93,15 +92,13 @@ public class TFCLayers
     public static final int CENOTE_PLATEAU = idFor(TFCBiomes.CENOTE_PLATEAU);
     public static final int EXTREME_DOLINE_PLATEAU = idFor(TFCBiomes.EXTREME_DOLINE_PLATEAU);
     public static final int EXTREME_DOLINE_MOUNTAINS = idFor(TFCBiomes.EXTREME_DOLINE_MOUNTAINS);
-    public static final int ACTIVE_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.ACTIVE_OCEANIC_SHIELD_VOLCANO);
-    public static final int DORMANT_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.DORMANT_OCEANIC_SHIELD_VOLCANO);
-    public static final int EXTINCT_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.EXTINCT_OCEANIC_SHIELD_VOLCANO);
-    public static final int ANCIENT_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.ANCIENT_OCEANIC_SHIELD_VOLCANO);
-    public static final int ACTIVE_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.ACTIVE_CONTINENTAL_SHIELD_VOLCANO);
-    public static final int DORMANT_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.DORMANT_CONTINENTAL_SHIELD_VOLCANO);
-    public static final int EXTINCT_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.EXTINCT_CONTINENTAL_SHIELD_VOLCANO);
-    public static final int ANCIENT_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.ANCIENT_CONTINENTAL_SHIELD_VOLCANO);
+    public static final int ACTIVE_SHIELD_VOLCANO = idFor(TFCBiomes.ACTIVE_SHIELD_VOLCANO);
+    public static final int DORMANT_SHIELD_VOLCANO = idFor(TFCBiomes.DORMANT_SHIELD_VOLCANO);
+    public static final int EXTINCT_SHIELD_VOLCANO = idFor(TFCBiomes.EXTINCT_SHIELD_VOLCANO);
+    public static final int ANCIENT_SHIELD_VOLCANO = idFor(TFCBiomes.ANCIENT_SHIELD_VOLCANO);
+    public static final int SUNKEN_SHIELD_VOLCANO = idFor(TFCBiomes.SUNKEN_SHIELD_VOLCANO);
     public static final int SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.SHIELD_VOLCANO_SHORE);
+    public static final int OLD_SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.OLD_SHIELD_VOLCANO_SHORE);
 
     public static BiomeExtension getFromLayerId(int id)
     {
@@ -212,7 +209,7 @@ public class TFCLayers
     public static boolean hasShore(int value)
     {
         return value != LOWLANDS && value != SALT_MARSH && value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
-            && value != TOWER_KARST_BAY && value != ANCIENT_OCEANIC_SHIELD_VOLCANO;
+            && value != TOWER_KARST_BAY && value != SUNKEN_SHIELD_VOLCANO;
     }
 
     public static int shoreFor(int value)
@@ -229,31 +226,21 @@ public class TFCLayers
         {
             return TOWER_KARST_BAY;
         }
-//        if (value == ACTIVE_CONTINENTAL_SHIELD_VOLCANO)
-//        {
-//            return ACTIVE_OCEANIC_SHIELD_VOLCANO;
-//        }
-//        if (value == DORMANT_CONTINENTAL_SHIELD_VOLCANO)
-//        {
-//            return DORMANT_OCEANIC_SHIELD_VOLCANO;
-//        }
-//        if (value == EXTINCT_CONTINENTAL_SHIELD_VOLCANO)
-//        {
-//            return EXTINCT_OCEANIC_SHIELD_VOLCANO;
-//        }
-        // TODO: Cleanup
-        if (value == ACTIVE_CONTINENTAL_SHIELD_VOLCANO || value == DORMANT_CONTINENTAL_SHIELD_VOLCANO || value == EXTINCT_CONTINENTAL_SHIELD_VOLCANO || value == ANCIENT_CONTINENTAL_SHIELD_VOLCANO
-        || value == ACTIVE_OCEANIC_SHIELD_VOLCANO || value == DORMANT_OCEANIC_SHIELD_VOLCANO || value == EXTINCT_OCEANIC_SHIELD_VOLCANO)
+        if (value == ACTIVE_SHIELD_VOLCANO)
         {
             return SHIELD_VOLCANO_SHORE;
+        }
+        if (value == DORMANT_SHIELD_VOLCANO || value == EXTINCT_SHIELD_VOLCANO || value == ANCIENT_SHIELD_VOLCANO)
+        {
+            return OLD_SHIELD_VOLCANO_SHORE;
         }
         return SHORE;
     }
 
     public static boolean hasLake(int value)
     {
-        return (!isOcean(value) && value != BADLANDS && value != ACTIVE_CONTINENTAL_SHIELD_VOLCANO && value != DORMANT_CONTINENTAL_SHIELD_VOLCANO
-            && value != EXTINCT_CONTINENTAL_SHIELD_VOLCANO && value != ANCIENT_CONTINENTAL_SHIELD_VOLCANO);
+        return (!isOcean(value) && value != BADLANDS && value != ACTIVE_SHIELD_VOLCANO && value != DORMANT_SHIELD_VOLCANO
+            && value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO);
     }
 
     public static int lakeFor(int value)

@@ -40,6 +40,7 @@ public class BiomeBuilder
     private boolean hasTuffRings;
     private int volcanoFrequency;
     private int volcanoBasaltHeight;
+    private int tuffRingFrequency;
     private boolean spawnable;
     private boolean rivers;
     private boolean shore;
@@ -174,11 +175,10 @@ public class BiomeBuilder
         return this;
     }
 
-    public BiomeBuilder tuffRings(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight)
+    public BiomeBuilder tuffRings(int frequency, int baseHeight, int scaleHeight)
     {
         this.hasTuffRings = true;
-        this.volcanoFrequency = frequency;
-        this.volcanoBasaltHeight = TFCChunkGenerator.SEA_LEVEL_Y + volcanoBasaltHeight;
+        this.tuffRingFrequency = frequency;
 
         assert heightNoiseFactory != null : "tuff rings must be called after setting a heightmap";
         assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
@@ -196,6 +196,6 @@ public class BiomeBuilder
     {
         assert surfaceBuilderFactory != null : "missing surface builder";
 
-        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, salty, volcanic, hasTuffRings, volcanoFrequency, volcanoBasaltHeight, spawnable, rivers, shore, sandyRiverShores);
+        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, salty, volcanic, hasTuffRings, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, spawnable, rivers, shore, sandyRiverShores);
     }
 }

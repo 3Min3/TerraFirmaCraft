@@ -72,21 +72,18 @@ public final class VolcanoNoise
     }
 
     // Alternate version of modifyHeight used for shield volcanoes that directly adds to the base noise
-    public double addHeight(double x, double z, Noise2D baseNoise, int rarity, int scaleVolcanoHeight)
+    public double modifyShieldVolcanoHeight(double x, double z, double baseHeight, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight)
     {
         final Cellular2D.Cell cell = sampleCell(x, z, rarity);
-        final double baseHeight = baseNoise.noise(x, z);
-        final double baseCenterHeight = cell == null ? baseHeight : baseNoise.noise(cell.cx(), cell.cy());
-
         if (cell != null)
         {
             final float f1 = (float) cell.f1();
             final float easing = Mth.clamp(VolcanoNoise.calculateEasing(f1) + (float) jitterNoise.noise(x, z), 0, 1);
             final float shape = VolcanoNoise.calculateShape(1 - easing);
-            final float volcanoHeight = (float) (baseCenterHeight + shape * scaleVolcanoHeight);
             final float volcanoAdditionalHeight = shape * scaleVolcanoHeight;
-            final float weight = 10f * Mth.clamp((float) cell.f2() - f1, 0f, 0.1f); // TODO: Do we want to apply this to all volcanoes? Avoids cliffs at edges of cells
-            return Mth.lerp(easing * weight, baseHeight, (0.6 * volcanoHeight + 0.4 * Math.max(volcanoHeight, baseHeight + 0.6f * volcanoAdditionalHeight)));
+            final float volcanoHeight = (SEA_LEVEL_Y + baseVolcanoHeight + volcanoAdditionalHeight);
+            final float weight = 10f * Mth.clamp((float) cell.f2() - f1, 0f, 0.1f);
+            return Mth.lerp(easing * weight, baseHeight, (0.2 * volcanoHeight + 0.8 * Math.max(volcanoHeight, baseHeight + 0.6f * volcanoAdditionalHeight)));
         }
         return baseHeight;
     }

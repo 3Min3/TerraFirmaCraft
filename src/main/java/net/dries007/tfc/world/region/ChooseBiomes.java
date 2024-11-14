@@ -68,15 +68,16 @@ public enum ChooseBiomes implements RegionTask
             }
 
             // Add hot spot biomes
-            if (point.hotSpotAge > 0)
+            byte age = point.hotSpotAge;
+            if (age > 0)
             {
-                if (point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH)
+                if (age == 4 && point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH)
                 {
-                    point.biome = getOceanicHotSpotBiome(point.hotSpotAge);
+                    point.biome = SUNKEN_SHIELD_VOLCANO;
                 }
                 else
                 {
-                    point.biome = getLandHotSpotBiome(point.hotSpotAge);
+                    point.biome = getHotSpotBiome(point.hotSpotAge);
                 }
             }
 
@@ -146,30 +147,16 @@ public enum ChooseBiomes implements RegionTask
         }
     }
 
-
-    private int getOceanicHotSpotBiome(int age)
+    private int getHotSpotBiome(int age)
     {
         if (age == 4)
-            return ANCIENT_OCEANIC_SHIELD_VOLCANO;
+            return ANCIENT_SHIELD_VOLCANO;
         if (age == 3)
-            return EXTINCT_OCEANIC_SHIELD_VOLCANO;
+            return EXTINCT_SHIELD_VOLCANO;
         if (age == 2)
-            return DORMANT_OCEANIC_SHIELD_VOLCANO;
+            return DORMANT_SHIELD_VOLCANO;
         if (age == 1)
-            return ACTIVE_OCEANIC_SHIELD_VOLCANO;
-        return OCEAN;
-    }
-
-    private int getLandHotSpotBiome(int age)
-    {
-        if (age == 4)
-            return ANCIENT_CONTINENTAL_SHIELD_VOLCANO;
-        if (age == 3)
-            return EXTINCT_CONTINENTAL_SHIELD_VOLCANO;
-        if (age == 2)
-            return DORMANT_CONTINENTAL_SHIELD_VOLCANO;
-        if (age == 1)
-            return ACTIVE_CONTINENTAL_SHIELD_VOLCANO;
+            return ACTIVE_SHIELD_VOLCANO;
         return PLAINS;
     }
 

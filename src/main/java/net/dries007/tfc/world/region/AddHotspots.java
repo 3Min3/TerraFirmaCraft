@@ -25,13 +25,12 @@ public enum AddHotspots implements RegionTask
         final double expansionThreshold = 0.15;
 
         final Noise2D hotspotAge = BiomeNoise.hotSpotAge(seed).spread(128);
-        final Noise2D hotspotIntensity = BiomeNoise.hotSpotIntensity(seed).spread(128); //TODO: Remove the point.intensity, maybe even remove this noise map
+        final Noise2D hotspotIntensity = BiomeNoise.hotSpotIntensity(seed).spread(128);
         final Cellular2D plateRegions = BiomeNoise.plateRegions(seed).spread(128);
 
         final IntArrayFIFOQueue queue = new IntArrayFIFOQueue();
 
         // If a location reaches a value of at least exceeding a threshold value, a hot spot is placed in the region
-        //TODO: Limit number of chains per cell? Remove intensity map?
         for (final var point : region.points())
         {
              final Cellular2D.Cell cell = plateRegions.cell(point.x, point.z);

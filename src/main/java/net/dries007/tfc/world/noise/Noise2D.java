@@ -130,17 +130,7 @@ public interface Noise2D
         };
     }
 
-    //TODO: Get better system
-    default Noise2D islandWarp(Noise2D dx, Noise2D dz)
-    {
-        return (x, z) -> {
-            x = x + dx.noise(x, z);
-            z = z + dz.noise(x, z);
-            return Noise2D.this.noise(x, z);
-        };
-    }
-
-    default Noise2D islandWarp(Noise2D warp, int velocityScale, double accelScale)
+    default Noise2D hotSpotWarp(Noise2D warp, int velocityScale, double accelScale)
     {
         return (x, z) -> {
             // Random vector
@@ -148,7 +138,7 @@ public interface Noise2D
             // Random magnitude from pev vector by multiplying and taking modulo, random direction based on magnitude
             final double uz = (Math.abs(ux * 16) % 1 > 0.5 ? 1 : -1) * (ux * 256) % 1;
 
-            // Increase magnitude of vector to ensure islands don't generate on top of each other
+            // Increase magnitude of vector to ensure islands in the same chain don't generate on top of each other
             final int sx = ux > 0 ? 1 : -1;
             final int sz = uz > 0 ? 1 : -1;
             final double vx = (ux + sx) * velocityScale;
@@ -260,14 +250,6 @@ public interface Noise2D
             {
                 return Noise2D.this.noise(x, z);
             }
-        };
-    }
-
-    // TODO: Description
-    default Noise2D pinch(double value, Noise2D intensity)
-    {
-        return (x, z) -> {
-            return Mth.lerp(intensity.noise(x, z), this.noise(x, z), value);
         };
     }
 }

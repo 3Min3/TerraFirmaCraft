@@ -34,7 +34,6 @@ public final class TuffRingNoise
      */
     private static float calculateShape(float t)
     {
-        // TODO: Re-write with a proper scale instead of this garbage
         return t < 0.03f ? 0 // Flat
             : t < 0.10f ? t * 7f - 0.21f // Slope up to 0.5
             : t < 0.15f ? t * 6.6667f // Cliff, 0.67 slope to 1.0

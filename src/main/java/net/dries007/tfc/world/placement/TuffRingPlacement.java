@@ -70,7 +70,7 @@ public class TuffRingPlacement extends PlacementModifier
         {
             if (center)
             {
-                final BlockPos center = local.tuffRingNoise.calculateCenter(pos.getX(), pos.getY(), pos.getZ(), variants.getVolcanoRarity());
+                final BlockPos center = local.tuffRingNoise.calculateCenter(pos.getX(), pos.getY(), pos.getZ(), variants.getTuffRingRarity());
                 if (center != null)
                 {
                     if (level instanceof WorldGenRegion generating && !ensureCanWrite(generating, center))
@@ -80,7 +80,7 @@ public class TuffRingPlacement extends PlacementModifier
                     return Stream.of(center);
                 }
             }
-            else if (local.tuffRingNoise.calculateEasing(pos.getX(), pos.getZ(), variants.getVolcanoRarity()) > this.distance)
+            else if (local.tuffRingNoise.calculateEasing(pos.getX(), pos.getZ(), variants.getTuffRingRarity()) > this.distance)
             {
                 return Stream.of(pos);
             }

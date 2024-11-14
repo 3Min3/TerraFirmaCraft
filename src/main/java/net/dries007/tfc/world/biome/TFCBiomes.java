@@ -145,23 +145,14 @@ public final class TFCBiomes
     }
 
     // Shield Volcanoes
-    //TODO: Custom shore surface builders
-    //TODO: Either use additive volcano code, or get rid of code
-    // TODO: Non-additive volcanoes seems fine, except that they make cliffs at cell edges, so maybe we just rename the additive bit to be a edge-clamped
-    // TODO: Get rid of most oceanic shield voclano biomes, general renaming
-    public static final BiomeExtension ACTIVE_OCEANIC_SHIELD_VOLCANO = register("active_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.activeShieldVolcano(seed, BiomeNoise.activeHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.ACTIVE).volcanoes(4, 0, 20, 28, true).spawnable().salty().type(RiverBlendType.CAVE));
-    public static final BiomeExtension DORMANT_OCEANIC_SHIELD_VOLCANO = register("dormant_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed,  BiomeNoise.dormantHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(2, 8, 36, 28).spawnable().salty().type(RiverBlendType.CAVE));
-    public static final BiomeExtension EXTINCT_OCEANIC_SHIELD_VOLCANO = register("extinct_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.extinctShieldVolcano(seed, BiomeNoise.extinctHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(2, 8, 26, 28).spawnable().salty().type(RiverBlendType.CAVE));
-    public static final BiomeExtension ANCIENT_OCEANIC_SHIELD_VOLCANO = register("ancient_oceanic_shield_volcano", builder().heightmap(seed -> BiomeNoise.ancientShieldVolcano(seed, 45, 95, BiomeNoise.ancientHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(3, -8, 24, 28).spawnable().salty().type(RiverBlendType.CAVE));
+    public static final BiomeExtension ACTIVE_SHIELD_VOLCANO = register("active_shield_volcano", builder().heightmap(seed -> BiomeNoise.activeShieldVolcano(seed, BiomeNoise.activeHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.ACTIVE).volcanoes(4, 15, 25, 28, true).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension DORMANT_SHIELD_VOLCANO = register("dormant_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, BiomeNoise.dormantHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(2, 0, 36).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension EXTINCT_SHIELD_VOLCANO = register("extinct_shield_volcano", builder().heightmap(seed -> BiomeNoise.extinctShieldVolcano(seed, BiomeNoise.extinctHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(2, 0, 26).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension ANCIENT_SHIELD_VOLCANO = register("ancient_shield_volcano", builder().heightmap(seed -> BiomeNoise.ancientShieldVolcano(seed, 90, 130, BiomeNoise.ancientHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(3, -16, 30).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension SUNKEN_SHIELD_VOLCANO = register("sunken_shield_volcano", builder().heightmap(seed -> BiomeNoise.sunkenShieldVolcano(seed, BiomeNoise.ancientHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(3, -8, 24).aquiferHeightOffset(-16).spawnable().salty().type(RiverBlendType.CAVE));
 
-    public static final BiomeExtension ACTIVE_CONTINENTAL_SHIELD_VOLCANO = register("active_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.activeShieldVolcano(seed, BiomeNoise.activeHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.ACTIVE).volcanoes(4, 0, 20, 28, true).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension DORMANT_CONTINENTAL_SHIELD_VOLCANO = register("dormant_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.dormantShieldVolcano(seed, BiomeNoise.dormantHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(2, 0, 36, 28).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension EXTINCT_CONTINENTAL_SHIELD_VOLCANO = register("extinct_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.extinctShieldVolcano(seed, BiomeNoise.extinctHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(2, 0, 26, 28).spawnable().type(RiverBlendType.CAVE));
-    public static final BiomeExtension ANCIENT_CONTINENTAL_SHIELD_VOLCANO = register("ancient_continental_shield_volcano", builder().heightmap(seed -> BiomeNoise.weatheredShieldVolcano(seed, 90, 130, BiomeNoise.ancientHotSpots(seed))).surface(ShieldVolcanoSurfaceBuilder.DORMANT).tuffRings(3, -16, 30, 28).spawnable().type(RiverBlendType.CAVE));
-
-    // TODO: Separate shore that has tuff cones
     public static final BiomeExtension SHIELD_VOLCANO_SHORE = register("shield_volcano_shore", builder().heightmap(BiomeNoise::shore).surface(ShieldVolcanoSurfaceBuilder.SHORE).spawnable().salty().shore().type(RiverBlendType.TALL_CANYON));
-
+    public static final BiomeExtension OLD_SHIELD_VOLCANO_SHORE = register("old_shield_volcano_shore", builder().heightmap(BiomeNoise::shore).surface(ShieldVolcanoSurfaceBuilder.SHORE).tuffRings(3, -8, 26).spawnable().salty().shore().type(RiverBlendType.TALL_CANYON));
 
     public static boolean hasExtension(CommonLevelAccessor level, Biome biome)
     {

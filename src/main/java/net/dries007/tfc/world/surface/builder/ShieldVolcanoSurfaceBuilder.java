@@ -98,8 +98,6 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
         }
     }
 
-    // TODO: Copied wholesale from NormalSurfaceBuilder, once this is working see if this can just be incorporated into that
-    // TODO: Though, the VolcanoesSurfaceBuilder seems to be organized similarly, so maybe it's whatever
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topState, SurfaceState midState, SurfaceState underState, SurfaceState underWaterState)
     {
         int surfaceDepth = -1;
@@ -107,7 +105,6 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
         boolean underwaterLayer = false, firstLayer = false;
         SurfaceState surfaceState = SurfaceStates.BASALT;
 
-        //TODO: dynamic?
         int basaltDepth = (int) (20 * context.weight());
 
         for (int y = startY; y >= endY; --y)
