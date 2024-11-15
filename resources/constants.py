@@ -174,6 +174,7 @@ ROCKS: dict[str, Rock] = {
     'dolomite': Rock('sedimentary', 'black'),
     'chert': Rock('sedimentary', 'yellow'),
     'chalk': Rock('sedimentary', 'white'),
+    'tuff': Rock('sedimentary', 'black'),
     'rhyolite': Rock('igneous_extrusive', 'red'),
     'basalt': Rock('igneous_extrusive', 'red'),
     'andesite': Rock('igneous_extrusive', 'red'),
@@ -376,8 +377,9 @@ ORE_VEINS: dict[str, Vein] = {
     'lignite': Vein.new('lignite', 160, 40, -20, -8, 0.85, ('sedimentary',), vein_type='disc', height=2, project='offset'),
     'bituminous_coal': Vein.new('bituminous_coal', 210, 50, -35, -12, 0.9, ('sedimentary',), vein_type='disc', height=3, project='offset'),
 
-    # Sulfur spawns near lava level in any low-level rock, common, but small veins
+    # Sulfur spawns near lava level in any low-level rock, common, but small veins, or in tuff near the surface
     'sulfur': Vein.new('sulfur', 4, 18, -64, -45, 0.25, ('igneous_intrusive', 'metamorphic'), vein_type='disc', height=5, near_lava=True),
+    'tuff_sulfur': Vein.new('sulfur', 4, 18, 40, 120, 0.45, ('tuff',), vein_type='disc', height=4),
 
     # Redstone: Cryolite is deep II, cinnabar is deep MM, both are common enough within these rocks but rare to find
     'cryolite': Vein.new('cryolite', 16, 18, -70, -10, 0.7, ('granite', 'diorite')),
@@ -415,6 +417,7 @@ DEPOSIT_RARES: Dict[str, str] = {
     'dolomite': 'amethyst',
     'chert': 'ruby',
     'chalk': 'sapphire',
+    'tuff': 'pyrite',
     'rhyolite': 'pyrite',
     'basalt': 'pyrite',
     'andesite': 'pyrite',

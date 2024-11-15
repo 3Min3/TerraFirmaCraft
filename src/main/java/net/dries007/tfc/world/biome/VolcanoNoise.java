@@ -71,7 +71,7 @@ public final class VolcanoNoise
         return baseHeight;
     }
 
-    // Alternate version of modifyHeight used for shield volcanoes that directly adds to the base noise
+    // Alternate version of modifyHeight used for shield volcanoes that weighs the base noise more heavily
     public double modifyShieldVolcanoHeight(double x, double z, double baseHeight, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight)
     {
         final Cellular2D.Cell cell = sampleCell(x, z, rarity);

@@ -152,7 +152,7 @@ public class RegionGeneratorTests implements TestSetup
             case ANNOTATE_DISTANCE_TO_WEST_COAST -> point.land()
                 ? green.apply(point.distanceToWestCoast / 100f)
                 : cellColor(region);
-            case ANNOTATE_BIOME_ALTITUDE, ANNOTATE_BIOME_ALTITUDE_POST_HOTSPOTS -> point.land()
+            case ANNOTATE_BIOME_ALTITUDE -> point.land()
                 ? green.apply(Mth.clampedMap(point.discreteBiomeAltitude(), 0, 3, 0, 1))
                 : continentColor(point);
             case ANNOTATE_HOT_SPOT_AGE -> point.hotSpotAge > 0 ? hotspot(point.hotSpotAge) : point.land()
@@ -419,14 +419,13 @@ public class RegionGeneratorTests implements TestSetup
         ADD_CONTINENTS(Task.ADD_CONTINENTS),
         ANNOTATE_DISTANCE_TO_CELL_EDGE(Task.ANNOTATE_DISTANCE_TO_CELL_EDGE),
         FLOOD_FILL_SMALL_OCEANS(Task.FLOOD_FILL_SMALL_OCEANS),
+        ANNOTATE_HOT_SPOT_AGE(Task.ADD_HOTSPOTS),
         ADD_ISLANDS(Task.ADD_ISLANDS),
         ANNOTATE_DISTANCE_TO_OCEAN(Task.ANNOTATE_DISTANCE_TO_OCEAN),
         ANNOTATE_BASE_LAND_HEIGHT(Task.ANNOTATE_BASE_LAND_HEIGHT),
         ANNOTATE_DISTANCE_TO_WEST_COAST(Task.ANNOTATE_DISTANCE_TO_WEST_COAST),
         ADD_MOUNTAINS(Task.ADD_MOUNTAINS),
         ANNOTATE_BIOME_ALTITUDE(Task.ANNOTATE_BIOME_ALTITUDE),
-        ANNOTATE_HOT_SPOT_AGE(Task.ADD_HOTSPOTS),
-        ANNOTATE_BIOME_ALTITUDE_POST_HOTSPOTS(Task.ADD_HOTSPOTS),
         // Multiple steps to draw temperature, rainfall, and rainfall variance
         TEMPERATURE(Task.ANNOTATE_CLIMATE),
         RAINFALL(Task.ANNOTATE_CLIMATE),

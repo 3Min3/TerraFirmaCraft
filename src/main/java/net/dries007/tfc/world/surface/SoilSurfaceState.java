@@ -70,21 +70,6 @@ public class SoilSurfaceState implements SurfaceState
         ));
     }
 
-    public static SurfaceState buildSingleRockSandOrGravel(SurfaceState sand, SurfaceState gravel)
-    {
-        return new SoilSurfaceState(ImmutableList.of(
-            sand,
-            transition(sand, gravel),
-            gravel,
-            gravel,
-            gravel,
-            gravel,
-            gravel,
-            gravel,
-            gravel
-        ));
-    }
-
     public static SurfaceState buildSand(boolean hasSandstone)
     {
         final SurfaceState sand = sand();

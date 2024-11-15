@@ -130,6 +130,15 @@ public interface Noise2D
         };
     }
 
+    /**
+     * A domain-warp designed to warp the location of noise peaks without distorting their shapes
+     * From an input value, procedurally determines a displacement vector
+     *
+     * @param warp              noise map to generate offsets from, designed to be used with a cellular hash map
+     * @param velocityScale     first-order distance scaling
+     * @param accelScale        second-order distance scaling
+     * @return this noise function, with a cellular domain warp effect
+     */
     default Noise2D hotSpotWarp(Noise2D warp, int velocityScale, double accelScale)
     {
         return (x, z) -> {

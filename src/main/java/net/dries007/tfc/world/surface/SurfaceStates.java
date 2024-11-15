@@ -31,9 +31,8 @@ public final class SurfaceStates
     public static final SurfaceState BASALT_COBBLE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.COBBLE).get().defaultBlockState();
     public static final SurfaceState BASALT_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
 
-    // TODO: Make these TFC blocks
-    public static final SurfaceState TUFF = context -> Blocks.TUFF.defaultBlockState();
-    public static final SurfaceState TUFF_GRAVEL = context -> Blocks.GRAVEL.defaultBlockState();
+    public static final SurfaceState TUFF = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState TUFF_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone
      */

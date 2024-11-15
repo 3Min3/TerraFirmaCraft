@@ -68,7 +68,7 @@ public enum ChooseBiomes implements RegionTask
             }
 
             // Add hot spot biomes
-            byte age = point.hotSpotAge;
+            final byte age = point.hotSpotAge;
             if (age > 0)
             {
                 if (age == 4 && point.biome == OCEAN || point.biome == DEEP_OCEAN || point.biome == OCEAN_REEF || point.biome == DEEP_OCEAN_TRENCH)
