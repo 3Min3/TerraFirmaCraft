@@ -105,6 +105,38 @@ public enum ChooseBiomes implements RegionTask
                 else if (point.biome == INVERTED_BADLANDS) point.biome = ROLLING_HILLS;
             }
 
+            // Glaciation
+            // TODO: Balance values, -18 seems like a good value for the number below once climate is moderated
+            final float maxIceSheetTemp = -10f + 0.006f * rainfall;
+            // TODO: Set most lakes to be land before setting the biomes?
+            if (point.land() || point.lake())
+            {
+                if (temperature < maxIceSheetTemp)
+                {
+                    // Makes oceanic glacial mountains more common by replacing coastal highlands as well
+                    if (point.biomeAltitude >= 3 && point.distanceToOcean < 3) point.biome = point.distanceToOcean < 1 ? ICE_SHEET_MOUNTAINS_SHORE : ICE_SHEET_OCEANIC_MOUNTAINS;
+                    else if (point.mountain()) point.biome = ICE_SHEET_MOUNTAINS;
+                    else
+                    {
+                        final int biome = point.biome;
+                        if (biome == CANYONS) point.biome = ICE_SHEET_TUYAS;
+                        else if (biome == ACTIVE_SHIELD_VOLCANO) point.biome = ICE_SHEET_ACTIVE_SHIELD_VOLCANO;
+                        else if (biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO) point.biome = ICE_SHEET_SHIELD_VOLCANO;
+                        else point.biome = ICE_SHEET;
+                    }
+                }
+                else if (temperature < maxIceSheetTemp + 0.6f && !(point.biome == MOUNTAINS || point.biome == VOLCANIC_MOUNTAINS
+                    || point.biome == OCEANIC_MOUNTAINS || point.biome == VOLCANIC_OCEANIC_MOUNTAINS || point.biome == OLD_MOUNTAINS))
+                {
+                    point.biome = getGlacialEdgeBiome(point.biome);
+                }
+                else if (temperature < maxIceSheetTemp + 2f && !(point.biome == MOUNTAINS || point.biome == VOLCANIC_MOUNTAINS
+                    || point.biome == OCEANIC_MOUNTAINS || point.biome == VOLCANIC_OCEANIC_MOUNTAINS || point.biome == OLD_MOUNTAINS))
+                {
+                    point.biome = TERMINAL_MORAINE;
+                }
+            }
+
             // Karst Biomes
             if (point.isSurfaceRockKarst)
             {
@@ -158,6 +190,18 @@ public enum ChooseBiomes implements RegionTask
         if (age == 1)
             return ACTIVE_SHIELD_VOLCANO;
         return PLAINS;
+    }
+
+    private int getGlacialEdgeBiome(int biome)
+    {
+        if (biome == MOUNTAINS || biome == MOUNTAIN_LAKE || biome == OLD_MOUNTAINS || biome == ICE_SHEET_MOUNTAINS || biome == VOLCANIC_MOUNTAINS
+            || biome == VOLCANIC_MOUNTAIN_LAKE)
+            return ICE_SHEET_MOUNTAINS_EDGE;
+        if (biome == OCEANIC_MOUNTAINS || biome == OCEANIC_MOUNTAIN_LAKE || biome == VOLCANIC_OCEANIC_MOUNTAINS || biome == VOLCANIC_OCEANIC_MOUNTAIN_LAKE
+            || biome == ICE_SHEET_OCEANIC_MOUNTAINS)
+            return ICE_SHEET_MOUNTAINS_SHORE;
+
+        return ICE_SHEET_EDGE;
     }
 
     private int getTowerKarstBiome(int biome)

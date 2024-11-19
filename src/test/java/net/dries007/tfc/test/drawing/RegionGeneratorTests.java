@@ -9,8 +9,6 @@ package net.dries007.tfc.test.drawing;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -261,6 +259,20 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == HILLS || biome == SHILIN_HILLS || biome == TOWER_KARST_HILLS || biome == DOLINE_HILLS || biome == CENOTE_HILLS) return new Color(80, 130, 80);
         if (biome == PLAINS || biome == BURREN_PLAINS || biome == TOWER_KARST_PLAINS || biome == DOLINE_PLAINS || biome == CENOTE_PLAINS || biome == SHILIN_PLAINS) return new Color(100, 200, 100);
 
+        if (biome == ACTIVE_SHIELD_VOLCANO) return new Color(255, 85, 0);
+        if (biome == DORMANT_SHIELD_VOLCANO) return new Color(255, 105, 0);
+        if (biome == EXTINCT_SHIELD_VOLCANO) return new Color(255, 135, 0);
+        if (biome == ANCIENT_SHIELD_VOLCANO || biome == SUNKEN_SHIELD_VOLCANO) return new Color(255, 155, 0);
+
+        if (biome == ICE_SHEET || biome == ICE_SHEET_TUYAS || biome == SUBGLACIAL_LAKE)
+            return new Color(255, 255, 255);
+        if (biome == ICE_SHEET_MOUNTAINS) return new Color(205, 255, 205);
+        if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(205, 205, 255);
+        if (biome == ICE_SHEET_SHORE || biome == ICE_SHEET_MOUNTAINS_SHORE) return new Color(160, 160, 255);
+        if (biome == ICE_SHEET_SHIELD_VOLCANO || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO) return new Color(255, 205, 205);
+        if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_MOUNTAINS_EDGE) return new Color(155, 155, 155);
+        if (biome == TERMINAL_MORAINE) return new Color(125, 125, 125);
+
         return Color.BLACK;
     }
 
@@ -352,6 +364,18 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == OCEANIC_MOUNTAINS || biome == VOLCANIC_OCEANIC_MOUNTAINS) return new Color(160, 30, 160);
         if (biome == OLD_MOUNTAINS || biome == EXTREME_DOLINE_MOUNTAINS) return new Color(200, 50, 200);
         if (biome == MOUNTAINS || biome == VOLCANIC_MOUNTAINS) return new Color(250, 10, 250);
+
+        // Shield Volcanoes
+        if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO || biome == ANCIENT_SHIELD_VOLCANO || biome == SUNKEN_SHIELD_VOLCANO)
+            return new Color(250, 90, 250);
+
+        // Ice Sheets
+        // TODO: fix up/coimplete
+        if (biome == ICE_SHEET || biome == ICE_SHEET_TUYAS) return new Color(255, 255, 255);
+        if (biome == ICE_SHEET_MOUNTAINS || biome == ICE_SHEET_SHIELD_VOLCANO
+            || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO || biome == ICE_SHEET_MOUNTAINS_EDGE) return new Color(250, 160, 250);
+        if (biome == ICE_SHEET_EDGE) return new Color(185, 185, 185);
+        if (biome == TERMINAL_MORAINE) return new Color(125, 125, 125);
 
         return Color.BLACK;
     }

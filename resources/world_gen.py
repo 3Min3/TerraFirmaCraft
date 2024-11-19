@@ -125,12 +125,26 @@ def generate(rm: ResourceManager):
     biome(rm, 'shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
     biome(rm, 'old_shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
 
+# TODO: add lake tags for fish spawning to shield volcanoes, subglacial lakes
     biome(rm, 'mountain_lake', 'extreme_hills')
     biome(rm, 'volcanic_mountain_lake', 'extreme_hills', volcano_features=True)
     biome(rm, 'old_mountain_lake', 'extreme_hills')
     biome(rm, 'oceanic_mountain_lake', 'river', ocean_features='both')
     biome(rm, 'volcanic_oceanic_mountain_lake', 'river', ocean_features='both', volcano_features=True)
     biome(rm, 'plateau_lake', 'extreme_hills', boulders=True)
+
+    biome(rm, 'ice_sheet', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_mountains', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_oceanic_mountains', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_edge', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_mountains_edge', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_shore', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_mountains_shore', 'exteme_hills', barren=True)
+    biome(rm, 'terminal_moraine', 'exteme_hills')
+    biome(rm, 'ice_sheet_tuyas', 'exteme_hills', barren=True)
+    biome(rm, 'subglacial_lake', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_active_shield_volcano', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_shield_volcano', 'exteme_hills', barren=True)
 
     # Carvers
     rm.configured_carver('cave', 'tfc:cave', {

@@ -99,6 +99,19 @@ public class TFCLayers
     public static final int SUNKEN_SHIELD_VOLCANO = idFor(TFCBiomes.SUNKEN_SHIELD_VOLCANO);
     public static final int SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.SHIELD_VOLCANO_SHORE);
     public static final int OLD_SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.OLD_SHIELD_VOLCANO_SHORE);
+    public static final int ICE_SHEET = idFor(TFCBiomes.ICE_SHEET);
+    public static final int ICE_SHEET_EDGE = idFor(TFCBiomes.ICE_SHEET_EDGE);
+    public static final int ICE_SHEET_SHORE = idFor(TFCBiomes.ICE_SHEET_SHORE);
+    public static final int TERMINAL_MORAINE = idFor(TFCBiomes.TERMINAL_MORAINE);
+    public static final int SUBGLACIAL_LAKE = idFor(TFCBiomes.SUBGLACIAL_LAKE);
+    public static final int ICE_SHEET_MOUNTAINS = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS);
+    public static final int ICE_SHEET_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS_EDGE);
+    public static final int ICE_SHEET_OCEANIC_MOUNTAINS = idFor(TFCBiomes.ICE_SHEET_OCEANIC_MOUNTAINS);
+    public static final int ICE_SHEET_MOUNTAINS_SHORE = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS_SHORE);
+    public static final int ICE_SHEET_TUYAS = idFor(TFCBiomes.ICE_SHEET_TUYAS);
+    public static final int ICE_SHEET_ACTIVE_SHIELD_VOLCANO = idFor(TFCBiomes.ICE_SHEET_ACTIVE_SHIELD_VOLCANO);
+    public static final int ICE_SHEET_SHIELD_VOLCANO = idFor(TFCBiomes.ICE_SHEET_SHIELD_VOLCANO);
+
 
     public static BiomeExtension getFromLayerId(int id)
     {
@@ -234,6 +247,14 @@ public class TFCLayers
         {
             return OLD_SHIELD_VOLCANO_SHORE;
         }
+        if (isFlatIceSheet(value) || value == ICE_SHEET_SHIELD_VOLCANO || value == ICE_SHEET_ACTIVE_SHIELD_VOLCANO || value == ICE_SHEET_EDGE)
+        {
+            return ICE_SHEET_SHORE;
+        }
+        if (value == ICE_SHEET_OCEANIC_MOUNTAINS || value == ICE_SHEET_MOUNTAINS_EDGE)
+        {
+            return ICE_SHEET_MOUNTAINS_SHORE;
+        }
         return SHORE;
     }
 
@@ -269,6 +290,10 @@ public class TFCLayers
         {
             return PLATEAU_LAKE;
         }
+        if (isFlatIceSheet(value))
+        {
+            return SUBGLACIAL_LAKE;
+        }
         return LAKE;
     }
 
@@ -290,6 +315,11 @@ public class TFCLayers
     public static boolean isFlats(int value)
     {
         return value == MUD_FLATS || value == SALT_FLATS;
+    }
+
+    public static boolean isFlatIceSheet(int value)
+    {
+        return value == ICE_SHEET || value == ICE_SHEET_TUYAS || value == SUBGLACIAL_LAKE;
     }
 
     public static int idFor(BiomeExtension extension)

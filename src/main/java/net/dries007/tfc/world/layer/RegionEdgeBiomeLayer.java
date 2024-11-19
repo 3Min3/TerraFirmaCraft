@@ -45,6 +45,39 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
             }
         }
 
+        // Add ice sheet edges
+        if (TFCLayers.isFlatIceSheet(center))
+        {
+            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && matcher.test(TFCLayers::isFlatIceSheet))
+            {
+                return ICE_SHEET_EDGE;
+            }
+        }
+        if (TFCLayers.isFlatIceSheet(center))
+        {
+            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && (matcher.test(i -> i == ICE_SHEET_EDGE)))
+            {
+                return ICE_SHEET_EDGE;
+            }
+        }
+
+        // TODO: Clean up this mess/duplicate code if possible
+        // Add ice sheet mountain edges
+        if (center == ICE_SHEET_MOUNTAINS)
+        {
+            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && matcher.test(i -> i == ICE_SHEET_MOUNTAINS))
+            {
+                return ICE_SHEET_MOUNTAINS_EDGE;
+            }
+        }
+        if (center == ICE_SHEET_MOUNTAINS)
+        {
+            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && matcher.test(i -> i == ICE_SHEET_MOUNTAINS))
+            {
+                return ICE_SHEET_MOUNTAINS_EDGE;
+            }
+        }
+
         if (center == PLATEAU || center == BADLANDS || center == INVERTED_BADLANDS)
         {
             if (matcher.test(i -> i == LOW_CANYONS || i == LOWLANDS))

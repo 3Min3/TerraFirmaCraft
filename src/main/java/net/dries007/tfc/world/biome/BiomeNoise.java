@@ -129,6 +129,33 @@ public final class BiomeNoise
             .scaled(-0.75f, 0.7f, SEA_LEVEL_Y - minMeight, SEA_LEVEL_Y + maxHeight);
     }
 
+    // Referenced from multiple locations
+    // TODO: Drumlin/terminal moraine noise?
+    public static Noise2D glacialBase(long seed)
+    {
+        return hills(seed, -4, 8);
+    }
+
+    public static Noise2D glacialOceanicBase(long seed)
+    {
+        return hills(seed, -8, -2);
+    }
+
+    public static Noise2D glacialSurface(long seed)
+    {
+        return BiomeNoise.hills(seed, 30, 38);
+    }
+
+    public static Noise2D glacialOceanicSurface(long seed)
+    {
+        return BiomeNoise.hills(seed, 18, 26);
+    }
+
+    public static Noise2D glacialMountainsBase(long seed)
+    {
+        return BiomeNoise.mountains(seed, -24, 55);
+    }
+
     /**
      * Inspired by the bare Karst at Burren, Ireland
      * Can be applied over any base terrain noise map, adds to the base terrain

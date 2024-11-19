@@ -21,6 +21,8 @@ import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.dries007.tfc.world.surface.builder.TuffRingsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.VolcanoesSurfaceBuilder;
 
+import static net.dries007.tfc.world.TFCChunkGenerator.*;
+
 public class BiomeBuilder
 {
     public static BiomeBuilder builder()
@@ -44,6 +46,7 @@ public class BiomeBuilder
     private boolean spawnable;
     private boolean rivers;
     private boolean shore;
+    private int cliffBaseHeight;
     private boolean sandyRiverShores;
 
     private BiomeBuilder()
@@ -62,6 +65,7 @@ public class BiomeBuilder
         spawnable = false;
         rivers = true;
         shore = false;
+        cliffBaseHeight = 0; // Above/below sea level
         sandyRiverShores = true;
     }
 
@@ -83,7 +87,7 @@ public class BiomeBuilder
         Objects.requireNonNull(heightNoiseFactory, "Height noise must not be null");
         final LongFunction<Noise2D> baseHeightNoiseFactory = heightNoiseFactory;
         this.noiseFactory = seed -> carvingNoiseFactory.apply(seed, baseHeightNoiseFactory.apply(seed));
-        this.aquiferSurfaceHeight = (sampler, x, z) -> TFCChunkGenerator.SEA_LEVEL_Y - 16; // Expect sea level carving to restrict aquifers
+        this.aquiferSurfaceHeight = (sampler, x, z) -> SEA_LEVEL_Y - 16; // Expect sea level carving to restrict aquifers
         return this;
     }
 
@@ -146,6 +150,12 @@ public class BiomeBuilder
         return this;
     }
 
+    public BiomeBuilder setCliffBaseHeight(int cliffBaseHeight)
+    {
+        this.cliffBaseHeight = cliffBaseHeight;
+        return this;
+    }
+
     public BiomeBuilder shore()
     {
         this.shore = true;
@@ -161,7 +171,7 @@ public class BiomeBuilder
     {
         this.volcanic = true;
         this.volcanoFrequency = frequency;
-        this.volcanoBasaltHeight = TFCChunkGenerator.SEA_LEVEL_Y + volcanoBasaltHeight;
+        this.volcanoBasaltHeight = SEA_LEVEL_Y + volcanoBasaltHeight;
 
         assert heightNoiseFactory != null : "volcanoes must be called after setting a heightmap";
         assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
@@ -196,6 +206,6 @@ public class BiomeBuilder
     {
         assert surfaceBuilderFactory != null : "missing surface builder";
 
-        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, salty, volcanic, hasTuffRings, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, spawnable, rivers, shore, sandyRiverShores);
+        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, salty, volcanic, hasTuffRings, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, spawnable, rivers, shore, cliffBaseHeight, sandyRiverShores);
     }
 }
