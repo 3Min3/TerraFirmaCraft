@@ -188,8 +188,9 @@ public class RegionGeneratorTests implements TestSetup
                 }
             }
             case CHOOSE_BIOMES -> biomeColor(point.biome);
-            case ANNOTATE_KARST_BIOMES -> karstBiomeColor(point.biome);
             case ANNOTATE_BIOMES_BY_HEIGHT -> heightBiomeColor(point.biome);
+            case ANNOTATE_KARST_BIOMES -> karstBiomeColor(point.biome);
+            case ANNOTATE_GLACIAL_BIOMES -> glaciatedBiomeColor(point.biome);
             case ADD_RIVERS_AND_LAKES -> {
                 if (point.river()) yield new Color(120, 120, 240);
                 if (point.shore()) yield new Color(120, 120, 240);
@@ -343,8 +344,8 @@ public class RegionGeneratorTests implements TestSetup
 
         if (biome == ICE_SHEET || biome == SUBGLACIAL_LAKE) return new Color(255, 255, 255);
         if (biome == ICE_SHEET_TUYAS ) return new Color(235, 235, 235);
-        if (biome == ICE_SHEET_MOUNTAINS) return new Color(255, 175, 175);
-        if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(255, 175, 255);
+        if (biome == ICE_SHEET_MOUNTAINS) return new Color(255, 195, 195);
+        if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(255, 195, 255);
         if (biome == ICE_SHEET_SHIELD_VOLCANO || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO) return new Color(255, 195, 145);
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE) return new Color(165, 165, 165);
@@ -503,8 +504,9 @@ public class RegionGeneratorTests implements TestSetup
         CHOOSE_ROCKS(Task.CHOOSE_ROCKS),
         ANNOTATE_KARST_SURFACE(Task.ANNOTATE_KARST_SURFACE),
         CHOOSE_BIOMES(Task.CHOOSE_BIOMES),
-        ANNOTATE_KARST_BIOMES(Task.CHOOSE_BIOMES),
         ANNOTATE_BIOMES_BY_HEIGHT(Task.CHOOSE_BIOMES),
+        ANNOTATE_KARST_BIOMES(Task.CHOOSE_BIOMES),
+        ANNOTATE_GLACIAL_BIOMES(Task.CHOOSE_BIOMES),
         ADD_RIVERS_AND_LAKES(Task.ADD_RIVERS_AND_LAKES),
         // Draw climate visualizations again after rivers, which modify rainfall
         RAINFALL_AFTER_RIVERS(Task.ADD_RIVERS_AND_LAKES),

@@ -51,6 +51,7 @@ public final class RegionGenerator
     public final Cellular2D cellNoise;
     public final Noise2D continentNoise;
     public final Noise2D temperatureNoise;
+    public final Noise2D oceanicInfluenceNoise;
     public final Noise2D rainfallNoise;
     public final Noise2D rainfallVarianceNoise;
     public final Settings settings;
@@ -91,6 +92,9 @@ public final class RegionGenerator
                 .octaves(2)
                 .spread(0.15f)
                 .scaled(-3f, 3f));
+
+        this.oceanicInfluenceNoise = new OpenSimplex2D(random.nextInt())
+            .spread(0.02f);
 
         this.rainfallNoise = baseNoise(true, settings.rainfallScale(), settings.rainfallConstant())
             .scaled(0f, 500f)

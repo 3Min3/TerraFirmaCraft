@@ -32,6 +32,7 @@ public enum ChooseBiomes implements RegionTask
         {DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, CHANNELED_SCABLANDS, PLATEAU, PLATEAU, PLATEAU, ICE_SHEET_MOUNTAINS}, // High
     };
     private static final int[] SUBGLACIAL_HIGHLANDS = {DRUMLINS, DRUMLINS, BADLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, PLATEAU, PLATEAU, PLATEAU, GLACIATED_MOUNTAINS};
+    private static final int[] KNOB_AND_KETTLE_BIOMES = {KNOB_AND_KETTLE, PATTERNED_KNOB_AND_KETTLE, PATTERNED_KNOB_AND_KETTLE};
     private static final int[] ISLAND_BIOMES = {PLAINS, HILLS, ROLLING_HILLS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS};
     private static final int[] MID_DEPTH_OCEAN_BIOMES = {DEEP_OCEAN, OCEAN, OCEAN, OCEAN_REEF, OCEAN_REEF, OCEAN_REEF};
     private static final int[] DRY_LOWLANDS_REPLACEMENT_BIOMES = {MUD_FLATS, MUD_FLATS, GRASSY_DUNES, GRASSY_DUNES};
@@ -54,48 +55,72 @@ public enum ChooseBiomes implements RegionTask
             }
             else if (point.mountain())
             {
-                // TODO: Balance values, -18 seems like a good value for FLAT LANDS once climate is moderated, these are MOUNTAIN biomes, though
-                final float maxIceSheetTemp = -8f + 0.006f * point.rainfall;
                 final float temp = point.temperature;
-                if (temp < maxIceSheetTemp)
+                if (point.coastalMountain())
                 {
-                    point.biome = point.coastalMountain()
-                        ? ICE_SHEET_OCEANIC_MOUNTAINS
-                        : ICE_SHEET_MOUNTAINS;
-                }
-                else if (temp < maxIceSheetTemp + 4) // TODO: Tweak numbers
-                {
-                    point.biome = point.coastalMountain()
-                        ? GLACIATED_OCEANIC_MOUNTAINS
-                        : GLACIATED_MOUNTAINS;
-                }
-                else if (temp < maxIceSheetTemp + 8) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
-                {
-                    point.biome = point.coastalMountain()
-                        ? GLACIALLY_CARVED_OCEANIC_MOUNTAINS
-                        : GLACIALLY_CARVED_MOUNTAINS;
+                    // TODO: Balance values, based on -17 being the year-round-freeze avg temp
+                    // Different temperature limits used because biomes at at different elevations
+                    final float maxIceSheetTemp = -16f + 0.006f * point.rainfall;
+                    if (temp < maxIceSheetTemp)
+                    {
+                        point.biome = ICE_SHEET_OCEANIC_MOUNTAINS;
+                    }
+                    else if (temp < maxIceSheetTemp + 4) // TODO: Tweak numbers
+                    {
+                        point.biome = GLACIATED_OCEANIC_MOUNTAINS;
+                    }
+                    else if (temp < maxIceSheetTemp + 10) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
+                    {
+                        point.biome = GLACIALLY_CARVED_OCEANIC_MOUNTAINS;
+                    }
+                    else
+                    {
+                        point.biome = randomSeededFrom(rngSeed, areaSeed, OCEANIC_MOUNTAIN_ALTITUDE_BIOMES);
+                    }
                 }
                 else
                 {
-                    point.biome = randomSeededFrom(rngSeed, areaSeed, point.coastalMountain()
-                        ? OCEANIC_MOUNTAIN_ALTITUDE_BIOMES
-                        : MOUNTAIN_ALTITUDE_BIOMES);
+                    final float maxIceSheetTemp = -14f + 0.006f * point.rainfall;
+                    if (temp < maxIceSheetTemp)
+                    {
+                        point.biome = ICE_SHEET_MOUNTAINS;
+                    }
+                    else if (temp < maxIceSheetTemp + 4) // TODO: Tweak numbers
+                    {
+                        point.biome = GLACIATED_MOUNTAINS;
+                    }
+                    else if (temp < maxIceSheetTemp + 8) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
+                    {
+                        point.biome = GLACIALLY_CARVED_MOUNTAINS;
+                    }
+                    else
+                    {
+                        point.biome = randomSeededFrom(rngSeed, areaSeed, MOUNTAIN_ALTITUDE_BIOMES);
+                    }
                 }
             }
             else if (point.land())
             {
-                // TODO: Balance values, -18 seems like a good value for FLAT LANDS once climate is moderated
-                final float maxIceSheetTemp = -10f + 0.006f * point.rainfall;
+                // TODO: Balance values
+                final float maxIceSheetTemp = -17f + 0.006f * point.rainfall;
                 final float temp = point.temperature;
                 if (temp < maxIceSheetTemp)
                 {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
                 }
-                else if (temp < maxIceSheetTemp + 4) // TODO: Tweak numbers
+                else if (temp < maxIceSheetTemp + 1)
+                {
+                    point.biome = ICE_SHEET_EDGE;
+                }
+                else if (temp < maxIceSheetTemp + 2.5)
+                {
+                    point.biome = randomSeededFrom(rngSeed, areaSeed, KNOB_AND_KETTLE_BIOMES);
+                }
+                else if (temp < maxIceSheetTemp + 6) // TODO: Tweak numbers
                 {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, PALEO_ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
                 }
-                else if (temp < maxIceSheetTemp + 6 && point.discreteBiomeAltitude() == 2) // TODO: Tweak numbers
+                else if (temp < maxIceSheetTemp + 8 && point.discreteBiomeAltitude() == 2) // TODO: Tweak numbers
                 {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, SUBGLACIAL_HIGHLANDS);
                 }
