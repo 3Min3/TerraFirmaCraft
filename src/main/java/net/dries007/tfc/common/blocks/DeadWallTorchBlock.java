@@ -9,9 +9,13 @@ package net.dries007.tfc.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.dries007.tfc.common.items.TFCItems;
 
 public class DeadWallTorchBlock extends WallTorchBlock
 {
@@ -22,4 +26,12 @@ public class DeadWallTorchBlock extends WallTorchBlock
 
     @Override
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {}
+
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state)
+    {
+        return TFCBlocks.TORCH.get().getCloneItemStack(level,pos,state);
+    }
+
+
 }
