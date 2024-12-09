@@ -17,17 +17,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class DeadTorchBlock extends TorchBlock
 {
-    public DeadTorchBlock(Properties properties, SimpleParticleType particle)
+    private final ExtendedProperties properties;
+    public DeadTorchBlock(ExtendedProperties properties, SimpleParticleType particle)
     {
-        super(particle, properties);
+        super(particle, properties.properties());
+        this.properties = properties;
     }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource randomSource) { }
-
-    @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state)
-    {
-        return TFCBlocks.TORCH.get().getCloneItemStack(level,pos,state);
-    }
 }
