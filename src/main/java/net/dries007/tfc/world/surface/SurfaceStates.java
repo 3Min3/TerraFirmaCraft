@@ -43,11 +43,7 @@ public final class SurfaceStates
     public static final SurfaceState SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48 ?
         context.getRock().sand().defaultBlockState() : context.getRock().gravel().defaultBlockState();
     public static final SurfaceState GLACIER = context -> Blocks.PACKED_ICE.defaultBlockState();
-    public static final SurfaceState SNOW = context -> {
-        final BlockPos pos = context.pos();
-        final double noise = PATCH_NOISE.noise(pos.getX(), pos.getZ());
-        return noise > -0.2 ? Blocks.SNOW_BLOCK.defaultBlockState() : Blocks.PACKED_ICE.defaultBlockState();
-    };
+    public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
 
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone

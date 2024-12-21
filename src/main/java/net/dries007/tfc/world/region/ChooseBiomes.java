@@ -29,9 +29,8 @@ public enum ChooseBiomes implements RegionTask
     private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
         {PATTERNED_GROUND, PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS}, // Low
         {PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, TUYAS, TUYAS}, // Mid
-        {DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, CHANNELED_SCABLANDS, PLATEAU, PLATEAU, PLATEAU, ICE_SHEET_MOUNTAINS}, // High
+        {DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, PLATEAU, ICE_SHEET_MOUNTAINS}, // High
     };
-    private static final int[] SUBGLACIAL_HIGHLANDS = {DRUMLINS, DRUMLINS, BADLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, PLATEAU, PLATEAU, PLATEAU, GLACIATED_MOUNTAINS};
     private static final int[] KNOB_AND_KETTLE_BIOMES = {KNOB_AND_KETTLE, PATTERNED_GROUND, PATTERNED_GROUND};
     private static final int[] ISLAND_BIOMES = {PLAINS, HILLS, ROLLING_HILLS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS};
     private static final int[] MID_DEPTH_OCEAN_BIOMES = {DEEP_OCEAN, OCEAN, OCEAN, OCEAN_REEF, OCEAN_REEF, OCEAN_REEF};
@@ -122,7 +121,7 @@ public enum ChooseBiomes implements RegionTask
                 }
                 else if (temp < maxIceSheetTemp + 8 && point.discreteBiomeAltitude() == 2) // TODO: Tweak numbers
                 {
-                    point.biome = randomSeededFrom(rngSeed, areaSeed, SUBGLACIAL_HIGHLANDS);
+                    point.biome = CHANNELED_SCABLANDS;
                 }
                 else
                 {

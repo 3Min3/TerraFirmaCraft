@@ -8,6 +8,7 @@ package net.dries007.tfc.world.biome;
 
 import java.util.Random;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.levelgen.synth.NoiseUtils;
 
 import net.dries007.tfc.world.BiomeNoiseSampler;
 import net.dries007.tfc.world.noise.Cellular2D;
@@ -23,6 +24,23 @@ import static net.dries007.tfc.world.TFCChunkGenerator.*;
  */
 public final class BiomeNoise
 {
+
+    /**
+     * Basic noise map used by several biomes with connected ridge-noise valleys
+     */
+    public static Noise2D connectedValleyBaseNoise(long seed)
+    {
+        return new OpenSimplex2D(seed).spread(0.0025);
+    }
+
+    /**
+     * Ridge-noise form of connectedValleyBaseNoise
+     */
+    public static Noise2D connectedValleyAbsNoise(long seed)
+    {
+        return connectedValleyBaseNoise(seed).map(Math::abs);
+    }
+
     /**
      * Generates a flat base with twisting carved canyons using many smaller terraces.
      * Inspired by imagery of Drumheller, Alberta
@@ -49,7 +67,7 @@ public final class BiomeNoise
      * Creates a variant of badlands with stacked pillar like structures, as opposed to relief carved.
      * Inspired by imagery of Bryce Canyon, Utah.
      */
-    public static Noise2D bryceCanyon(long seed)
+    public static Noise2D bryceCanyon(long seed) // TODO: consider hooking up to global connected canyon noise systems
     {
         final Random generator = new Random(seed);
 
@@ -157,7 +175,7 @@ public final class BiomeNoise
 
     public static Noise2D glacialCirquesIceSurface(long seed)
     {
-        return glacialValleyAbsNoise(seed)
+        return connectedValleyAbsNoise(seed)
             .map(y ->
                 y < 0.38 ? -100 :
                 y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) :
@@ -167,7 +185,7 @@ public final class BiomeNoise
 
     public static Noise2D glacialOceanicCirquesIceSurface(long seed)
     {
-        return glacialValleyAbsNoise(seed)
+        return connectedValleyAbsNoise(seed)
             .map(y ->
                 y < 0.38 ? -100 :
                     y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) :
@@ -175,19 +193,9 @@ public final class BiomeNoise
             .add(BiomeNoise.hills(seed, -29, -21));
     }
 
-    public static Noise2D glacialValleyBaseNoise(long seed)
-    {
-        return new OpenSimplex2D(seed).spread(0.0025);
-    }
-
     public static Noise2D glacialValleyShapeNoise(long seed)
     {
-        return glacialValleyBaseNoise(seed).map(y -> Math.min(6 * y * y, 1));
-    }
-
-    public static Noise2D glacialValleyAbsNoise(long seed)
-    {
-        return glacialValleyBaseNoise(seed).map(Math::abs);
+        return connectedValleyBaseNoise(seed).map(y -> Math.min(6 * y * y, 1));
     }
 
     public static Noise2D glacialCirques(long seed)
@@ -197,7 +205,7 @@ public final class BiomeNoise
         Noise2D warp = new OpenSimplex2D(seed).spread(0.02).scaled(-0.25, 0.25);
 
         Noise2D shape = glacialValleyShapeNoise(seed);
-        Noise2D shapeMap = glacialValleyAbsNoise(seed);
+        Noise2D shapeMap = connectedValleyAbsNoise(seed);
 
         final Noise2D cliffScale = new OpenSimplex2D(seed + 785267L).spread(0.02).scaled(1, 10);
         final Noise2D cliffStartHeight = new OpenSimplex2D(seed + 3798L).spread(0.06).scaled(14, 20);
@@ -208,9 +216,9 @@ public final class BiomeNoise
 
             final double f1 = cell.f1();
             final double f2 = cell.f2();
-            if (shapeMap.noise(cell.cx() / cellScale, cell.cy() / cellScale) > 0.60) // TODO: See if we can make this a property of the cell itself, like this noise map sets the cell hash value - this may be tricky/undoable because of the scaling that has to happen here
+            if (shapeMap.noise(cell.cx() / cellScale, cell.cy() / cellScale) > 0.60)
             {
-                return 1 + 2 * (f1 > 0 ? (f2 - f1) : 1) + warp.noise(x, z); // TODO: Consider 2x scaling?
+                return 1 + 2 * (f1 > 0 ? (f2 - f1) : 1) + warp.noise(x, z); // TODO: make these peaks less regular
             }
             else
             {
@@ -248,7 +256,7 @@ public final class BiomeNoise
         };
     }
 
-    // TODO: too high, too flat, knobs/kettles very rare, add patterned ground stuff
+    // TODO: too high, too flat, knobs/kettles very rare
     public static Noise2D knobAndKettle(long seed)
     {
         return new OpenSimplex2D(seed).octaves(2).spread(0.03f)
@@ -264,10 +272,57 @@ public final class BiomeNoise
     // TODO: Detail work
     public static Noise2D channeledScablands(long seed)
     {
-        return new OpenSimplex2D(seed).octaves(3).spread(0.015f)
-            .map(y -> Math.clamp(Math.abs(y), 0.2, 0.3))
-            .scaled(0.2, 0.3, 0, 22).add(hills(seed, -4, 8));
+        // 0.0025 scale
+        final Noise2D baseNoise = connectedValleyBaseNoise(seed);
+
+        // Smooth noise representing leftward/rightward skew of secondary canyon
+        final Noise2D channelOffsetNoise = new OpenSimplex2D(seed + 89183L).spread(0.008).scaled(-0.19, 0.19).clamped(-0.15, 0.15);
+
+        // Smooth noise, that when high will cause the channel to split, forming a center outcrop
+        final Noise2D channelSplitNoise = new OpenSimplex2D(seed + 883283L).octaves(2).spread(0.007).scaled(-2, 1.5).clamped(0, 0.26);
+
+        // Absolute value noise, representing "distance" to center-lines of coulees
+        final Noise2D couleeCenterLineNoise = new OpenSimplex2D(seed + 989013L).spread(0.003).abs();
+
+        // Increase height of talus piles in some locations
+        final Noise2D talusHeightNoise = new OpenSimplex2D(seed + 9890113L).spread(0.012).scaled(-0.07, 0.12).clamped(-0.03, 0.1);
+
+        final Noise2D scablandsShapeNoise = (x, z) -> {
+            final double base = baseNoise.noise(x, z);
+            final double y = base < 0 ? base + channelSplitNoise.noise(x, z) : base - channelSplitNoise.noise(x, z);
+            final double absY = Math.abs(y);
+            final double channelOffset = channelOffsetNoise.noise(x, z);
+            final double couleeCenterLine = couleeCenterLineNoise.noise(x, z);
+            final double couleeShape = Math.sqrt(y * y + 3 * couleeCenterLine * couleeCenterLine);
+            final double talusHt = talusHeightNoise.noise(x, z);
+            final double talusWd = talusHt * 0.5;
+            final double couleeBaseHeight = couleeShape > 0.7 ? 1
+                : couleeShape > 0.55 ? Mth.clampedMap(y, 0.63 - talusWd, 0.7, 0.5, 0.72 + talusHt)
+                : Mth.clampedMap(y, 0.49 - talusWd, 0.55, 0, 0.22 + talusHt);
+
+            final double baseHeight = absY > 0.35 ? 1
+                : y > 0.2 + channelOffset ? Mth.clampedMap(y, 0.29 - talusWd, 0.35, 0.5, 0.72 + talusHt)
+                : y < -0.2 + channelOffset ? Mth.clampedMap(y, -0.29 + talusWd, -0.35, 0.5, 0.72 + talusHt)
+                : y > 0 ? Mth.clampedMap(y, 0.14 + channelOffset - talusWd, 0.2 + channelOffset, 0, 0.22 + talusHt)
+                : Mth.clampedMap(y, -0.14 + channelOffset + talusWd, -0.2 + channelOffset, 0, 0.22 + talusHt);
+
+            return Math.min(couleeBaseHeight, baseHeight);
+        };
+
+        final Noise2D potholes = new OpenSimplex2D(seed)
+            .octaves(3)
+            .spread(0.045)
+            .map(x -> {
+                x = -0.5 * Math.cos(Math.PI * x) + 0.5;
+                x = (Math.max(x, 0.1) - 0.1);
+                x = -8 * x;
+                return x;
+            });
+
+        return scablandsShapeNoise.scaled(0, 1, SEA_LEVEL_Y + 3, SEA_LEVEL_Y + 33).add(potholes);
+
     }
+
 
     /**
      * Inspired by the bare Karst at Burren, Ireland

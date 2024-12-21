@@ -69,14 +69,14 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         }
         else
         {
-            iceDepth = 36;
+            iceDepth = 35;
         }
-        if ((hasStonyPeaks && startY > glacierSurfaceHeight + 3) || startY < glacierBaseHeight)
+        if ((hasStonyPeaks && startY > glacierSurfaceHeight + 3) || startY < glacierBaseHeight - 2)
         {
             MountainSurfaceBuilder.NORMAL.apply(seed).buildSurface(context, startY, endY);
         }
         else {
-            for (int y = startY; y >= glacierBaseHeight; --y)
+            for (int y = startY; y >= glacierBaseHeight - 2; --y)
             {
                 final BlockState stateAt = context.getBlockState(y);
                 if (stateAt.isAir())
@@ -93,11 +93,19 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                         surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, -3);
                         if (surfaceDepth <= -1)
                         {
-                            // skip the top layer entirely
-                            context.setBlockState(y, iceState);
+                            // skip placing snow on steep slopes
+                            if (iceDepth <= 0)
+                            {
+                                context.setBlockState(y, moraineState);
+                            }
+                            else
+                            {
+                                context.setBlockState(y, iceState);
+                            }
                         }
-                        else if (iceDepth == 0 || y <= context.getSeaLevel())
+                        else if (iceDepth == 0 || y <= context.getSeaLevel() || y < glacierBaseHeight)
                         {
+                            // Skip placing snow where there is no glacier, or underwater
                             context.setBlockState(y, moraineState);
                         }
                         else
@@ -106,7 +114,7 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                         }
                         surfaceDepth = 36;
                     }
-                    else if (iceDepth > 0)
+                    else if (iceDepth > 0 && y > glacierBaseHeight)
                     {
                         // Subsurface layers
                         iceDepth--;

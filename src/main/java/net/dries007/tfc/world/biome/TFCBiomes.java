@@ -188,7 +188,7 @@ public final class TFCBiomes
     public static final BiomeExtension GLACIALLY_CARVED_OCEANIC_MOUNTAINS = register("glacially_carved_oceanic_mountains", builder().heightmap(seed -> BiomeNoise.glacialCirques(seed)).surface(MountainSurfaceBuilder.NORMAL).aquiferHeightOffset(-24).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().salty());
 
     // High-elevation biomes
-    public static final BiomeExtension CHANNELED_SCABLANDS = register("channeled_scablands", builder().heightmap(BiomeNoise::channeledScablands).surface(NormalSurfaceBuilder.ROCKY).spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());
+    public static final BiomeExtension CHANNELED_SCABLANDS = register("channeled_scablands", builder().heightmap(BiomeNoise::channeledScablands).surface(NormalSurfaceBuilder.ROCKY).spawnable().type(RiverBlendType.TALL_CANYON).noSandyRiverShores());
 
     // Mid-elevation biomes
     public static final BiomeExtension DRUMLINS = register("drumlins", builder().heightmap(BiomeNoise::drumlins).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());

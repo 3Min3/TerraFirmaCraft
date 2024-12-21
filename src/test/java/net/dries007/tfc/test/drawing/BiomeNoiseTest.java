@@ -37,8 +37,8 @@ public class BiomeNoiseTest implements TestSetup
         .dimensions(400)
         .size(400);
     private final Artist.Noise<Noise2D> noise = Artist.<Noise2D>forNoise(instance -> Artist.NoisePixel.coerceFloat(instance::noise))
-        .dimensions(400)
-        .size(400);
+        .dimensions(1600)
+        .size(1600);
 
     @Test
     public void testRollingHills()
@@ -110,5 +110,11 @@ public class BiomeNoiseTest implements TestSetup
     public void testCirque()
     {
         terrain.draw("noise_cirques", glacialCirques(seed()));
+    }
+
+    @Test
+    public void testScablands()
+    {
+        terrain.draw("noise_scablands", channeledScablands(223546764L));
     }
 }
