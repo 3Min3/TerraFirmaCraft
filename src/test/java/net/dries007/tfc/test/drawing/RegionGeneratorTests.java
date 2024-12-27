@@ -269,7 +269,7 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == ICE_SHEET_TUYAS ) return new Color(235, 235, 235);
         if (biome == ICE_SHEET_MOUNTAINS) return new Color(255, 195, 195);
         if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(255, 195, 255);
-        if (biome == ICE_SHEET_SHIELD_VOLCANO || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO) return new Color(255, 215, 185);
+        if (biome == ICE_SHEET_SHIELD_VOLCANO) return new Color(255, 215, 185);
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE) return new Color(165, 165, 165);
 
@@ -280,7 +280,7 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == CHANNELED_SCABLANDS) return new Color(190, 150, 150);
         if (biome == GLACIATED_MOUNTAINS) return new Color(255, 165, 165);
         if (biome == GLACIATED_OCEANIC_MOUNTAINS) return new Color(255, 165, 255);
-        if (biome == GLACIATED_SHIELD_VOLCANO || biome == GLACIATED_ACTIVE_SHIELD_VOLCANO) return new Color(255, 185, 125);
+        if (biome == GLACIATED_SHIELD_VOLCANO) return new Color(255, 185, 125);
         if (biome == GLACIALLY_CARVED_MOUNTAINS) return new Color(255, 135, 135);
         if (biome == GLACIALLY_CARVED_OCEANIC_MOUNTAINS) return new Color(255, 135, 255);
 
@@ -346,9 +346,9 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == ICE_SHEET_TUYAS ) return new Color(235, 235, 235);
         if (biome == ICE_SHEET_MOUNTAINS) return new Color(255, 195, 195);
         if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(255, 195, 255);
-        if (biome == ICE_SHEET_SHIELD_VOLCANO || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO) return new Color(255, 195, 145);
+        if (biome == ICE_SHEET_SHIELD_VOLCANO) return new Color(255, 195, 145);
 
-        if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE) return new Color(165, 165, 165);
+        if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE || biome == ICE_SHEET_TUYAS_EDGE) return new Color(165, 165, 165);
 
         if (biome == PATTERNED_GROUND) return new Color(255, 195, 100);
         if (biome == KNOB_AND_KETTLE) return new Color(255, 195, 100);
@@ -357,7 +357,7 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == CHANNELED_SCABLANDS) return new Color(190, 150, 150);
         if (biome == GLACIATED_MOUNTAINS) return new Color(255, 165, 165);
         if (biome == GLACIATED_OCEANIC_MOUNTAINS) return new Color(255, 165, 255);
-        if (biome == GLACIATED_SHIELD_VOLCANO || biome == GLACIATED_ACTIVE_SHIELD_VOLCANO) return new Color(255, 185, 125);
+        if (biome == GLACIATED_SHIELD_VOLCANO) return new Color(255, 185, 125);
         if (biome == GLACIALLY_CARVED_MOUNTAINS) return new Color(255, 135, 135);
         if (biome == GLACIALLY_CARVED_OCEANIC_MOUNTAINS) return new Color(255, 135, 255);
 
@@ -420,7 +420,7 @@ public class RegionGeneratorTests implements TestSetup
         // Ice Sheets - Ice sheet influenced biomes are distributed among other biomes in this view
         if (biome == ICE_SHEET || biome == ICE_SHEET_TUYAS) return new Color(255, 255, 255);
         if (biome == ICE_SHEET_MOUNTAINS || biome == ICE_SHEET_SHIELD_VOLCANO
-            || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO || biome == GLACIATED_MOUNTAINS) return new Color(250, 160, 250);
+            || biome == GLACIATED_MOUNTAINS) return new Color(250, 160, 250);
         if (biome == ICE_SHEET_EDGE) return new Color(185, 185, 185);
 
         return Color.BLACK;

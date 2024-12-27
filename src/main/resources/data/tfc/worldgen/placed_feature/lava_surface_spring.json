@@ -1,10 +1,10 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:lava_spring",
+  "feature": "tfc:lava_surface_spring",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 50
+      "count": 70
     },
     {
       "type": "minecraft:in_square"
@@ -14,12 +14,15 @@
       "height": {
         "type": "uniform",
         "min_inclusive": {
-          "absolute": -64
+          "absolute": 64
         },
         "max_inclusive": {
-          "absolute": 63
+          "absolute": 220
         }
       }
+    },
+    {
+      "type": "tfc:biome"
     }
   ]
 }

@@ -784,16 +784,53 @@ public final class BiomeNoise
         return volcano.add(surface);
     }
 
+    // Shield volcanoes with large calderas with open sides, and rough surfaces to fill with glaciers
+    public static Noise2D glaciatedShieldVolcano(long seed, Noise2D hotspot)
+    {
+        final double seaElev = SEA_LEVEL_Y + 15;
+        final double mtnBaseElev = SEA_LEVEL_Y + 70;
+        final double calderaEdgeElev = SEA_LEVEL_Y + 100;
+        final double cliffEdgeElev = SEA_LEVEL_Y + 60;
+        final double calderaCenterElev = SEA_LEVEL_Y + 50;
+
+        final Noise2D volcano = hotspot.map(y ->
+            y < 0.45 ? Mth.map(y, 0, 0.45, seaElev, mtnBaseElev) // Coastal slopes
+                : y < 0.72 ? Mth.map(y, 0.45, 0.72, mtnBaseElev, calderaEdgeElev) // Mountain side/slope up to caldera
+                : y < 0.74 ? Mth.map(y, 0.72, 0.74, calderaEdgeElev, cliffEdgeElev) // Caldera cliff
+                : y < 0.85 ? Mth.map(y, 0.74, 0.85, cliffEdgeElev, calderaCenterElev) : calderaCenterElev); // Downward slope to flat bottom of caldera
+
+        final OpenSimplex2D warp = new OpenSimplex2D(seed + 43L).octaves(4).spread(0.03f).scaled(-100f, 100f);
+        final Noise2D surface = new OpenSimplex2D(seed + 44L)
+            .octaves(4)
+            .spread(0.02f)
+            .warped(warp)
+            .map(x -> x > 0.4 ? x - 0.8f : -x)
+            .scaled(-0.4f, 0.8f, -48, 32);
+
+        return volcano.add(surface);
+    }
+
     // Surface for Ice Sheet Shield Volcanos
     public static Noise2D shieldVolcanoIceSheetSurface(long seed, Noise2D hotspot)
     {
         final double edgeElev = 0;
-        final double calderaEdgeElev = 30;
-        final double calderaCenterElev = 40;
+        final double calderaCenterElev = 51;
 
         return hotspot.map(y ->
-            y < 0.75 ? Mth.map(y, 0, 0.75, edgeElev, calderaEdgeElev) // Slope upwards to mountain top or crater rim
-                : y < 0.9 ? Mth.map(y, 0.75, 0.9, calderaEdgeElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
+            y < 0.9 ? Mth.map(y, 0.0, 0.9, edgeElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
+            .add(glacialIceSurface(seed));
+    }
+
+    // Surface for Glaciated Shield Volcanos
+    public static Noise2D shieldVolcanoGlacierSurface(long seed, Noise2D hotspot)
+    {
+        final double edgeElev = -20;
+        final double mtnBaseElev = 0;
+        final double calderaCenterElev = 51;
+
+        return hotspot.map(y ->
+            y < 0.45 ? Mth.map(y, 0.0, 0.45, edgeElev, mtnBaseElev)
+                : y < 0.9 ? Mth.map(y, 0.45, 0.9, mtnBaseElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
             .add(glacialIceSurface(seed));
     }
 

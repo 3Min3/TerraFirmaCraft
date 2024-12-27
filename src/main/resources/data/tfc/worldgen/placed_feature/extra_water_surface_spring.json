@@ -1,10 +1,10 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:lava_spring",
+  "feature": "tfc:extra_water_surface_spring",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 50
+      "count": 30
     },
     {
       "type": "minecraft:in_square"
@@ -14,12 +14,17 @@
       "height": {
         "type": "uniform",
         "min_inclusive": {
-          "absolute": -64
+          "absolute": 64
         },
         "max_inclusive": {
-          "absolute": 63
+          "absolute": 180
         }
       }
+    },
+    {
+      "type": "tfc:climate",
+      "min_temperature": -16,
+      "min_groundwater": 390
     }
   ]
 }

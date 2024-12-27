@@ -190,14 +190,12 @@ public enum ChooseBiomes implements RegionTask
             if (point.land() && temperature < maxIceSheetTemp)
             {
                 final int biome = point.biome;
-                if (biome == ACTIVE_SHIELD_VOLCANO) point.biome = ICE_SHEET_ACTIVE_SHIELD_VOLCANO;
-                else if (biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO) point.biome = ICE_SHEET_SHIELD_VOLCANO;
+                if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO) point.biome = ICE_SHEET_SHIELD_VOLCANO;
             }
             else if (temperature < maxIceSheetTemp + 4f)
             {
                 final int biome = point.biome;
-                if (biome == ACTIVE_SHIELD_VOLCANO) point.biome = GLACIATED_ACTIVE_SHIELD_VOLCANO;
-                else if (biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO) point.biome = GLACIATED_SHIELD_VOLCANO;
+                if (biome == ACTIVE_SHIELD_VOLCANO || biome == DORMANT_SHIELD_VOLCANO || biome == EXTINCT_SHIELD_VOLCANO) point.biome = GLACIATED_SHIELD_VOLCANO;
             }
 
             // Karst Biomes

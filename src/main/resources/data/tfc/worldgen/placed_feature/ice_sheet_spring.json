@@ -1,6 +1,6 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:lava_spring",
+  "feature": "tfc:ice_sheet_spring",
   "placement": [
     {
       "type": "minecraft:count",
@@ -14,10 +14,10 @@
       "height": {
         "type": "uniform",
         "min_inclusive": {
-          "absolute": -64
+          "absolute": 64
         },
         "max_inclusive": {
-          "absolute": 63
+          "absolute": 96
         }
       }
     }

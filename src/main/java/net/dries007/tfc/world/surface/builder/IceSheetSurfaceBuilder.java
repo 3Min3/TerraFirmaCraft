@@ -28,8 +28,8 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
     public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.glacialOceanicCirquesIceSurface(seed)), false, true); // TODO: maybe change back to the oceanic ice sheet surface
     public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialOceanicCirquesIceSurface(seed), false, true);
     // TODO: These need special surface builders to add the basalt, if we keep moraines those should be basaltic too
-    public static final SurfaceBuilderFactory ACTIVE_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.activeShieldVolcano(seed, BiomeNoise.activeHotSpots(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed))), true, true);
-    public static final SurfaceBuilderFactory DORMANT_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.dormantShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed))), true, true);
+    public static final SurfaceBuilderFactory ICE_SHEET_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true);
+    public static final SurfaceBuilderFactory GLACIATED_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoGlacierSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true);
 
 
     private final long seed;
@@ -55,7 +55,8 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         final int x = context.pos().getX();
         final int z = context.pos().getZ();
         SurfaceState snowState = SurfaceStates.SNOW;
-        SurfaceState iceState = SurfaceStates.GLACIER;
+        SurfaceState iceState = SurfaceStates.PACKED_ICE;
+        SurfaceState blueIceState = SurfaceStates.BLUE_ICE;
         SurfaceState moraineState = SurfaceStates.MORAINE;
 
         final int glacierBaseHeight = (int) Math.ceil(baseNoise.noise(x, z));
@@ -119,7 +120,7 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                         // Subsurface layers
                         iceDepth--;
                         surfaceDepth--;
-                        context.setBlockState(y, iceState);
+                        context.setBlockState(y, y < glacierSurfaceHeight - 16 ? blueIceState : iceState);
                     }
                     else if (surfaceDepth > 0)
                     {

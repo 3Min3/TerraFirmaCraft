@@ -53,8 +53,8 @@ def generate(rm: ResourceManager):
     rm.placed_feature_tag('feature/icebergs', 'tfc:iceberg_packed', 'tfc:iceberg_blue', 'tfc:iceberg_packed_rare', 'tfc:iceberg_blue_rare')
     rm.placed_feature_tag('feature/boulders', 'tfc:raw_boulder', 'tfc:cobble_boulder', 'tfc:mossy_boulder', 'tfc:raw_boulder_small_patch', 'tfc:cobble_boulder_small_patch', 'tfc:mossy_boulder_small_patch')
     rm.placed_feature_tag('feature/soil_discs', 'tfc:clay_disc_with_indicator', 'tfc:water_clay_disc_with_indicator', 'tfc:peat_disc', 'tfc:powder_snow', 'tfc:rooted_dirt')
-    rm.placed_feature_tag('feature/volcanoes', 'tfc:volcano_rivulet', 'tfc:volcano_caldera', 'tfc:random_volcano_fissure', 'tfc:pumice_patch')
-    rm.placed_feature_tag('feature/tuyas', 'tfc:tuya_rivulet', 'tfc:tuya_caldera', 'tfc:random_tuya_fissure', 'tfc:pumice_patch')
+    rm.placed_feature_tag('feature/volcanoes', 'tfc:volcano_rivulet', 'tfc:volcano_caldera', 'tfc:random_volcano_fissure', 'tfc:pumice_patch', 'tfc:lava_surface_spring')
+    rm.placed_feature_tag('feature/tuyas', 'tfc:tuya_rivulet', 'tfc:tuya_caldera', 'tfc:random_tuya_fissure', 'tfc:pumice_patch', 'tfc:lava_surface_spring')
     rm.placed_feature_tag('feature/surface_flood_fill_lakes', 'tfc:flood_fill_lake')
     rm.placed_feature_tag('feature/shield_volcanoes', 'tfc:pumice_shield_volcano_patch')
 
@@ -139,7 +139,6 @@ def generate(rm: ResourceManager):
     biome(rm, 'ice_sheet', 'extreme_hills', barren=True)
     biome(rm, 'ice_sheet_mountains', 'extreme_hills', barren=True)
     biome(rm, 'ice_sheet_oceanic_mountains', 'extreme_hills', barren=True)
-    biome(rm, 'ice_sheet_active_shield_volcano', 'extreme_hills', barren=True)
     biome(rm, 'ice_sheet_shield_volcano', 'extreme_hills', barren=True)
     biome(rm, 'ice_sheet_tuyas', 'extreme_hills', barren=True, tuya_features=True)
     biome(rm, 'subglacial_lake', 'extreme_hills', barren=True)
@@ -147,6 +146,7 @@ def generate(rm: ResourceManager):
     # Ice sheet edge biomes
     # TODO: Make boulders substantially more common in many of these biomes, maybe special extra-large erratics that are also random stone types? But that could be confusing
     biome(rm, 'ice_sheet_edge', 'extreme_hills')
+    biome(rm, 'ice_sheet_tuyas_edge', 'plains', tuya_features=True)
     biome(rm, 'ice_sheet_mountains_edge', 'extreme_hills')
     biome(rm, 'ice_sheet_oceanic_mountains_edge', 'extreme_hills')
     biome(rm, 'meltwater_lake', 'river')
@@ -154,7 +154,6 @@ def generate(rm: ResourceManager):
     biome(rm, 'ice_sheet_shore', 'extreme_hills')
 
     # Glaciated biomes
-    biome(rm, 'glaciated_active_shield_volcano', 'extreme_hills')
     biome(rm, 'glaciated_shield_volcano', 'extreme_hills')
     biome(rm, 'glaciated_mountains', 'extreme_hills')
     biome(rm, 'glaciated_oceanic_mountains', 'extreme_hills')
@@ -262,15 +261,54 @@ def generate(rm: ResourceManager):
         'replace_fluids': [],
     })
 
-    rm.placed_feature('flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(5), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(min_water=125), decorate_biome())
+    rm.placed_feature('flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(5), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(min_water=125, min_temp=-17), decorate_biome())
     rm.placed_feature('underground_flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(3), decorate_square(), decorate_range(-56, 63))
 
+    # Underground springs, no restrictions
     for spring_cfg in (('water', 110), ('lava', 50)):
         rm.configured_feature('%s_spring' % spring_cfg[0], 'tfc:spring', {
             'state': utils.block_state('minecraft:%s[falling=true]' % spring_cfg[0]),
             'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
         })
-        rm.placed_feature('%s_spring' % spring_cfg[0], 'tfc:%s_spring' % spring_cfg[0], decorate_count(spring_cfg[1]), decorate_square(), decorate_range(-64, 180, bias='biased_to_bottom'))
+        rm.placed_feature('%s_spring' % spring_cfg[0], 'tfc:%s_spring' % spring_cfg[0], decorate_count(spring_cfg[1]), decorate_square(), decorate_range(-64, 63, bias='uniform'))
+
+    # Above ground springs
+
+    # Water in stone, not present at ice sheet temperatures or extremely dry biomes
+    rm.configured_feature('water_surface_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
+    })
+    rm.placed_feature('water_surface_spring', 'tfc:water_surface_spring', decorate_count(60), decorate_square(), decorate_range(64, 180, bias='biased_to_bottom'), decorate_climate(min_temp=-16, min_water=65))
+
+    # Extra water in stone, only present in very wet biomes
+    rm.configured_feature('extra_water_surface_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
+    })
+    rm.placed_feature('extra_water_surface_spring', 'tfc:extra_water_surface_spring', decorate_count(30), decorate_square(), decorate_range(64, 180, bias='uniform'), decorate_climate(min_temp=-16, min_water=390))
+
+    # Water in blue ice, at the bases of ice-sheets, not at cirque heights
+    rm.configured_feature('ice_sheet_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['minecraft:blue_ice']
+    })
+    rm.placed_feature('ice_sheet_spring', 'tfc:ice_sheet_spring', decorate_count(50), decorate_square(), decorate_range(64, 96, bias='uniform'))
+
+    # Water in blue ice, at the bases of cirque glaciers, in biomes with glaciated cirques but no ice sheets
+    rm.configured_feature('glacial_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['minecraft:packed_ice']
+    })
+    rm.placed_feature('glacial_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(80, 150, bias='uniform'), decorate_biome())
+
+    # Lava in stone, only present in volcanic biomes
+    rm.configured_feature('lava_surface_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:lava[falling=true]'),
+        'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
+    })
+    rm.placed_feature('lava_surface_spring', 'tfc:lava_surface_spring', decorate_count(70), decorate_square(), decorate_range(64, 220, bias='uniform'), decorate_biome())
+
 
     rm.configured_feature('peat_disc', 'tfc:soil_disc', {
         'min_radius': 5,
@@ -1700,6 +1738,9 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
         large_features += ['tfc:rare_bamboo', 'tfc:bamboo', 'tfc:rare_bamboo_golden', 'tfc:bamboo_golden', 'tfc:cave_vegetation']
         surface_decorations.append('#tfc:feature/land_plants')
         spawners['creature'] = [entity for entity in LAND_CREATURES.values()]
+
+    if 'glaciated' in name:
+        large_features.append('tfc:glacial_spring')
 
     if volcano_features:
         large_features.append('#tfc:feature/volcanoes')
