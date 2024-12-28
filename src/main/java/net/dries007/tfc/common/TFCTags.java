@@ -180,6 +180,7 @@ public class TFCTags
         public static final TagKey<Block> SEA_BUSH_PLANTABLE_ON = tag("sea_bush_plantable_on");
         public static final TagKey<Block> HALOPHYTE_PLANTABLE_ON = tag("halophyte_plantable_on");
         public static final TagKey<Block> CREEPING_STONE_PLANTABLE_ON = tag("creeping_stone_plantable_on");
+        public static final TagKey<Block> CREEPING_PLANT_NOT_PLANTABLE_ON = tag("creeping_plant_not_plantable_on");
 
         /** Crops that rabbits will eat / break. Includes cabbage and carrots. */
         public static final TagKey<Block> RABBIT_RAIDABLE = tag("rabbit_raidable");
