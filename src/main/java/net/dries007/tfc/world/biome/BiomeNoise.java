@@ -199,16 +199,6 @@ public final class BiomeNoise
             .add(BiomeNoise.hills(seed, 15, 23));
     }
 
-    public static Noise2D glacialOceanicCirquesIceSurface(long seed)
-    {
-        return connectedValleyAbsNoise(seed)
-            .map(y ->
-                y < 0.38 ? -100 :
-                    y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) :
-                        Mth.map(y, 0.43, 1, 0, 32))
-            .add(BiomeNoise.hills(seed, -29, -21));
-    }
-
     public static Noise2D glacialValleyShapeNoise(long seed)
     {
         return connectedValleyBaseNoise(seed).map(y -> Math.min(6 * y * y, 1));

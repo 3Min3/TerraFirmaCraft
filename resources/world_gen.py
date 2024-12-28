@@ -300,7 +300,8 @@ def generate(rm: ResourceManager):
         'state': utils.block_state('minecraft:water[falling=true]'),
         'valid_blocks': ['minecraft:packed_ice']
     })
-    rm.placed_feature('glacial_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(80, 150, bias='uniform'), decorate_biome())
+    rm.placed_feature('glacial_oceanic_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(80, 92, bias='uniform'), decorate_biome())
+    rm.placed_feature('glacial_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(110, 122, bias='uniform'), decorate_biome())
 
     # Lava in stone, only present in volcanic biomes
     rm.configured_feature('lava_surface_spring', 'tfc:spring', {
@@ -1739,8 +1740,11 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
         surface_decorations.append('#tfc:feature/land_plants')
         spawners['creature'] = [entity for entity in LAND_CREATURES.values()]
 
-    if 'glaciated' in name:
-        large_features.append('tfc:glacial_spring')
+    if ('glaciated' in name) or ('mountains_edge' in name):
+        if 'oceanic' in name:
+            large_features.append('tfc:glacial_oceanic_spring')
+        else:
+            large_features.append('tfc:glacial_spring')
 
     if volcano_features:
         large_features.append('#tfc:feature/volcanoes')

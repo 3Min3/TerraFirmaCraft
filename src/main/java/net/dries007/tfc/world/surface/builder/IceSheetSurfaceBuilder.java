@@ -25,8 +25,8 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
     // TODO: rework into versions with soils
     public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(39), BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39), false, true);
     public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.glacialOceanicIceSurface(seed), false, false);
-    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.glacialOceanicCirquesIceSurface(seed)), false, true); // TODO: maybe change back to the oceanic ice sheet surface
-    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialOceanicCirquesIceSurface(seed), false, true);
+    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialOceanicIceSurface(seed).max(BiomeNoise.glacialCirquesIceSurface(seed)), false, true); // TODO: maybe change back to the oceanic ice sheet surface
+    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialCirquesIceSurface(seed), false, true);
     // TODO: These need special surface builders to add the basalt, if we keep moraines those should be basaltic too
     public static final SurfaceBuilderFactory ICE_SHEET_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true);
     public static final SurfaceBuilderFactory GLACIATED_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoGlacierSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true);
@@ -63,6 +63,7 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         final int glacierSurfaceHeight = (int) Math.ceil(iceSurfaceNoise.noise(x, z));
 
         int iceDepth;
+        // Base Groundwater check allows for exposed ice near where rivers cut into ice sheet
         if (hasMoraines && context.baseGroundwater() <= 20f)
         {
             final double moraineCrestHeight = Math.min((0.5 * (glacierSurfaceHeight + glacierBaseHeight)), glacierBaseHeight + 18);
@@ -72,7 +73,7 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         {
             iceDepth = 35;
         }
-        if ((hasStonyPeaks && startY > glacierSurfaceHeight + 3) || startY < glacierBaseHeight - 2)
+        if ((hasStonyPeaks && startY > glacierSurfaceHeight + 2.5) || startY < glacierBaseHeight - 1.5)
         {
             MountainSurfaceBuilder.NORMAL.apply(seed).buildSurface(context, startY, endY);
         }
@@ -95,9 +96,14 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                         if (surfaceDepth <= -1)
                         {
                             // skip placing snow on steep slopes
-                            if (iceDepth <= 0)
+                            if (iceDepth < 1)
                             {
                                 context.setBlockState(y, moraineState);
+                            }
+                            // avoids placing ice on steep slopes where glacier base height = terrain height
+                            else if (y <= glacierBaseHeight)
+                            {
+                                iceDepth = 0;
                             }
                             else
                             {
