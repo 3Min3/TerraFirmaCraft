@@ -291,6 +291,28 @@ public final class BiomeNoise
         };
     }
 
+    public static Noise2D invertedPatternedGround(long seed)
+    {
+        final Noise2D base = BiomeNoise.hills(seed, -4, 3);
+        Cellular2D cells = new Cellular2D(seed).spread(0.05);
+
+        return (x, z) -> {
+            final double height = base.noise(x, z);
+            Cellular2D.Cell cell = cells.cell(x, z);
+            final double f1 = cell.f1();
+            final double f2 = cell.f2();
+            final double f2f1 = f2 - f1;
+            if (height >= SEA_LEVEL_Y)
+            {
+                return height + (f2f1 < 0.12 ? 1 : 0);
+            }
+            else
+            {
+                return f2f1 < 0.12 ? SEA_LEVEL_Y - 1 : f2f1 < 0.18 ? SEA_LEVEL_Y - 2 : SEA_LEVEL_Y - 3;
+            }
+        };
+    }
+
     // Ring-shaped protrusions 1 block high, based on those found in the Svalbard Archipelago and other polar climates
     public static Noise2D stoneCircles(long seed)
     {
@@ -600,7 +622,7 @@ public final class BiomeNoise
     }
 
     /**
-     * Noise just above sea level
+     * Sand Dune Noise just above sea level
      */
     public static Noise2D dunes(long seed, int minHeight, int maxHeight)
     {
@@ -813,13 +835,13 @@ public final class BiomeNoise
     // Surface for Glaciated Shield Volcanos
     public static Noise2D shieldVolcanoGlacierSurface(long seed, Noise2D hotspot)
     {
-        final double edgeElev = -20;
+        final double edgeElev = -50;
         final double mtnBaseElev = 0;
         final double calderaCenterElev = 51;
 
         return hotspot.map(y ->
-            y < 0.45 ? Mth.map(y, 0.0, 0.45, edgeElev, mtnBaseElev)
-                : y < 0.9 ? Mth.map(y, 0.45, 0.9, mtnBaseElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
+            y < 0.55 ? edgeElev
+                : y < 0.9 ? Mth.map(y, 0.55, 0.9, mtnBaseElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
             .add(glacialIceSurface(seed));
     }
 

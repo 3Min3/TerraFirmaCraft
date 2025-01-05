@@ -124,6 +124,7 @@ public class TFCLayers
     public static final int TUYAS = idFor(TFCBiomes.TUYAS);
     public static final int KNOB_AND_KETTLE = idFor(TFCBiomes.KNOB_AND_KETTLE);
     public static final int PATTERNED_GROUND = idFor(TFCBiomes.PATTERNED_GROUND);
+    public static final int INVERTED_PATTERNED_GROUND = idFor(TFCBiomes.INVERTED_PATTERNED_GROUND);
     public static final int STONE_CIRCLES = idFor(TFCBiomes.STONE_CIRCLES);
 
 

@@ -54,8 +54,8 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
         }
         else
         {
-            top = SurfaceStates.TOP_GRASS_TO_GRAVEL;
-            mid = SurfaceStates.MID_DIRT_TO_GRAVEL;
+            top = SurfaceStates.VOLCANIC_TOP_GRASS_TO_GRAVEL;
+            mid = SurfaceStates.VOLCANIC_MID_DIRT_TO_GRAVEL;
             bot = SurfaceStates.BASALT_GRAVEL;
             underwater = SurfaceStates.BASALT_GRAVEL;
         }

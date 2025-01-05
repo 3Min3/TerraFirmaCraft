@@ -576,6 +576,10 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             TFCBlocks.PLANTS.get(Plant.SEA_LAVENDER),
             TFCBlocks.PLANTS.get(Plant.CORDGRASS));
         tag(SINGLE_BLOCK_REPLACEABLE); // todo
+        tag(POWDER_SNOW_REPLACEABLE).add(
+            Blocks.SNOW_BLOCK,
+            Blocks.PACKED_ICE,
+            Blocks.BLUE_ICE);
         tag(TIDE_POOL_BLOCKS).add(
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK),

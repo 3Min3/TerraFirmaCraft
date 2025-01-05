@@ -15,17 +15,11 @@ import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
 
-public class IceSheetSurfaceBuilder implements SurfaceBuilder
+public class IceSheetShieldVoclanoSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed), BiomeNoise.glacialIceSurface(seed), true, false);
-    public static final SurfaceBuilderFactory EDGE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed).addConstant(1.6), BiomeNoise.glacialIceSurface(seed), true, false);
-    public static final SurfaceBuilderFactory EDGE_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.lake(seed), BiomeNoise.glacialIceSurface(seed), false, false);
-    public static final SurfaceBuilderFactory HIDDEN_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.glacialIceSurface(seed), false, false);
-    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(39), BiomeNoise.glacialMontaneIceSurface(seed).max(BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39)), false, true);
-    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(39), BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39), false, true);
-    public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.glacialOceanicIceSurface(seed), false, false);
-    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialOceanicIceSurface(seed).max(BiomeNoise.glacialCirquesIceSurface(seed)), false, true);
-    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialCirquesIceSurface(seed), false, true);
+    public static final SurfaceBuilderFactory ICE_SHEET = seed -> new IceSheetShieldVoclanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true);
+    public static final SurfaceBuilderFactory GLACIATED = seed -> new IceSheetShieldVoclanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.shieldVolcanoGlacierSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true);
+
 
     private final long seed;
     private final Noise2D iceSurfaceNoise;
@@ -33,7 +27,7 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
     private final boolean hasMoraines;
     private final boolean hasStonyPeaks;
 
-    IceSheetSurfaceBuilder(long seed, Noise2D baseNoise, Noise2D iceSurfaceNoise, boolean hasMoraines, boolean hasStonyPeaks)
+    IceSheetShieldVoclanoSurfaceBuilder(long seed, Noise2D baseNoise, Noise2D iceSurfaceNoise, boolean hasMoraines, boolean hasStonyPeaks)
     {
         this.baseNoise = baseNoise;
         this.iceSurfaceNoise = iceSurfaceNoise;
@@ -49,10 +43,11 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         int surfaceY = 0;
         final int x = context.pos().getX();
         final int z = context.pos().getZ();
-        SurfaceState snowState = SurfaceStates.SNOW;
-        SurfaceState iceState = SurfaceStates.PACKED_ICE;
-        SurfaceState blueIceState = SurfaceStates.BLUE_ICE;
-        SurfaceState moraineState = SurfaceStates.MORAINE;
+        final SurfaceState snowState = SurfaceStates.SNOW;
+        final SurfaceState iceState = SurfaceStates.PACKED_ICE;
+        final SurfaceState blueIceState = SurfaceStates.BLUE_ICE;
+        final SurfaceState moraineState = SurfaceStates.BASALT_MORAINE;
+        final SurfaceState basaltState = SurfaceStates.BASALT;
 
         final int glacierBaseHeight = (int) Math.ceil(baseNoise.noise(x, z));
         final int glacierSurfaceHeight = (int) Math.ceil(iceSurfaceNoise.noise(x, z));
@@ -70,14 +65,14 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         }
         if (hasStonyPeaks && startY > glacierSurfaceHeight + 2.5)
         {
-            NormalSurfaceBuilder.ROCKY.apply(seed).buildSurface(context, startY, endY);
+            ShieldVolcanoSurfaceBuilder.DORMANT.apply(seed).buildSurface(context, startY, endY);
         }
         else if (startY < glacierBaseHeight - 1.5)
         {
-            NormalSurfaceBuilder.INSTANCE.apply(seed).buildSurface(context, startY, endY);
+            ShieldVolcanoSurfaceBuilder.DORMANT.apply(seed).buildSurface(context, startY, endY);
         }
         else {
-            for (int y = startY; y >= glacierBaseHeight - 2; --y)
+            for (int y = startY; y >= glacierBaseHeight - 22; --y)
             {
                 final BlockState stateAt = context.getBlockState(y);
                 if (stateAt.isAir())
@@ -127,11 +122,17 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                         surfaceDepth--;
                         context.setBlockState(y, y < glacierSurfaceHeight - 16 ? blueIceState : iceState);
                     }
-                    else if (surfaceDepth > 0)
+                    else if (y > glacierBaseHeight)
                     {
                         // Subsurface layers
                         surfaceDepth--;
                         context.setBlockState(y, moraineState);
+                    }
+                    else
+                    {
+                        // Subsurface layers
+                        surfaceDepth--;
+                        context.setBlockState(y, basaltState);
                     }
                 }
             }

@@ -273,7 +273,7 @@ public class RegionGeneratorTests implements TestSetup
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE) return new Color(165, 165, 165);
 
-        if (biome == PATTERNED_GROUND) return new Color(135, 135, 135);
+        if (biome == PATTERNED_GROUND || biome == INVERTED_PATTERNED_GROUND) return new Color(135, 135, 135);
         if (biome == KNOB_AND_KETTLE) return new Color(115, 115, 115);
         if (biome == DRUMLINS || biome == BURREN_ROCHE_MOUTONEE) return new Color(135, 165, 135);
         if (biome == TUYAS) return new Color(115, 145, 115);
@@ -349,8 +349,9 @@ public class RegionGeneratorTests implements TestSetup
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE || biome == ICE_SHEET_TUYAS_EDGE) return new Color(165, 165, 165);
 
-        if (biome == PATTERNED_GROUND) return new Color(255, 195, 100);
-        if (biome == KNOB_AND_KETTLE) return new Color(255, 195, 100);
+        if (biome == PATTERNED_GROUND) return new Color(255, 215, 110);
+        if (biome == INVERTED_PATTERNED_GROUND) return new Color(255, 195, 100);
+        if (biome == KNOB_AND_KETTLE) return new Color(235, 175, 80);
         if (biome == DRUMLINS || biome == BURREN_ROCHE_MOUTONEE) return new Color(135, 165, 135);
         if (biome == TUYAS) return new Color(115, 145, 115);
         if (biome == GLACIATED_MOUNTAINS) return new Color(255, 165, 165);

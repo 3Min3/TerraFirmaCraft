@@ -27,11 +27,11 @@ public enum ChooseBiomes implements RegionTask
         {ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS, ICE_SHEET_MOUNTAINS, ICE_SHEET_TUYAS}, // High
     };
     private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
-        {PATTERNED_GROUND, PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS}, // Low
+        {PATTERNED_GROUND, INVERTED_PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS}, // Low
         {PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, TUYAS, TUYAS}, // Mid
         {DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, PLATEAU, PLATEAU, PLATEAU, PLATEAU, ICE_SHEET_MOUNTAINS}, // High
     };
-    private static final int[] KNOB_AND_KETTLE_BIOMES = {KNOB_AND_KETTLE, PATTERNED_GROUND, PATTERNED_GROUND};
+    private static final int[] KNOB_AND_KETTLE_BIOMES = {KNOB_AND_KETTLE, PATTERNED_GROUND, INVERTED_PATTERNED_GROUND};
     private static final int[] ISLAND_BIOMES = {PLAINS, HILLS, ROLLING_HILLS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS};
     private static final int[] MID_DEPTH_OCEAN_BIOMES = {DEEP_OCEAN, OCEAN, OCEAN, OCEAN_REEF, OCEAN_REEF, OCEAN_REEF};
     private static final int[] DRY_LOWLANDS_REPLACEMENT_BIOMES = {MUD_FLATS, MUD_FLATS, GRASSY_DUNES, GRASSY_DUNES};
@@ -169,7 +169,7 @@ public enum ChooseBiomes implements RegionTask
                 else if (point.biome == LOWLANDS || point.biome == LOW_CANYONS) point.biome = randomSeededFrom(rngSeed, areaSeed, DRY_LOWLANDS_REPLACEMENT_BIOMES);
                 else if (point.biome == HILLS || point.biome == ROLLING_HILLS) point.biome = GRASSY_DUNES;
             }
-            if (rainfall < 145 && point.biome == PATTERNED_GROUND) point.biome = STONE_CIRCLES;
+            if (rainfall < 145 && (point.biome == PATTERNED_GROUND || point.biome == INVERTED_PATTERNED_GROUND)) point.biome = STONE_CIRCLES;
 
             // Prevent badlands from appearing in very high rainfall environments
             final float maxRainfallForBadlands = 420f + Math.floorMod(areaSeed ^ climateSeed, 40);

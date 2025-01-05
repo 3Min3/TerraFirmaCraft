@@ -24,9 +24,8 @@ public class SoilSurfaceState implements SurfaceState
 {
     public static final Noise2D PATCH_NOISE = new OpenSimplex2D(18273952837592L).octaves(2).spread(0.04f);
 
-    public static SurfaceState buildSurfaceType(SoilBlockType type, boolean sandy)
+    public static SurfaceState buildSurfaceType(SoilBlockType type, SurfaceState dry)
     {
-        final SurfaceState dry = sandy ? SurfaceStates.SAND : SurfaceStates.GRAVEL;
         final ImmutableList<SurfaceState> regions = ImmutableList.of(
             SurfaceStates.SNOW,
             SurfaceStates.SNOW,
@@ -50,9 +49,8 @@ public class SoilSurfaceState implements SurfaceState
         return type == SoilBlockType.GRASS ? new SoilSurfaceState.NeedsPostProcessing(regions) : new SoilSurfaceState(regions);
     }
 
-    public static SurfaceState buildMidType(SoilBlockType type, boolean sandy)
+    public static SurfaceState buildMidType(SoilBlockType type, SurfaceState dry)
     {
-        final SurfaceState dry = sandy ? SurfaceStates.SAND : SurfaceStates.GRAVEL;
         final ImmutableList<SurfaceState> regions = ImmutableList.of(
             SurfaceStates.PACKED_ICE,
             blobTransition(SurfaceStates.PACKED_ICE, dry),

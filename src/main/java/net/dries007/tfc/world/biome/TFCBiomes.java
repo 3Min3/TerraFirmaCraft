@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.river.RiverBlendType;
+import net.dries007.tfc.world.surface.builder.IceSheetShieldVoclanoSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.IceSheetSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.PatternedGroundSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.ShieldVolcanoSurfaceBuilder;
@@ -157,13 +158,13 @@ public final class TFCBiomes
     public static final BiomeExtension ICE_SHEET = register("ice_sheet", builder().heightmap(seed -> BiomeNoise.glacialIceSurface(seed).add(BiomeNoise.glacierTexture(seed))).surface(IceSheetSurfaceBuilder.NORMAL).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
     public static final BiomeExtension ICE_SHEET_MOUNTAINS = register("ice_sheet_mountains", builder().heightmap(seed -> BiomeNoise.glacialMontaneIceSurface(seed).add(BiomeNoise.glacierTexture(seed)).max(BiomeNoise.glacialCirques(seed).addConstant(39)).max(BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39))).surface(IceSheetSurfaceBuilder.ICE_SHEET_MOUNTAINS).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
     public static final BiomeExtension ICE_SHEET_OCEANIC_MOUNTAINS = register("ice_sheet_oceanic_mountains", builder().heightmap(seed -> BiomeNoise.glacialOceanicIceSurface(seed).add(BiomeNoise.glacierTexture(seed)).max(BiomeNoise.glacialCirquesIceSurface(seed)).max(BiomeNoise.glacialCirques(seed))).surface(IceSheetSurfaceBuilder.ICE_SHEET_OCEANIC_MOUNTAINS).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
-    public static final BiomeExtension ICE_SHEET_SHIELD_VOLCANO = register("ice_sheet_shield_volcano", builder().heightmap(seed -> BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed)).add(BiomeNoise.glacierTexture(seed)))).surface(IceSheetSurfaceBuilder.ICE_SHEET_SHIELD_VOLCANO).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
-    public static final BiomeExtension ICE_SHEET_TUYAS = register("ice_sheet_tuyas", builder().heightmap(seed -> BiomeNoise.glacialIceSurface(seed).add(BiomeNoise.glacierTexture(seed))).surface(IceSheetSurfaceBuilder.NORMAL).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().tuyas(2, 0, 35, 40, true).type(RiverBlendType.CAVE));
+    public static final BiomeExtension ICE_SHEET_SHIELD_VOLCANO = register("ice_sheet_shield_volcano", builder().heightmap(seed -> BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed)).add(BiomeNoise.glacierTexture(seed)))).surface(IceSheetShieldVoclanoSurfaceBuilder.ICE_SHEET).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
+    public static final BiomeExtension ICE_SHEET_TUYAS = register("ice_sheet_tuyas", builder().heightmap(seed -> BiomeNoise.glacialIceSurface(seed).add(BiomeNoise.glacierTexture(seed))).surface(IceSheetSurfaceBuilder.NORMAL).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().tuyas(3, 0, 35, 40, true).type(RiverBlendType.CAVE));
     public static final BiomeExtension SUBGLACIAL_LAKE = register("subglacial_lake", builder().heightmap(seed -> BiomeNoise.glacialIceSurface(seed).add(BiomeNoise.glacierTexture(seed))).surface(IceSheetSurfaceBuilder.HIDDEN_LAKE).carving(BiomeNoise::undergroundLakes).type(BiomeBlendType.LAKE).noRivers());
 
     // Ice Sheet Edge Biomes
     public static final BiomeExtension ICE_SHEET_EDGE = register("ice_sheet_edge", builder().heightmap(BiomeNoise::glacialBase).surface(IceSheetSurfaceBuilder.EDGE).spawnable().type(RiverBlendType.TALL_CANYON).noSandyRiverShores());
-    public static final BiomeExtension ICE_SHEET_TUYAS_EDGE = register("ice_sheet_tuyas_edge", builder().heightmap(BiomeNoise::glacialBase).surface(IceSheetSurfaceBuilder.EDGE).spawnable().type(RiverBlendType.TALL_CANYON).noSandyRiverShores().tuyas(2, 0, 35, 40, true));
+    public static final BiomeExtension ICE_SHEET_TUYAS_EDGE = register("ice_sheet_tuyas_edge", builder().heightmap(BiomeNoise::glacialBase).surface(IceSheetSurfaceBuilder.EDGE).spawnable().type(RiverBlendType.TALL_CANYON).noSandyRiverShores().tuyas(3, 0, 35, 40, true));
     public static final BiomeExtension ICE_SHEET_MOUNTAINS_EDGE = register("ice_sheet_mountains_edge", builder().heightmap(seed -> BiomeNoise.glacialCirques(seed).addConstant(39).max(BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39))).surface(IceSheetSurfaceBuilder.ICE_SHEET_MOUNTAINS).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
     public static final BiomeExtension ICE_SHEET_OCEANIC_MOUNTAINS_EDGE = register("ice_sheet_oceanic_mountains_edge", builder().heightmap(seed -> BiomeNoise.glacialCirquesIceSurface(seed).max(BiomeNoise.glacialCirques(seed))).surface(IceSheetSurfaceBuilder.ICE_SHEET_OCEANIC_MOUNTAINS).aquiferHeightOffset(-24).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().shore().setCliffBaseHeight(-16).salty());
     public static final BiomeExtension MELTWATER_LAKE = register("meltwater_lake", builder().heightmap(BiomeNoise::lake).surface(IceSheetSurfaceBuilder.EDGE_LAKE).aquiferHeightOffset(-16).type(BiomeBlendType.LAKE).type(RiverBlendType.WIDE).noRivers().shore().setCliffBaseHeight(-16));
@@ -173,7 +174,7 @@ public final class TFCBiomes
     // Glaciated Biomes
     public static final BiomeExtension GLACIATED_MOUNTAINS = register("glaciated_mountains", builder().heightmap(seed -> BiomeNoise.glacialCirques(seed).addConstant(39).max(BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39))).surface(IceSheetSurfaceBuilder.GLACIATED_MOUNTAINS).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
     public static final BiomeExtension GLACIATED_OCEANIC_MOUNTAINS = register("glaciated_oceanic_mountains", builder().heightmap(seed -> BiomeNoise.glacialCirques(seed).max(BiomeNoise.glacialCirquesIceSurface(seed))).surface(IceSheetSurfaceBuilder.GLACIATED_OCEANIC_MOUNTAINS).aquiferHeightOffset(-24).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().salty());
-    public static final BiomeExtension GLACIATED_SHIELD_VOLCANO = register("glaciated_shield_volcano", builder().heightmap(seed -> BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)).max(BiomeNoise.shieldVolcanoGlacierSurface(seed, BiomeNoise.hotSpotIntensity(seed)))).surface(IceSheetSurfaceBuilder.GLACIATED_SHIELD_VOLCANO).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
+    public static final BiomeExtension GLACIATED_SHIELD_VOLCANO = register("glaciated_shield_volcano", builder().heightmap(seed -> BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)).max(BiomeNoise.shieldVolcanoGlacierSurface(seed, BiomeNoise.hotSpotIntensity(seed)))).surface(IceSheetShieldVoclanoSurfaceBuilder.GLACIATED).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores());
 
     // Peri/Paleoglacial Biomes
     // Montane biomes
@@ -181,13 +182,14 @@ public final class TFCBiomes
     public static final BiomeExtension GLACIALLY_CARVED_OCEANIC_MOUNTAINS = register("glacially_carved_oceanic_mountains", builder().heightmap(seed -> BiomeNoise.glacialCirques(seed)).surface(NormalSurfaceBuilder.ROCKY).aquiferHeightOffset(-24).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().salty());
 
     // Mid-elevation biomes
-    public static final BiomeExtension DRUMLINS = register("drumlins", builder().heightmap(BiomeNoise::drumlins).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());
-    public static final BiomeExtension TUYAS = register("tuyas", builder().heightmap(BiomeNoise::drumlins).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE).noSandyRiverShores().tuyas(2, 0, 35, 40, false).type(RiverBlendType.CANYON));
+    public static final BiomeExtension DRUMLINS = register("drumlins", builder().heightmap(BiomeNoise::drumlins).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE));
+    public static final BiomeExtension TUYAS = register("tuyas", builder().heightmap(BiomeNoise::drumlins).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE).tuyas(2, 0, 35, 40, false).type(RiverBlendType.CANYON));
 
     // Low-elevation biomes
-    public static final BiomeExtension KNOB_AND_KETTLE = register("knob_and_kettle", builder().heightmap(BiomeNoise::knobAndKettle).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());
-    public static final BiomeExtension PATTERNED_GROUND = register("patterned_ground", builder().heightmap(seed -> BiomeNoise.hills(seed, -4, 3).add(BiomeNoise.patternedGround(seed))).surface(PatternedGroundSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());
-    public static final BiomeExtension STONE_CIRCLES = register("stone_circles", builder().heightmap(seed -> BiomeNoise.hills(seed, -2, 4).add(BiomeNoise.stoneCircles(seed))).surface(StoneCirclesSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());
+    public static final BiomeExtension KNOB_AND_KETTLE = register("knob_and_kettle", builder().heightmap(BiomeNoise::knobAndKettle).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE));
+    public static final BiomeExtension PATTERNED_GROUND = register("patterned_ground", builder().heightmap(seed -> BiomeNoise.hills(seed, -4, 3).add(BiomeNoise.patternedGround(seed))).surface(PatternedGroundSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE));
+    public static final BiomeExtension INVERTED_PATTERNED_GROUND = register("inverted_patterned_ground", builder().heightmap(BiomeNoise::invertedPatternedGround).surface(PatternedGroundSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE));
+    public static final BiomeExtension STONE_CIRCLES = register("stone_circles", builder().heightmap(seed -> BiomeNoise.hills(seed, -2, 4).add(BiomeNoise.stoneCircles(seed))).surface(StoneCirclesSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.WIDE));
 
     public static BiomeExtension getExtensionOrThrow(LevelAccessor level, Biome biome)
     {

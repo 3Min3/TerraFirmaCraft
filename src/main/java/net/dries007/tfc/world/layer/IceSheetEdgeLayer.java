@@ -23,12 +23,12 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
     {
         final Predicate<IntPredicate> matcher = p -> p.test(north) || p.test(east) || p.test(south) || p.test(west);
 
-        if (center == KNOB_AND_KETTLE || center == PATTERNED_GROUND)
+        if (center == KNOB_AND_KETTLE || center == PATTERNED_GROUND || center == INVERTED_PATTERNED_GROUND || center == STONE_CIRCLES)
         {
             if ((matcher.test(i -> i == ICE_SHEET_TUYAS)))
-        {
+            {
             return ICE_SHEET_TUYAS_EDGE;
-        }
+            }
             else if ((matcher.test(TFCLayers::isFlatIceSheet)))
             {
                 return ICE_SHEET_EDGE;
@@ -74,6 +74,14 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
             return ICE_SHEET_OCEANIC;
         }
 
+        if (center == ICE_SHEET_SHORE)
+        {
+            if (!matcher.test(i -> i == ICE_SHEET_OCEANIC))
+            {
+                return SHORE;
+            }
+        }
+
         // Glaciated mountains should have glacially carved edges to avoid cirque glaciers turning to stone near borders with lower biomes
         if (isNotIceSheetOrGlaciated(center))
         {
@@ -93,6 +101,24 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
             if (matcher.test(i -> i == ICE_SHEET_OCEANIC_MOUNTAINS_EDGE))
             {
                 return GLACIATED_OCEANIC_MOUNTAINS;
+            }
+        }
+
+        // Similar to above, tall ice sheets can create icy cliffs at edges of moraines
+        if (center == ICE_SHEET || center == ICE_SHEET_TUYAS)
+        {
+            if (matcher.test(i -> i == ICE_SHEET_OCEANIC_MOUNTAINS_EDGE))
+            {
+                return ICE_SHEET_OCEANIC;
+            }
+        }
+
+        // See above
+        if (center == ICE_SHEET_MOUNTAINS)
+        {
+            if (matcher.test(i -> i == ICE_SHEET_OCEANIC_MOUNTAINS_EDGE))
+            {
+                return ICE_SHEET_OCEANIC_MOUNTAINS;
             }
         }
 

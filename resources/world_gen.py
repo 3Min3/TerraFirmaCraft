@@ -163,6 +163,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'tuyas', 'plains', tuya_features=True, boulders=True)
     biome(rm, 'knob_and_kettle', 'plains', boulders=True)
     biome(rm, 'patterned_ground', 'plains', boulders=True)
+    biome(rm, 'inverted_patterned_ground', 'plains', boulders=True)
     biome(rm, 'stone_circles', 'plains', boulders=True)
     # Carvers
     rm.configured_carver('cave', 'tfc:cave', {
@@ -251,7 +252,7 @@ def generate(rm: ResourceManager):
         rm.placed_feature('iceberg_%s_rare' % block, 'tfc:iceberg_%s_rare' % block, decorate_chance(30), decorate_square(), decorate_climate(max_temp=-18))
 
     rm.configured_feature('powder_snow', 'tfc:powder_snow', {'state': utils.block_state('minecraft:powder_snow')})
-    rm.placed_feature('powder_snow', 'tfc:powder_snow', decorate_chance(15), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(max_temp=-17), decorate_flat_enough(flatness=0.6))
+    rm.placed_feature('powder_snow', 'tfc:powder_snow', decorate_chance(2), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(max_temp=-15))
 
     rm.configured_feature('flood_fill_lake', 'tfc:flood_fill_lake', {
         'state': 'minecraft:water',

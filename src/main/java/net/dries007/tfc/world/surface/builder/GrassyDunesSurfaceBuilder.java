@@ -41,7 +41,7 @@ public class GrassyDunesSurfaceBuilder implements SurfaceBuilder
 
         if (startY > heightVariation && trueSlope < 5)
         {
-            SurfaceState grass = SoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, true);
+            SurfaceState grass = SoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, SurfaceStates.SAND);
             NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, grass, sand, sand, sand, sand);
         }
         else
