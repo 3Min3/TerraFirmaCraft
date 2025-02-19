@@ -64,7 +64,7 @@ public final class TFCBiomes
     public static final BiomeExtension ROLLING_HILLS = register("rolling_hills", builder().heightmap(seed -> BiomeNoise.hills(seed, -5, 28)).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.CANYON)); // Higher hills, above sea level. Some larger / steeper hills.
     public static final BiomeExtension HIGHLANDS = register("highlands", builder().heightmap(seed -> BiomeNoise.sharpHills(seed, -3, 28)).surface(NormalSurfaceBuilder.ROCKY).spawnable().type(RiverBlendType.CANYON)); // Hills with sharp, exposed rocky areas.
     public static final BiomeExtension BADLANDS = register("badlands", builder().heightmap(seed -> BiomeNoise.badlands(seed, 22, 19.5f)).surface(BadlandsSurfaceBuilder.NORMAL).spawnable().type(RiverBlendType.CANYON)); // Very high flat area with steep relief carving, similar to vanilla mesas.
-    public static final BiomeExtension INVERTED_BADLANDS = register("inverted_badlands", builder().heightmap(BiomeNoise::bryceCanyon).surface(BadlandsSurfaceBuilder.INVERTED).spawnable().type(RiverBlendType.CANYON)); // Inverted badlands: hills with additive ridges, similar to vanilla bryce canyon mesas.
+    public static final BiomeExtension INVERTED_BADLANDS = register("inverted_badlands", builder().heightmap(BiomeNoise::bryceCanyon).surface(BadlandsSurfaceBuilder.MESAS).spawnable().type(RiverBlendType.CANYON)); // Inverted badlands: hills with additive ridges, similar to vanilla bryce canyon mesas.
     public static final BiomeExtension PLATEAU = register("plateau", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(NormalSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.TALL_CANYON).noSandyRiverShores()); // Very high area, very flat top.
     public static final BiomeExtension CANYONS = register("canyons", builder().heightmap(seed -> BiomeNoise.canyons(seed, -2, 40)).surface(NormalSurfaceBuilder.INSTANCE).volcanoes(6, 14, 30, 28).spawnable().type(RiverBlendType.CANYON).noSandyRiverShores()); // Medium height with snake like ridges, minor volcanic activity
 
@@ -97,6 +97,12 @@ public final class TFCBiomes
     public static final BiomeExtension SALT_FLATS = register("salt_flats", builder().heightmap(BiomeNoise::saltFlats).surface(FlatsSurfaceBuilder.SALTY).aquiferHeightOffset(-16).salty().spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());
     public static final BiomeExtension DUNE_SEA = register("dune_sea", builder().heightmap(seed -> BiomeNoise.dunes(seed, 2, 16)).surface(DuneSurfaceBuilder.INSTANCE).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.WIDE));
     public static final BiomeExtension GRASSY_DUNES = register("grassy_dunes", builder().heightmap(seed -> BiomeNoise.dunes(seed, 2, 16)).surface(GrassyDunesSurfaceBuilder.INSTANCE).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.WIDE));
+    public static final BiomeExtension WHORLED_CANYONS = register("whorled_canyons", builder().heightmap(seed -> BiomeNoise.canyons(seed, 8, 60)).surface(BadlandsSurfaceBuilder.WARPED).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TALL_CANYON)); // Zhangye danxia TODO: Surface builder
+    public static final BiomeExtension STAIR_STEP_CANYONS = register("stair_step_canyons", builder().heightmap(seed -> BiomeNoise.stairCanyons(seed)).surface(BadlandsSurfaceBuilder.MESAS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
+    public static final BiomeExtension MESAS = register("mesas", builder().heightmap(seed -> BiomeNoise.mesas(seed)).surface(BadlandsSurfaceBuilder.MESAS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
+    public static final BiomeExtension BUTTES = register("buttes", builder().heightmap(seed -> BiomeNoise.buttes(seed)).surface(BadlandsSurfaceBuilder.MESAS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
+    public static final BiomeExtension HOODOOS = register("hoodoos", builder().heightmap(seed -> BiomeNoise.hoodoos(seed)).surface(BadlandsSurfaceBuilder.HOODOOS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
+    public static final BiomeExtension TABLE_MOUNTAINS = register("table_mountains", builder().heightmap(seed -> BiomeNoise.tableMountains(seed)).surface(BadlandsSurfaceBuilder.NORMAL).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.CAVE));
 
     // Karst Biomes
 

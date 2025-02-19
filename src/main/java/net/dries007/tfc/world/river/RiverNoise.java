@@ -130,6 +130,29 @@ public final class RiverNoise
         };
     }
 
+    // Rows of vertical cliffs
+    public static RiverNoiseSampler terraces(Seed seed)
+    {
+        return new RiverNoiseSampler() {
+            final Noise2D baseNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-2.5f, 1.5f);
+            final Noise2D cliffHeightNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.1f).scaled(4f, 8f);
+            final Noise2D distNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-0.15f, 0.15f);
+            double height;
+            @Override
+            public double setColumnAndSampleHeight(RiverInfo info, int x, int z, double heightIn, double caveWeight)
+            {
+                final double distFac = Math.sqrt(info.normDistSq()) * 0.8 + distNoise.noise(x, z);
+                final double riverHeight = 56 + distFac * 9 + baseNoise.noise(x, z) + cliffHeightNoise.noise(x, z) * Math.max(Math.floor(distFac), 0);
+                return height = Math.min(riverHeight, heightIn);
+            }
+            @Override
+            public double noise(int y, double noiseIn)
+            {
+                return y > height ? 0 : noiseIn;
+            }
+        };
+    }
+
     public static RiverNoiseSampler cave(Seed seed)
     {
         return new RiverNoiseSampler() {
