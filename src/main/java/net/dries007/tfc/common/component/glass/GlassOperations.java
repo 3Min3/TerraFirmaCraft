@@ -31,12 +31,12 @@ public record GlassOperations(
     public static final GlassOperations DEFAULT = new GlassOperations(List.of(), ItemStack.EMPTY);
 
     public static final Codec<GlassOperations> CODEC = RecordCodecBuilder.create(i -> i.group(
-        GlassOperation.CODEC.listOf(0, LIMIT).fieldOf("steps").forGetter(c -> c.steps),
+        GlassOperation.REGISTRY.byNameCodec().listOf(0, LIMIT).fieldOf("steps").forGetter(c -> c.steps),
         ItemStack.CODEC.optionalFieldOf("stack", ItemStack.EMPTY).forGetter(c -> c.batch)
     ).apply(i, GlassOperations::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, GlassOperations> STREAM_CODEC = StreamCodec.composite(
-        GlassOperation.STREAM_CODEC.apply(ByteBufCodecs.list()), c -> c.steps,
+        ByteBufCodecs.registry(GlassOperation.KEY).apply(ByteBufCodecs.list()), c -> c.steps,
         ItemStack.OPTIONAL_STREAM_CODEC, c -> c.batch,
         GlassOperations::new
     );
