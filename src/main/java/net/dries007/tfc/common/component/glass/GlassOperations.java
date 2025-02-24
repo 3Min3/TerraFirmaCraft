@@ -42,7 +42,6 @@ public record GlassOperations(
     );
 
     /**
-     *
      * @return {@code true} if the glass is empty, i.e. has no glass batch and no steps.
      */
     public boolean isEmpty()

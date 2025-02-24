@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.common.component.glass;
 
+import com.google.common.base.Suppliers;
+
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blocks.rock.Ore;
@@ -14,6 +16,7 @@ import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Helpers;
+
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -26,12 +29,12 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class GlassOperation
 {
@@ -42,8 +45,16 @@ public class GlassOperation
         .create();
     public static final DeferredRegister<GlassOperation> OPERATIONS = DeferredRegister.create(KEY, TerraFirmaCraft.MOD_ID);
 
-    @ApiStatus.Internal
-    public static final Map<Item, GlassOperation> POWDERS = new IdentityHashMap<>();
+    public static final Supplier<Map<Item, GlassOperation>> POWDERS = Suppliers.memoize(() -> {
+        final Map<Item, GlassOperation> map = new IdentityHashMap<>();
+        REGISTRY.stream().filter(op -> op.powder).forEach(op -> {
+            for (Holder<Item> item : op.items)
+            {
+                map.put(item.value(), op);
+            }
+        });
+        return map;
+    });
 
     // Blowpipe
     public static final DeferredHolder<GlassOperation, GlassOperation> BLOW = OPERATIONS.register("blow", () -> new GlassOperation(Set.of(TFCItems.BLOWPIPE_WITH_GLASS.holder(), TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS.holder()), TFCSounds.BELLOWS_BLOW.holder(), Heat.FAINT_RED.getMin(), false));
@@ -89,16 +100,7 @@ public class GlassOperation
     @Nullable
     public static GlassOperation getByPowder(ItemStack stack)
     {
-        if (POWDERS.isEmpty())
-        {
-            REGISTRY.stream().filter(op -> op.powder).forEach(op -> {
-                for (Holder<Item> item : op.items)
-                {
-                    POWDERS.put(item.value(), op);
-                }
-            });
-        }
-        return POWDERS.get(stack.getItem());
+        return POWDERS.get().get(stack.getItem());
     }
 
     private final Set<Holder<Item>> items;
@@ -123,7 +125,8 @@ public class GlassOperation
 
     public String getTranslationId()
     {
-        if (translationId == null) {
+        if (translationId == null)
+        {
             translationId = Util.makeDescriptionId("glass_operation", REGISTRY.getKey(this));
         }
         return translationId;
@@ -144,11 +147,6 @@ public class GlassOperation
         return HeatCapability.getTemperature(stack) > minTemperature;
     }
 
-    private static DeferredHolder<GlassOperation, GlassOperation> register(String name, Set<Holder<Item>> items)
-    {
-        return OPERATIONS.register(name, () -> new GlassOperation(items, Holder.direct(SoundEvents.ANVIL_USE), Heat.FAINT_RED.getMin(), false));
-    }
-
     private static DeferredHolder<GlassOperation, GlassOperation> powder(String name, TFCItems.ItemId item)
     {
         return OPERATIONS.register(name, () -> new GlassOperation(item.holder(), true));
@@ -157,6 +155,11 @@ public class GlassOperation
     private static DeferredHolder<GlassOperation, GlassOperation> powder(String name, Set<Holder<Item>> items)
     {
         return OPERATIONS.register(name, () -> new GlassOperation(items, Holder.direct(SoundEvents.ANVIL_USE), Heat.FAINT_RED.getMin(), true));
+    }
+
+    private static DeferredHolder<GlassOperation, GlassOperation> register(String name, Set<Holder<Item>> items)
+    {
+        return OPERATIONS.register(name, () -> new GlassOperation(items, Holder.direct(SoundEvents.ANVIL_USE), Heat.FAINT_RED.getMin(), false));
     }
 
     private static DeferredHolder<GlassOperation, GlassOperation> register(String name, TFCItems.ItemId item)
