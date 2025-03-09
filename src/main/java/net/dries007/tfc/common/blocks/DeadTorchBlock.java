@@ -9,15 +9,19 @@ package net.dries007.tfc.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class DeadTorchBlock extends TorchBlock
 {
-    public DeadTorchBlock(Properties properties, SimpleParticleType particle)
+    private final ExtendedProperties properties;
+    public DeadTorchBlock(ExtendedProperties properties, SimpleParticleType particle)
     {
-        super(particle, properties);
+        super(particle, properties.properties());
+        this.properties = properties;
     }
 
     @Override
