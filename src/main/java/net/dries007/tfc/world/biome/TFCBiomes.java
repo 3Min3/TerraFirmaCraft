@@ -7,6 +7,8 @@
 package net.dries007.tfc.world.biome;
 
 import java.util.Objects;
+
+import net.dries007.tfc.world.surface.builder.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -22,22 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.river.RiverBlendType;
-import net.dries007.tfc.world.surface.builder.IceSheetShieldVolcanoSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.IceSheetSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.PatternedGroundSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.ShieldVolcanoSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.BadlandsSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.DuneSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.GrassyDunesSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.BurrenSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.LowlandsSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.FlatsSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.NormalSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.OceanSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.RiverSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.ShilinSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.ShoreSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.StoneCirclesSurfaceBuilder;
 
 import static net.dries007.tfc.world.biome.BiomeBuilder.*;
 
@@ -97,12 +83,12 @@ public final class TFCBiomes
     public static final BiomeExtension SALT_FLATS = register("salt_flats", builder().heightmap(BiomeNoise::saltFlats).surface(FlatsSurfaceBuilder.SALTY).aquiferHeightOffset(-16).salty().spawnable().type(RiverBlendType.WIDE).noSandyRiverShores());
     public static final BiomeExtension DUNE_SEA = register("dune_sea", builder().heightmap(seed -> BiomeNoise.dunes(seed, 2, 16)).surface(DuneSurfaceBuilder.INSTANCE).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.WIDE));
     public static final BiomeExtension GRASSY_DUNES = register("grassy_dunes", builder().heightmap(seed -> BiomeNoise.dunes(seed, 2, 16)).surface(GrassyDunesSurfaceBuilder.INSTANCE).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.WIDE));
-    public static final BiomeExtension WHORLED_CANYONS = register("whorled_canyons", builder().heightmap(seed -> BiomeNoise.canyons(seed, 8, 60)).surface(BadlandsSurfaceBuilder.WARPED).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TALL_CANYON)); // Zhangye danxia TODO: Surface builder
+    public static final BiomeExtension WHORLED_CANYONS = register("whorled_canyons", builder().heightmap(seed -> BiomeNoise.canyons(seed, 8, 60)).surface(BadlandsSurfaceBuilder.WARPED).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TALL_CANYON)); // Zhangye danxia
     public static final BiomeExtension STAIR_STEP_CANYONS = register("stair_step_canyons", builder().heightmap(seed -> BiomeNoise.stairCanyons(seed)).surface(BadlandsSurfaceBuilder.MESAS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
     public static final BiomeExtension MESAS = register("mesas", builder().heightmap(seed -> BiomeNoise.mesas(seed)).surface(BadlandsSurfaceBuilder.MESAS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
     public static final BiomeExtension BUTTES = register("buttes", builder().heightmap(seed -> BiomeNoise.buttes(seed)).surface(BadlandsSurfaceBuilder.MESAS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
     public static final BiomeExtension HOODOOS = register("hoodoos", builder().heightmap(seed -> BiomeNoise.hoodoos(seed)).surface(BadlandsSurfaceBuilder.HOODOOS).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.TERRACES));
-    public static final BiomeExtension TABLE_MOUNTAINS = register("table_mountains", builder().heightmap(seed -> BiomeNoise.tableMountains(seed)).surface(BadlandsSurfaceBuilder.NORMAL).aquiferHeightOffset(-16).spawnable().type(RiverBlendType.CAVE));
+    public static final BiomeExtension ROCKY_PLATEAU = register("rocky_plateau", builder().heightmap(seed -> BiomeNoise.bowlDolines(seed, BiomeNoise.hills(seed, 22, 32), 16).max(BiomeNoise.canyons(seed, 0, 52).spread(1.5))).surface(RockyPlateauSurfaceBuilder.INSTANCE).spawnable().type(RiverBlendType.TALL_CANYON).noSandyRiverShores());
 
     // Karst Biomes
 

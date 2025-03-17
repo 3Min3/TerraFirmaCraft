@@ -159,7 +159,8 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
 
         if (inverted)
         {
-            if (startY + 5 < heightVariation + weightVariation + rainfallVariation)
+            final int shift = dippingStrata ? 2 : 5;
+            if (startY + shift < heightVariation + weightVariation + rainfallVariation)
             {
                 NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_SAND, SurfaceStates.MID_DIRT_TO_SAND, SurfaceStates.UNDER_GRAVEL);
             }
@@ -213,7 +214,7 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
                 {
                     // Subsurface layers
                     surfaceDepth--;
-                    context.setBlockState(y, sampleLayer(getKarstOrVolcanicSandstoneLayer(sandLayers0, karst, volcanic), getKarstOrVolcanicSandstoneLayer(sandLayers1, karst, volcanic), y + height, style));
+                    context.setBlockState(y, sampleLayer(getKarstOrVolcanicSandstoneLayer(sandstoneLayers0, karst, volcanic), getKarstOrVolcanicSandstoneLayer(sandstoneLayers1, karst, volcanic), y + height, style));
                 }
             }
         }
@@ -245,7 +246,7 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
                     {
                         if (context.getSlope() > maxSoilSlope)
                         {
-                            context.setBlockState(y, sampleLayer(getKarstOrVolcanicSandstoneLayer(sandLayers0, karst, volcanic), getKarstOrVolcanicSandstoneLayer(sandLayers1, karst, volcanic), y + height, style));
+                            context.setBlockState(y, sampleLayer(getKarstOrVolcanicSandstoneLayer(sandstoneLayers0, karst, volcanic), getKarstOrVolcanicSandstoneLayer(sandstoneLayers1, karst, volcanic), y + height, style));
                         }
                         else
                         {
@@ -258,7 +259,7 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
                 {
                     // Subsurface layers
                     surfaceDepth--;
-                    context.setBlockState(y, sampleLayer(getKarstOrVolcanicSandstoneLayer(sandLayers0, karst, volcanic), getKarstOrVolcanicSandstoneLayer(sandLayers1, karst, volcanic), y + height, style));
+                    context.setBlockState(y, sampleLayer(getKarstOrVolcanicSandstoneLayer(sandstoneLayers0, karst, volcanic), getKarstOrVolcanicSandstoneLayer(sandstoneLayers1, karst, volcanic), y + height, style));
                 }
             }
         }

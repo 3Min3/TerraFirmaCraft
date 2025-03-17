@@ -68,7 +68,7 @@ public class TFCLayers
     public static final int MESAS = idFor(TFCBiomes.MESAS);
     public static final int BUTTES = idFor(TFCBiomes.BUTTES);
     public static final int HOODOOS = idFor(TFCBiomes.HOODOOS);
-    public static final int TABLE_MOUNTAINS = idFor(TFCBiomes.TABLE_MOUNTAINS);
+    public static final int ROCKY_PLATEAU = idFor(TFCBiomes.ROCKY_PLATEAU);
     public static final int TOWER_KARST_PLAINS = idFor(TFCBiomes.TOWER_KARST_PLAINS);
     public static final int TOWER_KARST_CANYONS = idFor(TFCBiomes.TOWER_KARST_CANYONS);
     public static final int TOWER_KARST_HILLS = idFor(TFCBiomes.TOWER_KARST_HILLS);
@@ -294,18 +294,6 @@ public class TFCLayers
             && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
             && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
             && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
-    }
-
-    // TODO: Use or lose
-    // Only checks biomes that are expected to be near meltwater lakes
-    public static boolean safeMeltwaterLakeBorder(int value)
-    {
-        return (value != ICE_SHEET_MOUNTAINS && value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS
-            && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE && value != DRUMLINS && value != TUYAS
-            && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
-            && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
-            && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != BADLANDS && value != PLATEAU && value != INVERTED_BADLANDS
-            && value != BURREN_BADLANDS && value != BURREN_BADLANDS_TALL && value != BURREN_PLATEAU && value != BURREN_ROCHE_MOUTONEE);
     }
 
     public static int lakeFor(int value)

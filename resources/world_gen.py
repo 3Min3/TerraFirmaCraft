@@ -92,7 +92,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'mesas', 'mesa')
     biome(rm, 'buttes', 'mesa')
     biome(rm, 'hoodoos', 'mesa')
-    biome(rm, 'table_mountains', 'extreme_hills')
+    biome(rm, 'rocky_plateau', 'extreme_hills', boulders=True, hot_spring_features='empty')
 
     biome(rm, 'tower_karst_plains', 'plains')
     biome(rm, 'burren_plains', 'plains')
@@ -697,7 +697,7 @@ def generate(rm: ResourceManager):
                  'tfc:doline_rolling_hills', 'tfc:doline_highlands', 'tfc:doline_plateau',
                  'tfc:cenote_rolling_hills', 'tfc:cenote_highlands', 'tfc:cenote_plateau',
                  'tfc:shilin_hills', 'tfc:shilin_highlands', 'tfc:shilin_plateau',
-                 'tfc:buttes', 'tfc:mesas', 'tfc:stair_step_canyons', 'tfc:table_mountains',
+                 'tfc:buttes', 'tfc:mesas', 'tfc:stair_step_canyons',
                  'tfc:dormant_shield_volcano', 'tfc:extinct_shield_volcano', 'tfc:ancient_shield_volcano',
                  'tfc:badlands', 'tfc:canyons'))
 
