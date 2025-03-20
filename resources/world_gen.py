@@ -692,7 +692,7 @@ def generate(rm: ResourceManager):
     rm.biome_tag('karsts', '#tfc:tower_karsts', '#tfc:dolines', '#tfc:cenotes', '#tfc:shilins', '#tfc:burrens')
     # Kaolin clay biomes, each row sorted by height, last row misc.
     (rm.biome_tag('kaolin_clay_spawns_in',
-                 'tfc:rolling_hills', 'tfc:highlands', 'tfc:plateau', 'tfc:old_mountains',
+                 'tfc:rolling_hills', 'tfc:highlands', 'tfc:plateau', 'tfc:plateau_wide', 'tfc:old_mountains',
                  'tfc:tower_karst_hills', 'tfc:tower_karst_highlands', 'tfc:extreme_doline_plateau', 'tfc:extreme_doline_mountains',
                  'tfc:doline_rolling_hills', 'tfc:doline_highlands', 'tfc:doline_plateau',
                  'tfc:cenote_rolling_hills', 'tfc:cenote_highlands', 'tfc:cenote_plateau',

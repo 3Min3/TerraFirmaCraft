@@ -7,7 +7,6 @@
 package net.dries007.tfc.world.surface.builder;
 
 import java.util.Arrays;
-
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;

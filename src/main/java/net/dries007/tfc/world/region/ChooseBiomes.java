@@ -280,7 +280,7 @@ public enum ChooseBiomes implements RegionTask
             return TOWER_KARST_HILLS;
         else if (biome == HIGHLANDS)
             return TOWER_KARST_HIGHLANDS;
-        else if (biome == PLATEAU)
+        else if (biome == PLATEAU || biome == PLATEAU_WIDE)
             return EXTREME_DOLINE_PLATEAU;
         else if (biome == OLD_MOUNTAINS || biome == MOUNTAINS || biome == OCEANIC_MOUNTAINS)
             return EXTREME_DOLINE_MOUNTAINS;
@@ -296,7 +296,7 @@ public enum ChooseBiomes implements RegionTask
             return SHILIN_CANYONS;
         if (biome == ROLLING_HILLS || biome == BADLANDS)
             return SHILIN_HILLS;
-        if (biome == PLATEAU)
+        if (biome == PLATEAU || biome == PLATEAU_WIDE)
             return SHILIN_PLATEAU;
         if (biome == HIGHLANDS)
             return SHILIN_HIGHLANDS;
@@ -313,7 +313,7 @@ public enum ChooseBiomes implements RegionTask
             return BURREN_ROCHE_MOUTONEE;
         if (biome == HIGHLANDS)
             return BURREN_BADLANDS_TALL;
-        if (biome == PLATEAU)
+        if (biome == PLATEAU || biome == PLATEAU_WIDE)
             return BURREN_PLATEAU;
         else
             return biome;
@@ -331,7 +331,7 @@ public enum ChooseBiomes implements RegionTask
             return DOLINE_ROLLING_HILLS;
         else if (biome == HIGHLANDS)
             return DOLINE_HIGHLANDS;
-        else if (biome == PLATEAU)
+        else if (biome == PLATEAU || biome == PLATEAU_WIDE)
             return DOLINE_PLATEAU;
         else
             return biome;
@@ -349,7 +349,7 @@ public enum ChooseBiomes implements RegionTask
             return CENOTE_ROLLING_HILLS;
         else if (biome == HIGHLANDS)
             return CENOTE_HIGHLANDS;
-        else if (biome == PLATEAU)
+        else if (biome == PLATEAU || biome == PLATEAU_WIDE)
             return CENOTE_PLATEAU;
         else
             return biome;
