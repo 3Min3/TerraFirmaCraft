@@ -368,6 +368,7 @@ public final class TFCCreativeTabs
         }
 
         out.accept(TFCItems.FIRESTARTER);
+        out.accept(TFCItems.FLINT_AND_PYRITE);
         out.accept(Items.FLINT_AND_STEEL);
         out.accept(TFCItems.SOOT);
         out.accept(TFCItems.SANDPAPER);
