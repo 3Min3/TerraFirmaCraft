@@ -70,6 +70,8 @@ public class Cellular2D implements Noise2D
         double distance1 = Double.MAX_VALUE;
         double closestCenterX = 0;
         double closestCenterY = 0;
+        int secondClosestCellX = 0;
+        int secondClosestCellY = 0;
         int closestHash = 0;
         int closestCellX = 0;
         int closestCellY = 0;
@@ -91,11 +93,16 @@ public class Cellular2D implements Noise2D
 
                 double newDistance = (vecX - x) * (vecX - x) + (vecY - y) * (vecY - y);
 
+                double oldDistance1 = distance1;
+
                 distance1 = FastNoiseLite.FastMax(FastNoiseLite.FastMin(distance1, newDistance), distance0);
+
                 if (newDistance < distance0)
                 {
                     distance0 = newDistance;
                     closestHash = hash;
+                    secondClosestCellX = closestCellX;
+                    secondClosestCellY = closestCellY;
 
                     // Store the last computed centers
                     closestCenterX = vecX;
@@ -103,13 +110,18 @@ public class Cellular2D implements Noise2D
                     closestCellX = xi;
                     closestCellY = yi;
                 }
+                else if (distance1 < oldDistance1)
+                {
+                    secondClosestCellX = xi;
+                    secondClosestCellY = yi;
+                }
                 yPrimed += primeY;
             }
             xPrimed += primeX;
         }
 
-        return new Cell(closestCenterX / frequency, closestCenterY / frequency, closestCellX, closestCellY, distance0, distance1, closestHash * (1 / 2147483648.0f));
+        return new Cell(closestCenterX / frequency, closestCenterY / frequency, closestCellX, closestCellY, distance0, secondClosestCellX, secondClosestCellY, distance1, closestHash * (1 / 2147483648.0f));
     }
 
-    public record Cell(double x, double y, int cx, int cy, double f1, double f2, double noise) {}
+    public record Cell(double x, double y, int cx, int cy, double f1, int c2x, int c2y, double f2, double noise) {}
 }

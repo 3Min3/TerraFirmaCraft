@@ -98,6 +98,8 @@ import net.dries007.tfc.world.region.RegionGenerator;
 import net.dries007.tfc.world.river.RiverBlendType;
 import net.dries007.tfc.world.river.RiverNoiseSampler;
 import net.dries007.tfc.world.settings.Settings;
+import net.dries007.tfc.world.shore.ShoreBlendType;
+import net.dries007.tfc.world.shore.ShoreNoiseSampler;
 import net.dries007.tfc.world.surface.SurfaceManager;
 
 @SuppressWarnings("NotNullFieldNotInitialized") // Since we do a separate `init` step
@@ -218,7 +220,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     public ChunkHeightFiller createHeightFillerForChunk(ChunkPos pos)
     {
         final Object2DoubleMap<BiomeExtension>[] biomeWeights = ChunkBiomeSampler.sampleBiomes(pos, this::sampleBiomeNoRiver, BiomeExtension::biomeBlendType);
-        return new ChunkHeightFiller(biomeWeights, customBiomeSource, createBiomeSamplersForChunk(null), createRiverSamplersForChunk(), createShoreSamplerForChunk(), getSeaLevel());
+        return new ChunkHeightFiller(biomeWeights, customBiomeSource, createBiomeSamplersForChunk(null), createRiverSamplersForChunk(), createShoreSamplersForChunk(), getSeaLevel());
     }
 
     @Override
@@ -427,7 +429,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
 
         final Object2DoubleMap<BiomeExtension>[] biomeWeights = ChunkBiomeSampler.sampleBiomes(chunkPos, this::sampleBiomeNoRiver, BiomeExtension::biomeBlendType);
         final ChunkBaseBlockSource baseBlockSource = createBaseBlockSourceForChunk(chunk);
-        final ChunkNoiseFiller filler = new ChunkNoiseFiller((ProtoChunk) chunk, biomeWeights, customBiomeSource, createBiomeSamplersForChunk(chunk), createRiverSamplersForChunk(), createShoreSamplerForChunk(), noiseSampler, baseBlockSource, settings, getSeaLevel(), Beardifier.forStructuresInChunk(structureManager, chunkPos));
+        final ChunkNoiseFiller filler = new ChunkNoiseFiller((ProtoChunk) chunk, biomeWeights, customBiomeSource, createBiomeSamplersForChunk(chunk), createRiverSamplersForChunk(), createShoreSamplersForChunk(), noiseSampler, baseBlockSource, settings, getSeaLevel(), Beardifier.forStructuresInChunk(structureManager, chunkPos));
 
         return CompletableFuture.supplyAsync(() -> {
             filler.sampleAquiferSurfaceHeight(this::sampleBiomeNoRiver);
@@ -474,7 +476,8 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     @Override
     public void addDebugScreenInfo(List<String> list, RandomState state, BlockPos pos)
     {
-        list.add("Shore: " + createShoreSamplerForChunk().noise(pos.getX(), pos.getZ()));
+        // TODO: Probably remove
+//        list.add("Shore: " + createShoreSamplerForChunk().noise(pos.getX(), pos.getZ()));
     }
 
     /**
@@ -597,12 +600,15 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         return builder;
     }
 
-    private Noise2D createShoreSamplerForChunk()
+    private Map<ShoreBlendType, ShoreNoiseSampler> createShoreSamplersForChunk()
     {
-        return new OpenSimplex2D(seed.seed() + 8719234132L)
-            .octaves(2)
-            .spread(0.003f)
-            .scaled(-0.1, 1.1);
+        final Seed noiseSamplerSeed = seed.forkStable();
+        final EnumMap<ShoreBlendType, ShoreNoiseSampler> builder = new EnumMap<>(ShoreBlendType.class);
+        for (ShoreBlendType blendType : ShoreBlendType.ALL)
+        {
+            builder.put(blendType, blendType.createNoiseSampler(noiseSamplerSeed));
+        }
+        return builder;
     }
 
     private TFCChunkGenerator copy()

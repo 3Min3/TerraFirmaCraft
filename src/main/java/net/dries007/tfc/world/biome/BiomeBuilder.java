@@ -24,7 +24,6 @@ import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.dries007.tfc.world.surface.builder.TuffRingsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.TuyasSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.VolcanoesSurfaceBuilder;
-import net.dries007.tfc.world.Seed;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
@@ -54,7 +53,7 @@ public class BiomeBuilder
     private boolean spawnable;
     private boolean rivers;
     private boolean shore;
-    private int cliffBaseHeight;
+    private int shoreBaseHeight;
     private boolean sandyRiverShores;
 
     private BiomeBuilder()
@@ -77,7 +76,7 @@ public class BiomeBuilder
         spawnable = false;
         rivers = true;
         shore = false;
-        cliffBaseHeight = 0; // Above/below sea level
+        shoreBaseHeight = 0; // Above/below sea level
         sandyRiverShores = true;
     }
 
@@ -170,9 +169,9 @@ public class BiomeBuilder
         return this;
     }
 
-    public BiomeBuilder setCliffBaseHeight(int cliffBaseHeight)
+    public BiomeBuilder setShoreBaseHeight(int shoreBaseHeight)
     {
-        this.cliffBaseHeight = cliffBaseHeight;
+        this.shoreBaseHeight = shoreBaseHeight;
         return this;
     }
 
@@ -245,6 +244,6 @@ public class BiomeBuilder
     {
         assert surfaceBuilderFactory != null : "missing surface builder";
 
-        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, shoreBlendType, salty, volcanic, hasTuffRings, hasTuyas, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, tuyaFrequency, spawnable, rivers, shore, cliffBaseHeight, sandyRiverShores);
+        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, shoreBlendType, salty, volcanic, hasTuffRings, hasTuyas, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, tuyaFrequency, spawnable, rivers, shore, shoreBaseHeight, sandyRiverShores);
     }
 }
