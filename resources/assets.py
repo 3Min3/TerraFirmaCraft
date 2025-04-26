@@ -1352,7 +1352,7 @@ def generate(rm: ResourceManager):
         rm.block_loot('tfc:plant/%s' % plant, 'tfc:plant/%s' % plant)
     for plant in ('tree_fern', 'arundo', 'winged_kelp', 'leafy_kelp', 'giant_kelp', 'hanging_vines', 'spanish_moss', 'liana', 'dry_phragmite', 'flame_vine', 'cycad'):
         rm.lang('block.tfc.plant.%s_plant' % plant, lang(plant))
-    for plant in ('hanging_vines', 'jungle_vines', 'liana', 'spanish_moss'):
+    for plant in ('hanging_vines', 'jungle_vines', 'liana', 'spanish_moss', 'flame_vine', 'cycad'):
         rm.block_loot('tfc:plant/%s' % plant, {'name': 'tfc:plant/%s' % plant, 'conditions': [match_tag_1_21_plus(TAG_SHARP)]})
     rm.block_loot('plant/golden_bamboo_sapling', 'tfc:plant/golden_bamboo')
 
