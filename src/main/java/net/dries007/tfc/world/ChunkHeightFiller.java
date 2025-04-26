@@ -169,7 +169,7 @@ public class ChunkHeightFiller
         computeInitialShoreWeights(biomeWeights);
 
         final double landWeight = 1 - oceanWeight - shoreWeight;
-        if (shoreWeight > 0.25 && shoreBiomeAt != null)
+        if (shoreWeight > 0 && shoreBiomeAt != null)
         {
             height = adjustHeightForShoreContributions(height, oceanWeight, landWeight, shoreWeight, maxShoreWeight, shoreBiomeAt, shoreHeight, normalHeight);
             if (shoreWeight > 0.5) biomeAt = shoreBiomeAt;
@@ -178,6 +178,12 @@ public class ChunkHeightFiller
         if (biomeAt == null)
         {
             biomeAt = oceanBiomeAt;
+        }
+
+        if (oceanWeight >= 0.25)
+        {
+            final double tideAdjustedSeaEdgeHeight = tideHeightNoise.noise(blockX, blockZ) - 4;
+            height = Mth.clampedMap(landWeight, 0.32, 0.36, Math.min(height, tideAdjustedSeaEdgeHeight), height);
         }
 
         assert biomeAt != null;

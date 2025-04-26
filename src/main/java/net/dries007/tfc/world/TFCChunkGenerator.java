@@ -210,7 +210,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         this.noiseSampler = new NoiseSampler(seed.next(), level.registryAccess().lookupOrThrow(Registries.NOISE), level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION));
         this.chunkDataGenerator = regionGenerator.chunkDataGenerator();
         this.surfaceManager = new SurfaceManager(seed);
-        this.tideHeightNoise = BiomeNoise.shoreTideLevelNoise(seed.seed());
+        this.tideHeightNoise = BiomeNoise.shoreTideLevelNoise(seed);
 
         this.customBiomeSource.initRandomState(regionGenerator, biomeLayer);
 

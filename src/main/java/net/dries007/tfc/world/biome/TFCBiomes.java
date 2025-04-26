@@ -90,12 +90,12 @@ public final class TFCBiomes
 
     // Inspired by Bay of Fundy, 12 Apostles, etc. -- High biome shore
     // TODO: Fix stalagmites
-    public static final BiomeExtension SEA_STACKS = register("sea_stacks", builder().heightmap(seed -> BiomeNoise.hills(seed, 10, 25)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.TALL_CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS).setShoreBaseHeight(-6));
+    public static final BiomeExtension SEA_STACKS = register("sea_stacks", builder().heightmap(seed -> BiomeNoise.hills(seed, 10, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.TALL_CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS).setShoreBaseHeight(-6));
     public static final BiomeExtension SEA_STUMPS = register("sea_stumps", builder().heightmap(seed -> BiomeNoise.hills(seed, 10, 25)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.TALL_CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS).setShoreBaseHeight(-6));
 
     // Multiple tiers, each similar to sea stacks -- High to montane biome shore
-    public static final BiomeExtension TERRACE_UPPER = register("terrace_upper", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.UPPER_TERRACE));
-    public static final BiomeExtension TERRACE_LOWER = register("terrace_lower", builder().heightmap(seed -> BiomeNoise.hills(seed, 7, 15)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.LOWER_TERRACE));
+    public static final BiomeExtension TERRACE_UPPER = register("terrace_upper", builder().heightmap(seed -> BiomeNoise.constant(0)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.UPPER_TERRACE));
+    public static final BiomeExtension TERRACE_LOWER = register("terrace_lower", builder().heightmap(seed -> BiomeNoise.constant(0)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.LOWER_TERRACE));
 
     // Vegetated zone below shore cliffs -- Mid-high biome shore
     public static final BiomeExtension SETBACK_CLIFFS = register("setback_cliffs", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS));
