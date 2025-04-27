@@ -255,7 +255,7 @@ public interface CraftingRecipes extends Recipes
                     .pattern(" SH", "SWS", " S ")
                     .damageInputs()
                     .source(0, 2)
-                    .shaped(blocks.get(Metal.BlockType.BLOCK));
+                    .shaped(blocks.get(Metal.BlockType.BLOCK), 8);
             }
 
             if (metal.allParts())
