@@ -35,6 +35,7 @@ import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blocks.plant.Plant;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.rock.RockCategory;
@@ -1137,6 +1138,9 @@ public interface CraftingRecipes extends Recipes
             .input(TFCItems.WOOL)
             .damageInputs()
             .shapeless(TFCItems.WOOL_YARN, 8);
+        recipe()
+            .input(TFCBlocks.PLANTS.get(Plant.BARREL_CACTUS))
+            .shapeless(TFCItems.CACTUS_WOOD);
     }
 
     /**

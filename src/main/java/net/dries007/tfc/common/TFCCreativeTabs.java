@@ -392,6 +392,8 @@ public final class TFCCreativeTabs
         out.accept(TFCItems.PURE_PHOSPHORUS);
         out.accept(TFCItems.DAUB);
         out.accept(TFCItems.DIRTY_JUTE_NET);
+        out.accept(TFCItems.CACTUS_WOOD);
+        out.accept(TFCItems.DRIED_CACTUS_WOOD);
         out.accept(TFCItems.FIRE_CLAY);
         out.accept(TFCItems.KAOLIN_CLAY);
         out.accept(TFCItems.GLUE);

@@ -209,8 +209,10 @@ public final class TFCItems
     public static final ItemId BRASS_MECHANISMS = register("brass_mechanisms");
     public static final ItemId BURLAP_CLOTH = register("burlap_cloth");
     public static final ItemId COMPOST = register("compost");
+    public static final ItemId CACTUS_WOOD = register("cactus_wood");
     public static final ItemId DAUB = register("daub");
     public static final ItemId DIRTY_JUTE_NET = register("dirty_jute_net");
+    public static final ItemId DRIED_CACTUS_WOOD = register("dried_cactus_wood");
     public static final ItemId FIRE_CLAY = register("fire_clay");
     public static final ItemId FIRESTARTER = register("firestarter", () -> new FirestarterItem(new Properties().durability(8)));
     public static final ItemId FLINT_AND_PYRITE = register("flint_and_pyrite", () -> new FlintAndPyriteItem(new Properties().durability(128)));

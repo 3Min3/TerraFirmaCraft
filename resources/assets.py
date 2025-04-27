@@ -1365,7 +1365,7 @@ def generate(rm: ResourceManager):
             ({'south': True}, {'model': 'tfc:block/plant/%s_branch_side' % cactus, 'y': 270}),
             ({'west': True}, {'model': 'tfc:block/plant/%s_branch_side' % cactus}),
             ({'east': True}, {'model': 'tfc:block/plant/%s_branch_side' % cactus, 'y': 180})
-            ).with_lang(lang('%s Branch', cactus))
+            ).with_lang(lang('%s Branch', cactus)).with_block_loot('tfc:cactus_wood')
     for part in ('down', 'side', 'up'):
         rm.block_model('tfc:plant/%s_branch_%s' % (cactus, part), parent='tfc:block/plant/cactus_branch_%s' % part, textures={'0': 'tfc:block/plant/%s/bark' % cactus, '1': 'tfc:block/plant/%s/bark_top' % cactus})
     rm.item_model(('plant', cactus), 'tfc:item/plant/%s' % cactus)

@@ -57,6 +57,7 @@ public class BuiltinFuels extends DataManagerProvider<Fuel> implements Accessors
         add(Wood.WHITE_CEDAR, 625, 1500, 0.95f);
         add(Wood.WILLOW, 603, 1000, 0.95f);
 
+        add(TFCItems.DRIED_CACTUS_WOOD, 603, 1000, 0.95f);
         add("coal", Ingredient.of(Items.COAL, TFCItems.ORES.get(Ore.BITUMINOUS_COAL)), 2000, 1415, 1f);
         add(TFCItems.ORES.get(Ore.LIGNITE), 2200, 1350, 1f);
         add(Items.CHARCOAL, 1800, 1350, 1f);
