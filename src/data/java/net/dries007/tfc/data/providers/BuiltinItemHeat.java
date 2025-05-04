@@ -148,6 +148,7 @@ public class BuiltinItemHeat extends DataManagerProvider<HeatDefinition> impleme
         add(TFCTags.Items.UNFIRED_MOLDS, 1.5f);
         add(Items.CLAY, 0.5f);
         add(TFCItems.KAOLIN_CLAY, 2.0f);
+        add(TFCItems.CACTUS_WOOD, 1.0f);
         add(ingredientOf(
             Ingredient.of(Items.TERRACOTTA),
             Ingredient.of(Items.WHITE_TERRACOTTA),

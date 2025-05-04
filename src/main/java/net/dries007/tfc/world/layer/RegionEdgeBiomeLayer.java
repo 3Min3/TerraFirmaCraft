@@ -30,13 +30,23 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
             {
                 return OCEANIC_MOUNTAINS;
             }
-            else if (matcher.test(TFCLayers::isOcean) && matcher.test(i -> i ==LOWLANDS))
+            else if (matcher.test(TFCLayers::isOcean) && matcher.test(i -> i == LOWLANDS))
             {
                 return SALT_MARSH;
             }
         }
 
-        if (center == PLATEAU || center == BADLANDS || center == INVERTED_BADLANDS)
+        // No mud/salt flats near oceans
+        if (TFCLayers.isFlats(center))
+        {
+            if (matcher.test(TFCLayers::isOcean) && matcher.test(TFCLayers::isFlats))
+            {
+                return CANYONS;
+            }
+        }
+
+
+        if (center == PLATEAU || center == BADLANDS)
         {
             if (matcher.test(i -> i == LOW_CANYONS || i == LOWLANDS))
             {
@@ -57,7 +67,7 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
         // Inverses of above conditions
         else if (center == LOWLANDS || center == LOW_CANYONS)
         {
-            if (matcher.test(i -> i == PLATEAU || i == BADLANDS || i == INVERTED_BADLANDS))
+            if (matcher.test(i -> i == PLATEAU || i == BADLANDS))
             {
                 return HILLS;
             }
@@ -68,7 +78,7 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
         }
         else if (center == PLAINS || center == HILLS)
         {
-            if (matcher.test(i -> i == PLATEAU || i == BADLANDS || i == INVERTED_BADLANDS))
+            if (matcher.test(i -> i == PLATEAU || i == BADLANDS))
             {
                 return HILLS;
             }

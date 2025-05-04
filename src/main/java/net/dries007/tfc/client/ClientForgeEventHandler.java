@@ -43,6 +43,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
@@ -74,7 +75,7 @@ import net.dries007.tfc.common.blocks.devices.SluiceBlock;
 import net.dries007.tfc.common.component.EggComponent;
 import net.dries007.tfc.common.component.TFCComponents;
 import net.dries007.tfc.common.component.food.FoodCapability;
-import net.dries007.tfc.common.component.forge.ForgingBonus;
+import net.dries007.tfc.common.component.forge.ForgingBonusComponent;
 import net.dries007.tfc.common.component.forge.ForgingCapability;
 import net.dries007.tfc.common.component.glass.GlassWorking;
 import net.dries007.tfc.common.component.heat.HeatCapability;
@@ -93,6 +94,7 @@ import net.dries007.tfc.network.PlaceBlockSpecialPacket;
 import net.dries007.tfc.network.RequestClimateModelPacket;
 import net.dries007.tfc.network.StackFoodPacket;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
+import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.PhysicalDamageType;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -147,12 +149,13 @@ public class ClientForgeEventHandler
                 tooltip.add("");
                 tooltip.add(AQUA + TerraFirmaCraft.MOD_NAME);
                 tooltip.add("Date: %s Tick: %d Calendar: %d".formatted(
-                    Calendars.CLIENT.getCalendarTimeAndDate().getString(),
+                    Calendars.CLIENT.getTimeAndDate().getString(),
                     Calendars.CLIENT.getTicks(),
                     Calendars.CLIENT.getCalendarTicks()
                 ));
-                tooltip.add("Temperature: Avg: %.3f Now: %.3f".formatted(
+                tooltip.add("Temperature: Sea Level Avg: %.3f Avg: %.3f Now: %.3f".formatted(
                     ClimateRenderCache.INSTANCE.getAverageTemperature(),
+                    EnvironmentHelpers.adjustAvgTempForElev(pos.getY(), ClimateRenderCache.INSTANCE.getAverageTemperature()),
                     ClimateRenderCache.INSTANCE.getTemperature()
                 ));
                 tooltip.add("Rain: Avg: %.3f Var: %.3f Now: %.3f".formatted(
@@ -228,7 +231,7 @@ public class ClientForgeEventHandler
 
             ItemSizeManager.addTooltipInfo(stack, tooltip);
             PhysicalDamageType.addTooltipInfo(stack, tooltip);
-            ForgingBonus.addTooltipInfo(stack, tooltip);
+            ForgingBonusComponent.addTooltipInfo(stack, tooltip);
             ForgingCapability.addTooltipInfo(stack, tooltip);
             GlassWorking.addTooltipInfo(stack, tooltip);
             FoodCapability.addTooltipInfo(stack, tooltip::add);
@@ -249,7 +252,6 @@ public class ClientForgeEventHandler
                 final MutableComponent heatTooltip = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(fuel.temperature());
                 if (heatTooltip != null)
                 {
-                    // burns at %s for %s
                     tooltip.add(Component.translatable("tfc.tooltip.fuel_burns_at", heatTooltip, Calendars.CLIENT.getTimeDelta(fuel.duration())));
                 }
             }
@@ -530,7 +532,7 @@ public class ClientForgeEventHandler
             final BlockPos pos = event.getCamera().getBlockPosition();
             if (fluid == FogType.NONE)
             {
-                final float fog = Climate.getFogginess(mc.level, pos);
+                final float fog = Climate.get(mc.level).getFog(mc.level, pos);
                 if (fog != 0)
                 {
                     final float renderDistance = mc.gameRenderer.getRenderDistance();
@@ -543,8 +545,12 @@ public class ClientForgeEventHandler
             }
             else if (fluid == FogType.WATER)
             {
+                // Custom water fog for TFC (?) - water gets foggier at low brightness
                 final Player player = mc.player;
-                final float fog = Climate.getWaterFogginess(mc.level, pos);
+                final float fog = Helpers.isFluid(mc.level.getFluidState(pos), Fluids.WATER)
+                    ? Mth.clampedMap(mc.level.getRawBrightness(pos, 0), 0f, 15f, 0.6f, 1.0f)
+                    : 1f;
+
                 if (fog != 1f)
                 {
                     waterFogLevel = player != null && player.hasEffect(MobEffects.NIGHT_VISION) ? 1f : Mth.lerp(0.01f, waterFogLevel, fog);
@@ -556,7 +562,6 @@ public class ClientForgeEventHandler
                     waterFogLevel = 1f;
                 }
             }
-
         }
     }
 

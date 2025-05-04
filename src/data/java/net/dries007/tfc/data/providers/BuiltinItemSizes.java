@@ -74,6 +74,7 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("powders", TFCTags.Items.BOWL_POWDERS, Size.TINY, Weight.VERY_LIGHT);
         add("stick_bunch", TFCItems.STICK_BUNCH, Size.NORMAL, Weight.LIGHT);
         add("stick_bundle", TFCItems.STICK_BUNDLE, Size.VERY_LARGE, Weight.MEDIUM);
+        add("cactus_wood", Ingredient.of(TFCItems.CACTUS_WOOD, TFCItems.DRIED_CACTUS_WOOD), Size.VERY_LARGE, Weight.MEDIUM);
         add("jute", Ingredient.of(TFCItems.JUTE_FIBER, TFCItems.JUTE), Size.SMALL, Weight.VERY_LIGHT);
         add("burlap_cloth", TFCItems.BURLAP_CLOTH, Size.SMALL, Weight.VERY_LIGHT);
         add("straw", TFCItems.STRAW, Size.SMALL, Weight.VERY_LIGHT);

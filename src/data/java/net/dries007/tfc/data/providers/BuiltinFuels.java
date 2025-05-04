@@ -9,6 +9,7 @@ package net.dries007.tfc.data.providers;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
@@ -56,6 +57,7 @@ public class BuiltinFuels extends DataManagerProvider<Fuel> implements Accessors
         add(Wood.WHITE_CEDAR, 625, 1500, 0.95f);
         add(Wood.WILLOW, 603, 1000, 0.95f);
 
+        add(TFCItems.DRIED_CACTUS_WOOD, 603, 1000, 0.95f);
         add("coal", Ingredient.of(Items.COAL, TFCItems.ORES.get(Ore.BITUMINOUS_COAL)), 2000, 1415, 1f);
         add(TFCItems.ORES.get(Ore.LIGNITE), 2200, 1350, 1f);
         add(Items.CHARCOAL, 1800, 1350, 1f);
@@ -70,12 +72,7 @@ public class BuiltinFuels extends DataManagerProvider<Fuel> implements Accessors
     private void add(Wood wood, int duration, float temperature, float purity)
     {
         final Map<Wood.BlockType, TFCBlocks.Id<Block>> blocks = TFCBlocks.WOODS.get(wood);
-        add(wood.getSerializedName() + "_logs", Ingredient.of(
-            blocks.get(Wood.BlockType.LOG),
-            blocks.get(Wood.BlockType.STRIPPED_LOG),
-            blocks.get(Wood.BlockType.WOOD),
-            blocks.get(Wood.BlockType.STRIPPED_WOOD)
-        ), duration, temperature, purity);
+        add(wood.getSerializedName() + "_logs", Ingredient.of(logsTagOf(Registries.ITEM, wood)), duration, temperature, purity);
         add(wood.getSerializedName() + "_planks", Ingredient.of(blocks.get(Wood.BlockType.PLANKS)), (int) (duration * 0.4f), temperature + 50f, purity);
     }
 

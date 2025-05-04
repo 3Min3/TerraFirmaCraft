@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.common.component.heat;
 
-import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -21,6 +20,24 @@ import net.dries007.tfc.config.TFCConfig;
  */
 public interface IHeatView
 {
+    /**
+     * A flag which is saved to the heat capacity of the item. indicating that the temperature is static, and not affected by
+     * time-based temperature decay. This will also prevent tooltips from being drawn on the item
+     */
+    float FLAG_STATIC_TEMPERATURE = -1f;
+
+    /**
+     * When reading a serialized heat component with this flag set as the {@code tick} value, this will read the current tick into
+     * that field. This is useful in order to support custom /give commands providing heat, or modifying heat conveniently via components
+     * <p>
+     * E.g.
+     * <ul>
+     *     <li>{@code /give @p stick[tfc:heat={tick:-1,temperature:600}]}</li>
+     *     <li>{@code /item modify entity @p container.0 {function:"set_components",components:{'tfc:heat':{tick:-1,temperature:1500}}}}</li>
+     * </ul>
+     */
+    long FLAG_NOW = -1;
+
     /**
      * Gets the current temperature. Should call {@link HeatCapability#adjustTemp(float, float, long)} internally
      *
@@ -69,9 +86,6 @@ public interface IHeatView
 
     /**
      * Adds the heat info tooltip when hovering over.
-     *
-     * @param stack The stack to add information to
-     * @param text  The list of tooltips
      */
     default void addTooltipInfo(ItemStack stack, Consumer<Component> text)
     {

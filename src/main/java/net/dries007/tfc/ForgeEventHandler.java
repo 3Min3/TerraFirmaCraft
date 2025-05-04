@@ -158,6 +158,7 @@ import net.dries007.tfc.common.component.Bowl;
 import net.dries007.tfc.common.component.TFCComponents;
 import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.component.forge.ForgingBonus;
+import net.dries007.tfc.common.component.forge.ForgingBonusComponent;
 import net.dries007.tfc.common.component.glass.GlassWorking;
 import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.common.component.heat.IHeat;
@@ -172,7 +173,6 @@ import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.items.BlowpipeItem;
 import net.dries007.tfc.common.items.TFCShieldItem;
 import net.dries007.tfc.common.player.IPlayerInfo;
-import net.dries007.tfc.common.player.PlayerInfo;
 import net.dries007.tfc.common.recipes.CollapseRecipe;
 import net.dries007.tfc.common.recipes.LandslideRecipe;
 import net.dries007.tfc.config.TFCConfig;
@@ -186,7 +186,6 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.InteractionManager;
 import net.dries007.tfc.util.PhysicalDamageType;
 import net.dries007.tfc.util.SelfTests;
-import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.climate.OverworldClimateModel;
@@ -200,7 +199,6 @@ import net.dries007.tfc.util.events.DouseFireEvent;
 import net.dries007.tfc.util.events.LoggingEvent;
 import net.dries007.tfc.util.events.SelectClimateModelEvent;
 import net.dries007.tfc.util.events.StartFireEvent;
-import net.dries007.tfc.util.tracker.WeatherHelpers;
 import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
@@ -218,7 +216,7 @@ public final class ForgeEventHandler
 
         bus.addListener(ForgeEventHandler::onCreateWorldSpawn);
         bus.addListener(ForgeEventHandler::onChunkWatch);
-        bus.addListener(ForgeEventHandler::registerCommands);
+        bus.addListener(EventPriority.LOW, ForgeEventHandler::registerCommands); // Must come after neo, since we take over `/neoforge day`
         bus.addListener(ForgeEventHandler::onBlockBroken);
         bus.addListener(ForgeEventHandler::onBlockPlace);
         bus.addListener(ForgeEventHandler::onBreakSpeed);
@@ -384,7 +382,7 @@ public final class ForgeEventHandler
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
     {
         // Apply mining speed modifiers from forging bonuses
-        final ForgingBonus bonus = ForgingBonus.get(event.getEntity().getMainHandItem());
+        final ForgingBonus bonus = ForgingBonusComponent.get(event.getEntity().getMainHandItem());
         if (bonus != ForgingBonus.NONE)
         {
             event.setNewSpeed(event.getNewSpeed() * bonus.efficiency());
@@ -436,11 +434,10 @@ public final class ForgeEventHandler
         if (event.getLevel() instanceof final ServerLevel level)
         {
             final MinecraftServer server = level.getServer();
+            final GameRules rules = level.getGameRules();
 
             if (TFCConfig.SERVER.enableForcedTFCGameRules.get())
             {
-                final GameRules rules = level.getGameRules();
-
                 rules.getRule(GameRules.RULE_NATURAL_REGENERATION).set(false, server);
                 rules.getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
                 rules.getRule(GameRules.RULE_DO_PATROL_SPAWNING).set(false, server);
@@ -448,6 +445,9 @@ public final class ForgeEventHandler
 
                 LOGGER.info("Updating TFC Relevant Game Rules for level {}.", level.dimension().location());
             }
+
+            // This one is non-negotiable, it's required in order for the calendar to function
+            rules.getRule(GameRules.RULE_DAYLIGHT).set(false, server);
 
             Climate.chooseModelForWorld(level);
 
@@ -641,6 +641,7 @@ public final class ForgeEventHandler
                 final ItemStack stack = bowl.getInventory().getStackInSlot(0);
                 if (stack.getItem() == Items.GUNPOWDER)
                 {
+                    Helpers.removeStack(bowl.getInventory(), 0); // Clear the inventory to prevent drops; see TerraFirmaCraft#2856
                     level.explode(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack.getCount() / 6f + 2f, Level.ExplosionInteraction.BLOCK);
                     event.setCanceled(true);
                 }
@@ -774,14 +775,10 @@ public final class ForgeEventHandler
         }
         if (!level.isClientSide() && !player.getAbilities().invulnerable && TFCConfig.SERVER.enableOverburdening.get() && level.getGameTime() % 20 == 0)
         {
-            final int hugeHeavyCount = Helpers.countOverburdened(player.getInventory());
-            if (hugeHeavyCount >= 1)
+            switch (Helpers.getCarryCount(player.getInventory()))
             {
-                player.addEffect(Helpers.getExhausted(false));
-            }
-            if (hugeHeavyCount == 2)
-            {
-                player.addEffect(Helpers.getOverburdened(false));
+                case ONE -> player.addEffect(Helpers.getExhausted(false));
+                case MORE_THAN_ONE -> player.addEffect(Helpers.getOverburdened(false));
             }
         }
     }
@@ -833,7 +830,7 @@ public final class ForgeEventHandler
         final Entity attackerEntity = event.getSource().getEntity();
         if (attackerEntity instanceof LivingEntity livingEntity)
         {
-            amount *= ForgingBonus.get(livingEntity.getMainHandItem()).damage();
+            amount *= ForgingBonusComponent.get(livingEntity.getMainHandItem()).damage();
         }
 
         // Physical Damage Type Modifiers
@@ -1159,11 +1156,12 @@ public final class ForgeEventHandler
 
     public static void onServerChat(ServerChatEvent event)
     {
-        // Apply intoxication after six hours
-        final long intoxicatedTicks = IPlayerInfo.get(event.getPlayer()).getIntoxication() - 6 * ICalendar.TICKS_IN_HOUR;
-        if (intoxicatedTicks > 0)
+        // Apply intoxication effects at >20% intoxication
+        final float intoxicationChance = Mth.clampedMap(
+            IPlayerInfo.get(event.getPlayer()).getIntoxication(),
+            0.2f, 1f, 0f, 0.7f);
+        if (intoxicationChance > 0)
         {
-            final float intoxicationChance = Mth.clamp((float) (intoxicatedTicks - 6 * ICalendar.TICKS_IN_HOUR) / PlayerInfo.MAX_INTOXICATED_TICKS, 0, 0.7f);
             final RandomSource random = event.getPlayer().getRandom();
             final String originalMessage = event.getMessage().getString();
             final String[] words = originalMessage.split(" ");
@@ -1221,7 +1219,7 @@ public final class ForgeEventHandler
             if (state.getBlock() instanceof TFCLecternBlock && LecternBlock.tryPlaceBook(event.getEntity(), level, event.getPos(), state, stack))
             {
                 event.setCanceled(true);
-                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
             }
         }
 
@@ -1307,8 +1305,8 @@ public final class ForgeEventHandler
         if (event.getHand() == InteractionHand.MAIN_HAND && event.getItemStack().isEmpty())
         {
             // Cannot be cancelled, only fired on client.
-            InteractionResult result = Drinkable.attemptDrink(event.getLevel(), event.getEntity(), false);
-            if (result == InteractionResult.SUCCESS)
+            final InteractionResult result = Drinkable.attemptDrink(event.getLevel(), event.getEntity(), false);
+            if (result.consumesAction())
             {
                 PacketDistributor.sendToServer(PlayerDrinkPacket.PACKET);
             }
@@ -1431,7 +1429,7 @@ public final class ForgeEventHandler
                     oldCart.discard();
                     player.level().addFreshEntity(minecart);
                 }
-                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCancellationResult(InteractionResult.sidedSuccess(player.level().isClientSide));
             }
         }
     }

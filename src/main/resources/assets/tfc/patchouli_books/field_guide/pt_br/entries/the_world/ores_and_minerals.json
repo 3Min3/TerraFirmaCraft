@@ -644,11 +644,11 @@
           ]
         ],
         "mapping": {
-          "X": "tfc:ore/lignite/dolomite"
+          "X": "tfc:lignite"
         }
       },
       "name": "",
-      "text": "Lignita em dolomita.",
+      "text": "Lignite",
       "enable_visualize": false
     },
     {
@@ -671,11 +671,11 @@
           ]
         ],
         "mapping": {
-          "X": "tfc:ore/bituminous_coal/chert"
+          "X": "tfc:bituminous_coal"
         }
       },
       "name": "",
-      "text": "Carvão betuminoso em chert.",
+      "text": "Carvão betuminoso",
       "enable_visualize": false
     },
     {
@@ -684,7 +684,7 @@
       "item": "tfc:kaolin_clay",
       "title": "Caulinita",
       "link_recipes": false,
-      "text": "Kaolinite is a soft $(thing)Mineral$() which is used in the construction of $(l:mechanics/fire_clay)Fire Clay$(). It can be found spawning at high altitudes in Plateaus, Old Mountains, and Highlands, at a $(l:the_world/climate#temperature)temperature$() of at least 18°C, with a $(l:the_world/climate#rainfall)rainfall$() of at least 300mm. The $(thing)Blood Lily$() flower grows on Kaolin clay."
+      "text": "Kaolinite is a soft $(thing)Mineral$() which is used in the construction of $(l:mechanics/fire_clay)Fire Clay$(). It can be found spawning at high altitudes in Plateaus, Old Mountains, Rolling Hills, and Highlands, at a $(l:the_world/climate#temperature)temperature$() of at least 18°C, with a $(l:the_world/climate#rainfall)rainfall$() of at least 300mm. The $(thing)Blood Lily$() flower grows on Kaolin clay."
     },
     {
       "type": "tfc:multimultiblock",
@@ -996,11 +996,11 @@
           ]
         ],
         "mapping": {
-          "X": "tfc:ore/halite/chalk"
+          "X": "tfc:halite"
         }
       },
       "name": "",
-      "text": "Halita em giz.",
+      "text": "Halite.",
       "enable_visualize": false
     },
     {
@@ -1131,7 +1131,7 @@
           ]
         ],
         "mapping": {
-          "X": "tfc:ore/amethyst/basalt"
+          "X": "tfc:ore/opal/basalt"
         }
       },
       "name": "",

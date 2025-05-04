@@ -95,7 +95,6 @@ import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.common.component.heat.IHeatView;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.common.recipes.BarrelRecipe;
 import net.dries007.tfc.common.recipes.BloomeryRecipe;
 import net.dries007.tfc.common.recipes.LoomRecipe;
 import net.dries007.tfc.config.TFCConfig;
@@ -198,7 +197,7 @@ public final class BlockEntityTooltips
                     if (recipe != null)
                     {
                         tooltip.accept(recipe);
-                        tooltip.accept(Component.translatable("tfc.jade.sealed_date", ICalendar.getTimeAndDate(Calendars.get(level).ticksToCalendarTicks(barrel.getSealedTick()), Calendars.get(level).getCalendarDaysInMonth())));
+                        tooltip.accept(Component.translatable("tfc.jade.sealed_date", Calendars.get(level).getExactTimeAndDate(barrel.getSealedTick())));
                         timeLeft(level, tooltip, tickLeft);
                     }
                 }
@@ -287,7 +286,7 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip COMPOSTER = (level, state, pos, entity, tooltip) -> {
-        if (state.getBlock() instanceof TFCComposterBlock block && entity instanceof ComposterBlockEntity composter)
+        if (state.getBlock() instanceof TFCComposterBlock && entity instanceof ComposterBlockEntity composter)
         {
             if (composter.isRotten())
             {
@@ -304,7 +303,7 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip CROP = (level, state, pos, entity, tooltip) -> {
-        if (entity instanceof CropBlockEntity crop && state.getBlock() instanceof CropBlock block)
+        if (entity instanceof CropBlockEntity crop && state.getBlock() instanceof CropBlock)
         {
             tooltip.accept(Component.translatable("tfc.jade.yield", String.format("%.0f", crop.getYield() * 100)));
         }
@@ -353,7 +352,7 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip FRUIT_TREE_SAPLING = (level, state, pos, entity, tooltip) -> {
         if (entity instanceof TickCounterBlockEntity counter && state.getBlock() instanceof FruitTreeSaplingBlock sapling)
         {
-            timeLeft(level, tooltip, (long) (sapling.getTreeGrowthDays() * ICalendar.TICKS_IN_DAY * TFCConfig.SERVER.globalFruitSaplingGrowthModifier.get()) - counter.getTicksSinceUpdate(), Component.translatable("tfc.jade.ready_to_grow"));
+            timeLeft(level, tooltip, sapling.getTicksToGrow() - counter.getTicksSinceUpdate(), Component.translatable("tfc.jade.ready_to_grow"));
         }
     };
 
@@ -431,7 +430,7 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip SAPLING = (level, state, pos, entity, tooltip) -> {
         if (entity instanceof TickCounterBlockEntity counter && state.getBlock() instanceof TFCSaplingBlock sapling)
         {
-            timeLeft(level, tooltip, (long) (sapling.getDaysToGrow() * ICalendar.TICKS_IN_DAY * TFCConfig.SERVER.globalSaplingGrowthModifier.get()) - counter.getTicksSinceUpdate(), Component.translatable("tfc.jade.ready_to_grow"));
+            timeLeft(level, tooltip, sapling.getTicksToGrow() - counter.getTicksSinceUpdate(), Component.translatable("tfc.jade.ready_to_grow"));
         }
     };
 

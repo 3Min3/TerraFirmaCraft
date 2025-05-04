@@ -106,18 +106,19 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(Tags.Items.STORAGE_BLOCKS_WHEAT).remove(Items.HAY_BLOCK);
         tag(Tags.Items.STRINGS).add(TFCItems.WOOL_YARN);
         tag(Tags.Items.SEEDS).add(TFCItems.CROP_SEEDS);
+        tag(Tags.Items.RODS_WOODEN).add(TFCBlocks.WOODS, Wood.BlockType.TWIG);
 
         // ===== TFC Tags ===== //
 
         for (Metal metal : Metal.values())
         {
-            metalTag(metal, Metal.ItemType.INGOT);
+            metalTag(metal, Metal.ItemType.INGOT, Tags.Items.INGOTS);
             if (metal.defaultParts())
             {
-                metalTag(metal, Metal.ItemType.DOUBLE_INGOT);
-                metalTag(metal, Metal.ItemType.SHEET);
-                metalTag(metal, Metal.ItemType.DOUBLE_SHEET);
-                metalTag(metal, Metal.ItemType.ROD);
+                metalTag(metal, Metal.ItemType.DOUBLE_INGOT, DOUBLE_INGOTS);
+                metalTag(metal, Metal.ItemType.SHEET, SHEETS);
+                metalTag(metal, Metal.ItemType.DOUBLE_SHEET, DOUBLE_SHEETS);
+                metalTag(metal, Metal.ItemType.ROD, Tags.Items.RODS);
                 copy(storageBlockTagOf(Registries.BLOCK, metal), storageBlockTagOf(Registries.ITEM, metal));
             }
         }
@@ -144,6 +145,8 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(DAIRY).add(Food.CHEESE);
         tag(SALADS).add(TFCItems.SALADS);
         tag(SOUPS).add(TFCItems.SOUPS);
+        tag(JAM).add(TFCItems.JAM);
+        tag(FOODS).addTag(JAM).add(TFCItems.FOOD);
         tag(PRESERVES).add(TFCItems.UNSEALED_FRUIT_PRESERVES);
         tag(SEALED_PRESERVES).add(TFCItems.FRUIT_PRESERVES);
         tag(JARS)
@@ -208,7 +211,6 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             Items.PAPER,
             TFCItems.JUTE_FIBER,
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.HUMUS),
-            TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.DEAD_GRASS),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.DRIFTWOOD),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.PINECONE));
 
@@ -332,7 +334,9 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         // and they don't contain other tool tags (???) so it's unclear what the point of them is.
 
         // TFC Added `#c:tools/`
-        tag(TOOLS_HAMMER).add(TFCItems.METAL_ITEMS, Metal.ItemType.HAMMER);
+        tag(TOOLS_HAMMER)
+            .add(TFCItems.METAL_ITEMS, Metal.ItemType.HAMMER)
+            .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.HAMMER);
         tag(TOOLS_SAW).add(TFCItems.METAL_ITEMS, Metal.ItemType.SAW);
         tag(TOOLS_SCYTHE).add(TFCItems.METAL_ITEMS, Metal.ItemType.SCYTHE);
         tag(TOOLS_KNIFE)
@@ -419,12 +423,13 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .addOnly(pivot(TFCBlocks.WOODS, Wood.BlockType.LOG), tannin::contains)
             .addOnly(pivot(TFCBlocks.WOODS, Wood.BlockType.WOOD), tannin::contains);
 
+        tag(ItemTags.LOGS_THAT_BURN).add(TFCItems.STICK_BUNDLE, TFCItems.STICK_BUNDLE, TFCItems.DRIED_CACTUS_WOOD);
         tag(FIREPIT_KINDLING)
             .addTags(ItemTags.LEAVES, BOOKS)
             .add(TFCItems.STRAW, Items.PAPER);
         tag(FIREPIT_STICKS).addTag(Tags.Items.RODS_WOODEN);
         tag(FIREPIT_LOGS).addTag(ItemTags.LOGS_THAT_BURN);
-        tag(LOG_PILE_LOGS).addTag(ItemTags.LOGS);
+        tag(LOG_PILE_LOGS).addTag(ItemTags.LOGS).add(TFCItems.STICK_BUNDLE, TFCItems.DRIED_CACTUS_WOOD, TFCItems.CACTUS_WOOD);
         tag(PIT_KILN_STRAW).add(TFCItems.STRAW);
         tag(PIT_KILN_LOGS).addTags(ItemTags.LOGS_THAT_BURN);
         tag(INEFFICIENT_LOGGING_AXES).add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.AXE);
@@ -471,6 +476,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
                 TFCBlocks.POWDERKEG
             );
         tag(TRIP_HAMMERS).add(TFCItems.METAL_ITEMS, Metal.ItemType.HAMMER); // N.B. Technical tag, don't include sub-tags
+        tag(WELDING_FLUX).add(TFCItems.POWDERS.get(Powder.FLUX));
         tag(THATCH_BED_HIDES).add(TFCItems.HIDES.get(HideItemType.RAW).get(HideItemType.Size.LARGE));
         tag(BOWL_POWDERS) // N.B. Technical tag, don't include sub-tags
             .add(TFCItems.POWDERS)
@@ -558,6 +564,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
 
         copy(TFCTags.Blocks.DIRT, DIRT);
         copy(TFCTags.Blocks.GRASS, GRASS);
+        copy(TFCTags.Blocks.COARSE_DIRT, COARSE_DIRT);
         copy(TFCTags.Blocks.MUD, MUD);
         copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICKS);
 
@@ -590,9 +597,11 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         });
     }
 
-    private void metalTag(Metal metal, Metal.ItemType type)
+    private void metalTag(Metal metal, Metal.ItemType type, TagKey<Item> baseTag)
     {
-        tag(commonTagOf(metal, type)).add(TFCItems.METAL_ITEMS.get(metal).get(type));
+        final TagKey<Item> commonTag = commonTagOf(metal, type);
+        tag(commonTag).add(TFCItems.METAL_ITEMS.get(metal).get(type));
+        tag(baseTag).addTag(commonTag);
     }
 
     private void copy(TagKey<Block> blockTag)

@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.world.surface.builder;
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
@@ -18,9 +19,9 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
 
     private final Noise2D variantNoise;
 
-    protected ShoreSurfaceBuilder(long seed)
+    protected ShoreSurfaceBuilder(Seed seed)
     {
-        this.variantNoise = new OpenSimplex2D(seed).octaves(2).spread(0.003f).abs();
+        this.variantNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.003f).abs();
     }
 
     @Override
@@ -37,7 +38,7 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
         }
         else
         {
-            SurfaceState top = context.groundwater() > 400 && variantNoiseValue > 0.4f ? SurfaceStates.SHORE_MUD : SurfaceStates.SHORE_SAND;
+            SurfaceState top = context.groundWater() > 400 && variantNoiseValue > 0.4f ? SurfaceStates.SHORE_MUD : SurfaceStates.SHORE_SAND;
             NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, top, top, SurfaceStates.SHORE_SANDSTONE);
         }
     }

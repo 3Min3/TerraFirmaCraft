@@ -15,7 +15,6 @@ import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.component.food.FoodData;
 import net.dries007.tfc.common.component.food.IFood;
 import net.dries007.tfc.common.component.food.NutritionData;
-import net.dries007.tfc.common.recipes.ChiselRecipe;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.network.PlayerInfoPacket;
 
@@ -61,15 +60,28 @@ public interface IPlayerInfo
     void cycleChiselMode();
 
     /**
-     * @return The number of ticks that the player is intoxicated for.
+     * @return The amount the player is intoxicated, in the range {@code [0, 1]}, with higher values indicating higher intoxication. This linearly
+     * decreases over time as the player gets less intoxicated.
      */
-    long getIntoxication();
+    float getIntoxication();
 
     /**
      * Adds an amount of ticks for the player to continue to be intoxicated for
      * @param ticks An amount of ticks to add
      */
     void addIntoxication(long ticks);
+
+    /**
+     * The possible maximum sleep duration that this player can sleep. Players accumulate "possible sleep" at a rate of 1t / 2t not spent sleeping,
+     * and can sleep once they accumulate at least 2 hours total, up to a maximum of 10 hours.
+     * @return A number of calendar ticks between 2-10 hours.
+     */
+    int getPossibleSleepDuration();
+
+    /**
+     * Resets the sleep restoration of this player, setting their effective sleep duration to zero.
+     */
+    void resetSleepRestoration();
 
     /**
      * @return The current thirst value of the player

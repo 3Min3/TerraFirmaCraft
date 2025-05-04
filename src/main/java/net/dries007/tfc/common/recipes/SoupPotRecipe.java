@@ -58,6 +58,7 @@ public class SoupPotRecipe extends PotRecipe
     @Override
     public PotOutput getOutput(PotBlockEntity.PotInventory inventory)
     {
+        inventory.clearFluid();
         int ingredientCount = 0;
         float water = 20, saturation = 2;
         float[] nutrition = new float[Nutrient.TOTAL];
@@ -137,7 +138,7 @@ public class SoupPotRecipe extends PotRecipe
                 // take the player's bowl, give a soup
                 clickedWith.shrink(1);
                 ItemHandlerHelper.giveItemToPlayer(player, stack.split(1));
-                return ItemInteractionResult.SUCCESS;
+                return ItemInteractionResult.sidedSuccess(player.level().isClientSide);
             }
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }

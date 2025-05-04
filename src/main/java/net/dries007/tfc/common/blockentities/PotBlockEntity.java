@@ -46,8 +46,6 @@ import net.dries007.tfc.common.recipes.outputs.PotOutput;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 
-import static net.dries007.tfc.TerraFirmaCraft.*;
-
 public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.PotInventory>
 {
     public static final int SLOT_EXTRA_INPUT_START = 4;
@@ -163,7 +161,6 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
                 RecipeHelpers.clearCraftingInput();
 
                 // Clear inputs
-                inventory.tank.setFluid(FluidStack.EMPTY);
                 for (int slot = SLOT_EXTRA_INPUT_START; slot <= SLOT_EXTRA_INPUT_END; slot++)
                 {
                     // Consume items, but set container items if they exist
@@ -344,6 +341,11 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         {
             inventory.deserializeNBT(provider, nbt.getCompound("inventory"));
             tank.readFromNBT(provider, nbt.getCompound("tank"));
+        }
+
+        public void clearFluid()
+        {
+            tank.setFluid(FluidStack.EMPTY);
         }
     }
 }

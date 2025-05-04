@@ -8,6 +8,12 @@
     },
     {
       "type": "minecraft:in_square"
+    },
+    {
+      "type": "tfc:climate",
+      "min_temperature": -14,
+      "min_elevation": -64,
+      "max_elevation": 320
     }
   ]
 }

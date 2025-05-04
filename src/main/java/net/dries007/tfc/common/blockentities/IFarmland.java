@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.common.blockentities;
 
-import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +24,8 @@ import static net.dries007.tfc.common.blockentities.FarmlandBlockEntity.Nutrient
  */
 public interface IFarmland
 {
+    float WATER_DISSIPATION_RATE = 0.001f;
+
     static void addNutrientParticles(ServerLevel level, BlockPos pos, Fertilizer fertilizer)
     {
         final float n = fertilizer.nitrogen(), p = fertilizer.phosphorus(), k = fertilizer.potassium();
@@ -50,10 +51,12 @@ public interface IFarmland
     /**
      * Implementations should clamp {@code value} on a range [0, 1]
      *
-     * @param type the nutrient type to be set
+     * @param type  the nutrient type to be set
      * @param value the amount (clamped [0-1]) of the nutrient to set
      */
     void setNutrient(NutrientType type, float value);
+
+    void setNutrientWithoutSync(NutrientType type, float value);
 
     default void addNutrient(NutrientType type, float value)
     {
@@ -72,10 +75,25 @@ public interface IFarmland
         addNutrient(POTASSIUM, fertilizer.potassium() * multiplier);
     }
 
+    float getAdditionalWater();
+
+    void waterTick();
+
+    void setAdditionalWater(float rainfall);
+
+    default void addAdditionalWater(float additionalWater)
+    {
+        setAdditionalWater(getAdditionalWater() + additionalWater);
+    }
+
+    long getLastWaterTick();
+
+    void setLastWaterTick(long lastWaterTick);
 
     /**
      * Consume up to {@code amount} of nutrient {@code type}.
      * Resupplies other nutrient by 1/6 of the amount consumed.
+     *
      * @return The amount of nutrient {@code type} that was actually consumed.
      */
     default float consumeNutrientAndResupplyOthers(NutrientType type, float amount)
@@ -100,6 +118,13 @@ public interface IFarmland
         return getNutrient(NITROGEN) == 1 && getNutrient(PHOSPHOROUS) == 1 && getNutrient(POTASSIUM) == 1;
     }
 
+    default void updateAdditionalWater(long fromTick, long toTick)
+    {
+        // TODO :: We need some way to inject additional water (watering can?)
+        long deltaTicks = toTick - fromTick;
+        addAdditionalWater(deltaTicks * WATER_DISSIPATION_RATE);
+    }
+
     default void saveNutrients(CompoundTag nbt)
     {
         nbt.putFloat("n", getNutrient(NITROGEN));
@@ -112,6 +137,16 @@ public interface IFarmland
         setNutrient(NITROGEN, nbt.getFloat("n"));
         setNutrient(PHOSPHOROUS, nbt.getFloat("p"));
         setNutrient(POTASSIUM, nbt.getFloat("k"));
+    }
+
+    default void loadAdditionalWater(CompoundTag nbt)
+    {
+        setAdditionalWater(nbt.getFloat("water"));
+    }
+
+    default void saveAdditionalWater(CompoundTag nbt)
+    {
+        nbt.putFloat("water", getAdditionalWater());
     }
 
     /**

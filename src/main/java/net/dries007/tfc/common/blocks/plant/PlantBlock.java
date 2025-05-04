@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blocks.plant;
 
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.Tags;
 
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.TFCTags;
@@ -50,6 +50,46 @@ public abstract class PlantBlock extends TFCBushBlock
         };
     }
 
+    public static PlantBlock createShrub(RegistryPlant plant, ExtendedProperties properties)
+    {
+        return new PlantBlock(properties)
+        {
+            static final VoxelShape SHAPE = box(0, 0, 0, 16, 16, 16);
+
+            @Override
+            public RegistryPlant getPlant()
+            {
+                return plant;
+            }
+
+            @Override
+            public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+            {
+                return SHAPE;
+            }
+        };
+    }
+
+    public static PlantBlock createShortShrub(RegistryPlant plant, ExtendedProperties properties)
+    {
+        return new PlantBlock(properties)
+        {
+            static final VoxelShape SHAPE = box(0, 0, 0, 16, 16, 16);
+
+            @Override
+            public RegistryPlant getPlant()
+            {
+                return plant;
+            }
+
+            @Override
+            public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+            {
+                return SHAPE;
+            }
+        };
+    }
+
     public static PlantBlock createDry(RegistryPlant plant, ExtendedProperties properties)
     {
         return new PlantBlock(properties)
@@ -64,6 +104,24 @@ public abstract class PlantBlock extends TFCBushBlock
             public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
             {
                 return isDryBlockPlantable(level.getBlockState(pos.below()));
+            }
+        };
+    }
+
+    public static PlantBlock createPerchedEpiphyte(RegistryPlant plant, ExtendedProperties properties)
+    {
+        return new PlantBlock(properties)
+        {
+            @Override
+            public RegistryPlant getPlant()
+            {
+                return plant;
+            }
+
+            @Override
+            public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+            {
+                return isEpiphytePlantable(level.getBlockState(pos.below()));
             }
         };
     }
@@ -86,7 +144,7 @@ public abstract class PlantBlock extends TFCBushBlock
         };
     }
 
-    public static PlantBlock createFlat(RegistryPlant plant, ExtendedProperties properties)
+    public static PlantBlock createFlowerbed(RegistryPlant plant, ExtendedProperties properties)
     {
 
         return new PlantBlock(properties)
@@ -104,23 +162,43 @@ public abstract class PlantBlock extends TFCBushBlock
             {
                 return SHAPE;
             }
+
+            // These two methods allow placing extra per block
+            @Override
+            protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
+                return !useContext.isSecondaryUseActive() && useContext.getItemInHand().is(this.asItem()) && state.getValue(AGE) < 3 || super.canBeReplaced(state, useContext);
+            }
+
+            @Nullable
+            public BlockState getStateForPlacement(BlockPlaceContext context) {
+                BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos());
+                if (blockstate.is(this)) {
+                    return blockstate.setValue(AGE, Math.min(3, blockstate.getValue(AGE) + 1));
+                }
+                return super.getStateForPlacement(context);
+            }
         };
     }
 
     public static boolean isDryBlockPlantable(BlockState state)
     {
-        return Helpers.isBlock(state, BlockTags.SAND) || Helpers.isBlock(state, Tags.Blocks.SANDS) || Helpers.isBlock(state, TFCTags.Blocks.BUSH_PLANTABLE_ON);
+        return Helpers.isBlock(state, TFCTags.Blocks.DRY_PLANT_PLANTABLE_ON);
+    }
+
+    public static boolean isEpiphytePlantable(BlockState state)
+    {
+        return Helpers.isBlock(state, TFCTags.Blocks.EPIPHYTE_PLANTABLE_ON);
     }
 
     protected PlantBlock(ExtendedProperties properties)
     {
         super(properties);
 
-        BlockState stateDefinition = getStateDefinition().any().setValue(AGE, 0);
-        IntegerProperty stageProperty = getPlant().getStageProperty();
-        if (stageProperty != null)
+        BlockState stateDefinition = getStateDefinition().any();
+        IntegerProperty ageProperty = getPlant().getAgeProperty();
+        if (ageProperty != null)
         {
-            stateDefinition = stateDefinition.setValue(stageProperty, 0);
+            stateDefinition = stateDefinition.setValue(ageProperty, 0);
         }
         registerDefaultState(stateDefinition);
     }
@@ -143,54 +221,31 @@ public abstract class PlantBlock extends TFCBushBlock
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        boolean dirty = false;
-        final int age = state.getValue(AGE);
-        if (random.nextDouble() < TFCConfig.SERVER.plantGrowthChance.get() && age < 3)
+        final var ageProp = getPlant().getAgeProperty();
+        if (ageProp != null)
         {
-            state = state.setValue(AGE, age + 1);
-            dirty = true;
-        }
-        final var stageProp = getPlant().getStageProperty();
-        if (stageProp != null)
-        {
-            final int stage = state.getValue(stageProp);
-            final int newStage = getPlant().stageFor(Calendars.SERVER.getCalendarMonthOfYear());
-            if (stage != newStage)
+            final int age = state.getValue(ageProp);
+            if (random.nextDouble() < TFCConfig.SERVER.plantGrowthChance.get() && age < 3)
             {
-                state = state.setValue(stageProp, newStage);
-                dirty = true;
+                state = state.setValue(AGE, age + 1);
+                level.setBlockAndUpdate(pos, state);
             }
         }
-        if (dirty)
-        {
-            level.setBlockAndUpdate(pos, updateStateWithCurrentMonth(state));
-        }
-
     }
 
     /**
      * Gets the plant metadata for this block.
-     * <p>
-     * The stage property is isolated and referenced via this as it is needed in the {@link Block} constructor - which builds the state container, and requires all property references to be computed in {@link Block#createBlockStateDefinition(StateDefinition.Builder)}.
-     * <p>
      * See the various {@link PlantBlock#create(RegistryPlant, ExtendedProperties)} methods and subclass versions for how to use.
      */
     public abstract RegistryPlant getPlant();
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
-        return updateStateWithCurrentMonth(defaultBlockState());
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        if (getPlant().getStageProperty() != null)
+        if (getPlant().getAgeProperty() != null)
         {
-            builder.add(getPlant().getStageProperty());
+            builder.add(AGE);
         }
-        builder.add(AGE);
     }
 
     @Override
@@ -200,8 +255,4 @@ public abstract class PlantBlock extends TFCBushBlock
         return Helpers.lerp(modifier, speedFactor, 1.0f);
     }
 
-    public BlockState updateStateWithCurrentMonth(BlockState state)
-    {
-        return getPlant().getStageProperty() != null ? state.setValue(getPlant().getStageProperty(), getPlant().stageFor(Calendars.SERVER.getCalendarMonthOfYear())) : state;
-    }
 }

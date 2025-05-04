@@ -114,6 +114,7 @@ public interface HeatRecipes extends Recipes
         add("melt", Ingredient.of(TFCItems.BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.BLOWPIPE), 1500);
         add("melt", Ingredient.of(TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.CERAMIC_BLOWPIPE), 1500);
         add(TFCItems.POWDERS.get(Powder.FLUX), TFCItems.POWDERS.get(Powder.LIME), 840);
+        add(TFCItems.CACTUS_WOOD, TFCItems.DRIED_CACTUS_WOOD, 700);
 
         burnFood("bread", Ingredient.of(TFCTags.Items.BREAD), 700);
         burnFood("meat", Ingredient.of(TFCTags.Items.MEATS), 900);

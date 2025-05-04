@@ -80,7 +80,6 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(BlockTags.WOODEN_BUTTONS).add(TFCBlocks.WOODS, Wood.BlockType.BUTTON);
         tag(BlockTags.STONE_BUTTONS).add(TFCBlocks.ROCK_BLOCKS, Rock.BlockType.BUTTON);
         tag(BlockTags.WOODEN_DOORS).add(TFCBlocks.WOODS, Wood.BlockType.DOOR);
-        tag(BlockTags.DOORS).add(TFCBlocks.FIREPROOF_DOOR);
         tag(BlockTags.WOODEN_STAIRS).add(TFCBlocks.WOODS, Wood.BlockType.STAIRS);
         tag(BlockTags.WOODEN_SLABS).add(TFCBlocks.WOODS, Wood.BlockType.SLAB);
         tag(BlockTags.WOODEN_FENCES)
@@ -215,9 +214,6 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .addAll(TFCBlocks.ALABASTER_POLISHED_DECORATIONS)
             .add(TFCBlocks.GROUNDCOVER)
             .add(TFCBlocks.GLAZED_LARGE_VESSELS)
-            .add(TFCBlocks.FIRE_BRICK_SHELF)
-            .add(TFCBlocks.FIREPROOF_DOOR)
-            .add(TFCBlocks.FIREBOX)
             .add(
                 TFCBlocks.ICICLE,
                 TFCBlocks.SEA_ICE,
@@ -422,12 +418,6 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(CHARCOAL_FORGE_INVISIBLE).add(TFCBlocks.CRUCIBLE);
         tag(BLOOMERY_INSULATION).addTag(INSULATION);
         tag(BLAST_FURNACE_INSULATION).add(TFCBlocks.FIRE_BRICKS);
-        tag(HEAT_INSULATION).add(TFCBlocks.FIRE_BRICKS).add(Blocks.BRICKS).add(Blocks.BRICK_STAIRS).add(Blocks.BRICK_SLAB).add(Blocks.TINTED_GLASS).add(TFCBlocks.FIREPROOF_DOOR);
-        tag(HEAT_PASSABLE)
-            .add(TFCBlocks.METALS, Metal.BlockType.GRATE)
-            .add(TFCBlocks.METALS, Metal.BlockType.EXPOSED_GRATE)
-            .add(TFCBlocks.METALS, Metal.BlockType.OXIDIZED_GRATE)
-            .add(TFCBlocks.METALS, Metal.BlockType.WEATHERED_GRATE);
         tag(SCRAPING_SURFACE).addTag(BlockTags.LOGS);
         tag(GLASS_POURING_TABLE).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));
         tag(GLASS_BASIN_BLOCKS).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));

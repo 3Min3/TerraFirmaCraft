@@ -86,7 +86,6 @@ import net.dries007.tfc.world.biome.BiomeSourceExtension;
 import net.dries007.tfc.world.biome.TFCBiomes;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.ChunkDataGenerator;
-import net.dries007.tfc.world.chunkdata.RegionChunkDataGenerator;
 import net.dries007.tfc.world.chunkdata.RockData;
 import net.dries007.tfc.world.layer.TFCLayers;
 import net.dries007.tfc.world.layer.framework.AreaFactory;
@@ -126,8 +125,8 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     private final NoiseBasedChunkGenerator stupidMojangChunkGenerator; // Mojang fix your god awful deprecated carver nonsense
     private final FastConcurrentCache<TFCAquifer> aquiferCache;
 
+    private Seed seed;
     private ChunkDataGenerator chunkDataGenerator;
-    private long noiseSamplerSeed;
     private SurfaceManager surfaceManager;
     private NoiseSampler noiseSampler;
 
@@ -184,7 +183,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
      * See: <a href="https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues/2591">TerraFirmaCraft#2591</a>
      */
     @Override
-    @SuppressWarnings("ConstantConditions") // this.chunkDataProvider is null
+    @SuppressWarnings("ConstantConditions") // this.chunkDataGenerator is null
     public void initRandomState(ChunkMap chunkMap, ServerLevel level)
     {
         if (chunkDataGenerator != null)
@@ -197,17 +196,15 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
             return;
         }
 
-        final long seed = level.getSeed();
-        final RandomSource random = new XoroshiroRandomSource(seed);
+        final Seed seed = Seed.of(level.getSeed());
 
-        final RegionGenerator regionGenerator = new RegionGenerator(settings, random);
-        final ChunkDataGenerator chunkDataGenerator = RegionChunkDataGenerator.create(random.nextLong(), settings.rockLayerSettings(), regionGenerator);
-        final AreaFactory factory = TFCLayers.createRegionBiomeLayer(regionGenerator, random.nextLong());
+        final RegionGenerator regionGenerator = new RegionGenerator(settings, seed);
+        final AreaFactory factory = TFCLayers.createRegionBiomeLayer(regionGenerator, seed);
         final ConcurrentArea<BiomeExtension> biomeLayer = new ConcurrentArea<>(factory, TFCLayers::getFromLayerId);
 
-        this.noiseSamplerSeed = seed;
-        this.noiseSampler = new NoiseSampler(random.nextLong(), level.registryAccess().lookupOrThrow(Registries.NOISE), level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION));
-        this.chunkDataGenerator = chunkDataGenerator;
+        this.seed = seed;
+        this.noiseSampler = new NoiseSampler(seed.next(), level.registryAccess().lookupOrThrow(Registries.NOISE), level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION));
+        this.chunkDataGenerator = regionGenerator.chunkDataGenerator();
         this.surfaceManager = new SurfaceManager(seed);
 
         this.customBiomeSource.initRandomState(regionGenerator, biomeLayer);
@@ -437,6 +434,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
             chunkData.generateFull(filler.surfaceHeight(), filler.aquifer().surfaceHeights());
             chunkData.getRockData().useCache(chunkPos);
             filler.fillFromNoise();
+            chunkData.modifyBaseGroundwater(filler.surfaceHeight());
 
             aquiferCache.set(chunkPos.x, chunkPos.z, filler.aquifer());
 
@@ -574,6 +572,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
 
     private Map<BiomeExtension, BiomeNoiseSampler> createBiomeSamplersForChunk(@Nullable ChunkAccess chunk)
     {
+        final Seed noiseSamplerSeed = seed.forkStable();
         final ImmutableMap.Builder<BiomeExtension, BiomeNoiseSampler> builder = ImmutableMap.builder();
         for (BiomeExtension extension : TFCBiomes.REGISTRY)
         {
@@ -589,6 +588,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
 
     private Map<RiverBlendType, RiverNoiseSampler> createRiverSamplersForChunk()
     {
+        final Seed noiseSamplerSeed = seed.forkStable();
         final EnumMap<RiverBlendType, RiverNoiseSampler> builder = new EnumMap<>(RiverBlendType.class);
         for (RiverBlendType blendType : RiverBlendType.ALL)
         {
@@ -599,7 +599,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
 
     private Noise2D createShoreSamplerForChunk()
     {
-        return new OpenSimplex2D(noiseSamplerSeed)
+        return new OpenSimplex2D(seed.seed() + 8719234132L)
             .octaves(2)
             .spread(0.003f)
             .scaled(-0.1, 1.1);

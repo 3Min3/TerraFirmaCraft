@@ -34,7 +34,7 @@ public final class Units
     public static final int CELL_WIDTH_IN_PARTITION = (1 << PARTITION_BITS);
     public static final int CELL_WIDTH_IN_GRID = CELL_WIDTH_IN_PARTITION * PARTITION_WIDTH_IN_GRID;
 
-    public static final int REGION_RADIUS_IN_GRID = CELL_WIDTH_IN_GRID + 4;
+    public static final int REGION_RADIUS_IN_GRID = CELL_WIDTH_IN_GRID + 5;
     public static final int REGION_WIDTH_IN_GRID = 1 + 2 * REGION_RADIUS_IN_GRID;
 
     public static final int QUART_BITS = 2;
@@ -97,6 +97,8 @@ public final class Units
     {
         return block >> GRID_BITS;
     }
+
+    public static int gridToBlock(int grid) { return grid << GRID_BITS; }
 
     public static int index(int x, int z)
     {

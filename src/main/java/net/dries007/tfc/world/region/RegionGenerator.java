@@ -9,6 +9,8 @@ package net.dries007.tfc.world.region;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+
+import net.dries007.tfc.world.biome.BiomeNoise;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
@@ -16,18 +18,24 @@ import org.jetbrains.annotations.TestOnly;
 import org.jetbrains.annotations.VisibleForTesting;
 
 import net.dries007.tfc.world.FastConcurrentCache;
+import net.dries007.tfc.world.Seed;
+import net.dries007.tfc.world.chunkdata.ChunkDataGenerator;
+import net.dries007.tfc.world.chunkdata.RegionChunkDataGenerator;
 import net.dries007.tfc.world.layer.TFCLayers;
 import net.dries007.tfc.world.layer.framework.Area;
 import net.dries007.tfc.world.layer.framework.AreaFactory;
 import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
+import net.dries007.tfc.world.settings.RockSettings;
 import net.dries007.tfc.world.settings.Settings;
 
 /**
- * This is a single-instance, threadsafe (accessible from multiple threads concurrently), generator. As such, all query-able fields of this class need to support concurrent access, either by being concurrent i.e. {@link FastConcurrentCache}, thread local {@link ThreadLocal}, or immutable / stateless i.e. {@link Noise2D}
+ * This is a single-instance, threadsafe (accessible from multiple threads concurrently), generator. As such, all query-able fields of this
+ * class need to support concurrent access, either by being concurrent i.e. {@link FastConcurrentCache}, thread local {@link ThreadLocal},
+ * or immutable / stateless i.e. {@link Noise2D}
  */
-public class RegionGenerator
+public final class RegionGenerator
 {
     private static double triangle(double frequency, double value)
     {
@@ -46,21 +54,30 @@ public class RegionGenerator
     public final Cellular2D cellNoise;
     public final Noise2D continentNoise;
     public final Noise2D temperatureNoise;
+    public final Noise2D oceanicInfluenceNoise;
     public final Noise2D rainfallNoise;
     public final Noise2D rainfallVarianceNoise;
+    public final Settings settings;
+    public final Noise2D hotSpotAgeNoise;
+    public final Noise2D hotSpotIntensityNoise;
+    public final Cellular2D plateRegionNoise;
 
     public final ThreadLocal<Area> biomeArea;
     public final ThreadLocal<Area> rockArea;
 
-    private final long seed;
+    private final Seed seed;
     private final FastConcurrentCache<Region> cellCache;
     private final FastConcurrentCache<RegionPartition> partitionCache;
 
-    public RegionGenerator(Settings settings, RandomSource random)
-    {
-        this.seed = random.nextLong();
+    private final ChunkDataGenerator chunkDataGenerator;
 
-        this.cellNoise = new Cellular2D(random.nextLong()).spread(1f / Units.CELL_WIDTH_IN_GRID);
+
+    public RegionGenerator(Settings settings, Seed seed)
+    {
+        this.settings = settings;
+        this.seed = seed;
+
+        this.cellNoise = new Cellular2D(seed.next()).spread(1f / Units.CELL_WIDTH_IN_GRID);
 
         // Both of these caches are queried, and cached, on a cell-coordinate basis
         // Since cells are large (~12km), a small concurrent cache should be enough
@@ -69,40 +86,81 @@ public class RegionGenerator
 
         float min = settings.continentalness() * 10f - 2.5f; // range [0, 1], default 0.5 -> 2.5 continentalness
         this.continentNoise = cellNoise.then(c -> 1 - c.f1() / (0.37f + c.f2()))
-            .lazyProduct(new OpenSimplex2D(random.nextLong())
+            .lazyProduct(new OpenSimplex2D(seed.next())
                 .spread(0.24f)
                 .scaled(min, 8.7f)
                 .octaves(4));
 
         this.temperatureNoise = baseNoise(false, settings.temperatureScale(), settings.temperatureConstant())
             .scaled(-20f, 30f)
-            .add(new OpenSimplex2D(random.nextInt())
+            .add(new OpenSimplex2D(seed.next())
                 .octaves(2)
                 .spread(0.15f)
                 .scaled(-3f, 3f));
 
+        this.oceanicInfluenceNoise = new OpenSimplex2D(seed.next())
+            .spread(0.02f);
+
         this.rainfallNoise = baseNoise(true, settings.rainfallScale(), settings.rainfallConstant())
             .scaled(0f, 500f)
-            .add(new OpenSimplex2D(random.nextInt())
+            .add(new OpenSimplex2D(seed.next())
                 .octaves(2)
                 .spread(0.15f)
                 .scaled(-80f, 40f)); // Bias slightly negative, as we bias near-ocean areas to be positive rainfall, so this encourages deserts inland
 
-        this.rainfallVarianceNoise = new OpenSimplex2D(random.nextInt())
+        this.rainfallVarianceNoise = new OpenSimplex2D(seed.next())
             .octaves(2)
-            .spread(0.3f)
-            .scaled(-.2f, 0.2f);
+            .spread(0.1f)
+            .scaled(0f, 20f);
 
-        final AreaFactory biomeAreaFactory = TFCLayers.createUniformLayer(random, 2);
-        final AreaFactory rockAreaFactory = TFCLayers.createUniformLayer(random, 3);
+        this.hotSpotAgeNoise = BiomeNoise.hotSpotAge(seed.seed()).spread(128);
+        this.hotSpotIntensityNoise = BiomeNoise.hotSpotIntensity(seed.seed()).spread(128);
+        this.plateRegionNoise = BiomeNoise.plateRegions(seed.seed()).spread(128);
+
+        final AreaFactory biomeAreaFactory = TFCLayers.createUniformLayer(seed, 2);
+        final AreaFactory rockAreaFactory = TFCLayers.createUniformLayer(seed, 3);
 
         biomeArea = ThreadLocal.withInitial(biomeAreaFactory);
         rockArea = ThreadLocal.withInitial(rockAreaFactory);
+
+        this.chunkDataGenerator = new RegionChunkDataGenerator(this, settings.rockLayerSettings(), seed);
     }
 
-    public long seed()
+    public Seed seed()
     {
         return seed;
+    }
+
+    public ChunkDataGenerator chunkDataGenerator()
+    {
+        return chunkDataGenerator;
+    }
+
+    /**
+     * @return A smoothly interpolated value in {@code [0, 1]} representing if we are within the finite continent region or not. Higher values
+     * are within the finite continent region.
+     */
+    public float continentFactor(Region.Point point)
+    {
+        if (settings.finiteContinents())
+        {
+            // Finite continent area is within one pole-pole area. Interpolate from 1 -> 0 to 1.2x scale for smooth borders
+            final int scaleX = settings.rainfallScale();
+            final int scaleZ = settings.temperatureScale();
+            return Math.min(
+                scaleX == 0 ? 1f : Mth.clampedMap(Math.abs(Units.gridToBlock(point.x)), scaleX, 1.2f * scaleX, 1, 0),
+                scaleZ == 0 ? 1f : Mth.clampedMap(Math.abs(Units.gridToBlock(point.z) - 0.5f * scaleZ), scaleZ, 1.2f * scaleZ, 1, 0)
+            );
+        }
+        return 1f;
+    }
+
+    /**
+     * @return The estimated surface rock type at the given grid coordinates. This should only be used during region point generation!
+     */
+    public RockSettings getSurfaceRock(Region.Point point)
+    {
+        return settings.rockLayerSettings().sampleAtLayer(point.rock, 0);
     }
 
     public RegionPartition.Point getOrCreatePartitionPoint(int gridX, int gridZ)
@@ -211,16 +269,16 @@ public class RegionGenerator
         ANNOTATE_DISTANCE_TO_CELL_EDGE(AnnotateDistanceToCellEdge.INSTANCE),
         FLOOD_FILL_SMALL_OCEANS(FloodFillSmallOceans.INSTANCE),
         ADD_ISLANDS(AddIslands.INSTANCE),
+        ADD_HOTSPOTS(AddHotspots.INSTANCE),
         ANNOTATE_DISTANCE_TO_OCEAN(AnnotateDistanceToOcean.INSTANCE),
         ANNOTATE_BASE_LAND_HEIGHT(AnnotateBaseLandHeight.INSTANCE),
         ANNOTATE_DISTANCE_TO_WEST_COAST(AnnotateDistanceToWestCoast.INSTANCE),
         ADD_MOUNTAINS(AddMountains.INSTANCE),
         ANNOTATE_BIOME_ALTITUDE(AnnotateBiomeAltitude.INSTANCE),
         ANNOTATE_CLIMATE(AnnotateClimate.INSTANCE),
-        ANNOTATE_RAINFALL(c -> {}),
-        ANNOTATE_RAINFALL_VARIANCE(c -> {}),
-        CHOOSE_BIOMES(ChooseBiomes.INSTANCE),
         CHOOSE_ROCKS(ChooseRocks.INSTANCE),
+        ANNOTATE_KARST_SURFACE(KarstSurfaceRocks.INSTANCE),
+        CHOOSE_BIOMES(ChooseBiomes.INSTANCE),
         ADD_RIVERS_AND_LAKES(AddRiversAndLakes.INSTANCE),
         ;
 
@@ -243,13 +301,13 @@ public class RegionGenerator
 
         public final Region region;
 
-        Context(BiConsumer<Task, Region> viewer, Cellular2D.Cell regionCell, long seed)
+        Context(BiConsumer<Task, Region> viewer, Cellular2D.Cell regionCell, Seed seed)
         {
             this.viewer = viewer;
             this.regionCell = regionCell;
             this.region = new Region(regionCell);
 
-            final long regionSeed = seed ^ Float.floatToIntBits((float) regionCell.noise()) * 7189234123L;
+            final long regionSeed = seed.seed() ^ Float.floatToIntBits((float) regionCell.noise()) * 7189234123L;
             this.random = new XoroshiroRandomSource(regionSeed);
         }
 

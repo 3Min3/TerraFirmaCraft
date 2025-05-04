@@ -32,6 +32,12 @@
   "spawners": {
     "creature": [
       {
+        "type": "tfc:polar_bear",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
         "type": "tfc:penguin",
         "weight": 10,
         "minCount": 2,
@@ -149,7 +155,7 @@
       }
     ]
   },
-  "creature_spawn_probability": 0.08,
+  "creature_spawn_probability": 0.1,
   "spawn_costs": {
     "tfc:octopoteuthis": {
       "energy_budget": 0.12,

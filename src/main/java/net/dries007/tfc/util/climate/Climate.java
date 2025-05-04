@@ -72,20 +72,14 @@ public final class Climate
         return get(level).getAverageRainfall(level, pos);
     }
 
+    public static float getRainfallVariance(Level level, BlockPos pos)
+    {
+        return get(level).getRainfallVariance(level, pos);
+    }
+
     public static float getGroundwater(Level level, BlockPos pos)
     {
         return get(level).getAverageGroundwater(level, pos);
-    }
-
-    public static float getFogginess(Level level, BlockPos pos)
-    {
-        return get(level).getFogginess(level, pos, Calendars.get(level).getTicks());
-    }
-
-    @Deprecated
-    public static float getWaterFogginess(Level level, BlockPos pos)
-    {
-        return get(level).getWaterFogginess(level, pos, Calendars.get(level).getTicks());
     }
 
     /**

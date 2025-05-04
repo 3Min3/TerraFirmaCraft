@@ -23,10 +23,16 @@
       "item": "tfc:plant/tulip_white"
     },
     {
-      "item": "tfc:plant/water_lily"
+      "item": "tfc:plant/white_water_lily"
     },
     {
       "item": "tfc:plant/lily_of_the_valley"
+    },
+    {
+      "item": "tfc:plant/edelweiss"
+    },
+    {
+      "item": "tfc:plant/beachgrass"
     }
   ],
   "result": {

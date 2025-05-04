@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.util.IArtist;
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.layer.TFCLayers;
 import net.dries007.tfc.world.layer.framework.Area;
 import net.dries007.tfc.world.layer.framework.ConcurrentArea;
@@ -30,25 +31,13 @@ import net.dries007.tfc.world.river.MidpointFractal;
 import net.dries007.tfc.world.settings.RockLayerSettings;
 import net.dries007.tfc.world.settings.RockSettings;
 
-public record RegionChunkDataGenerator(
-    RegionGenerator regionGenerator,
-    RockLayerSettings rockLayerSettings,
-    ConcurrentArea<ForestType> forestTypeLayer,
-    ThreadLocal<Area> rockLayerArea,
-    Noise2D layerHeightNoise,
-    Noise2D layerSkewXNoise,
-    Noise2D layerSkewZNoise
-) implements ChunkDataGenerator
+public final class RegionChunkDataGenerator implements ChunkDataGenerator
 {
     private static final int LAYER_OFFSET_BITS = 3;
     private static final int LAYER_OFFSET_MASK = (1 << LAYER_OFFSET_BITS) - 1;
     private static final int[] LAYER_OFFSETS = new int[1 << (LAYER_OFFSET_BITS + 1)];
 
     private static final float DELTA_Y_OFFSET = 12;
-
-    private static final int MIN_RIVER_WIDTH = 12; // Rivers must be this wide to influence rainfall
-    private static final float RIVER_INFLUENCE = (float) Units.blockToGridExact(40);
-    private static final float RIVER_INFLUENCE_SQ = RIVER_INFLUENCE * RIVER_INFLUENCE;
 
     static
     {
@@ -69,20 +58,29 @@ public record RegionChunkDataGenerator(
         return LAYER_OFFSETS[((layer & LAYER_OFFSET_MASK) << 1) | 0b1];
     }
 
-    public static RegionChunkDataGenerator create(long worldSeed, RockLayerSettings rockLayerSettings, RegionGenerator regionGenerator)
+    private static final int MIN_RIVER_WIDTH = 12; // Rivers must be this wide to influence rainfall
+    private static final float RIVER_INFLUENCE = (float) Units.blockToGridExact(40);
+    private static final float RIVER_INFLUENCE_SQ = RIVER_INFLUENCE * RIVER_INFLUENCE;
+
+    private final RegionGenerator regionGenerator;
+    private final RockLayerSettings rockLayerSettings;
+    private final ConcurrentArea<ForestType> forestTypeLayer;
+    private final ThreadLocal<Area> rockLayerArea;
+    private final Noise2D layerHeightNoise;
+    private final Noise2D layerSkewXNoise;
+    private final Noise2D layerSkewZNoise;
+
+    public RegionChunkDataGenerator(RegionGenerator regionGenerator, RockLayerSettings rockLayerSettings, Seed seed)
     {
-        final RandomSource random = new XoroshiroRandomSource(worldSeed);
-        random.setSeed(worldSeed ^ random.nextLong());
+        this.regionGenerator = regionGenerator;
+        this.rockLayerSettings = rockLayerSettings;
 
-        final ThreadLocal<Area> rockLayerArea = ThreadLocal.withInitial(TFCLayers.createOverworldRockLayer(regionGenerator, random.nextLong()));
-        final Noise2D layerHeightNoise = new OpenSimplex2D(random.nextInt()).octaves(3).scaled(43, 63).spread(0.014f);
-        final Noise2D layerSkewXNoise = new OpenSimplex2D(random.nextInt()).octaves(2).scaled(-1.8f, 1.8f).spread(0.01f);
-        final Noise2D layerSkewZNoise = new OpenSimplex2D(random.nextInt()).octaves(2).scaled(-1.8f, 1.8f).spread(0.01f);
+        this.rockLayerArea = ThreadLocal.withInitial(TFCLayers.createOverworldRockLayer(regionGenerator, seed.next()));
+        this.layerHeightNoise = new OpenSimplex2D(seed.next()).octaves(3).scaled(43, 63).spread(0.014f);
+        this.layerSkewXNoise = new OpenSimplex2D(seed.next()).octaves(2).scaled(-1.8f, 1.8f).spread(0.01f);
+        this.layerSkewZNoise = new OpenSimplex2D(seed.next()).octaves(2).scaled(-1.8f, 1.8f).spread(0.01f);
 
-        // Flora
-        final ConcurrentArea<ForestType> forestTypeLayer = new ConcurrentArea<>(TFCLayers.createOverworldForestLayer(random.nextLong(), IArtist.nope()), ForestType::valueOf);
-
-        return new RegionChunkDataGenerator(regionGenerator, rockLayerSettings, forestTypeLayer, rockLayerArea, layerHeightNoise, layerSkewXNoise, layerSkewZNoise);
+        this.forestTypeLayer = new ConcurrentArea<>(TFCLayers.createOverworldForestLayer(seed.next(), IArtist.nope()), ForestType::valueOf);
     }
 
     @Override
@@ -179,10 +177,9 @@ public record RegionChunkDataGenerator(
     {
         final float distance = (float) fractal.intersectDistance(gridX, gridZ);
         final float distanceInfluence = Mth.clampedMap(distance, 0f, RIVER_INFLUENCE_SQ, 1f, 0f);
-        final float targetValue = Math.min(300f, 500f);
 
         // Take the max of any influence with adjacent rivers
-        return Math.max(currentValue, distanceInfluence * widthInfluence * targetValue);
+        return Math.max(currentValue, distanceInfluence * widthInfluence * 300f);
     }
 
     @Override

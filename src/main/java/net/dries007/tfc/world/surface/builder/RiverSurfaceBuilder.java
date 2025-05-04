@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.world.surface.builder;
 
+import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
@@ -15,7 +16,7 @@ public class RiverSurfaceBuilder extends ShoreSurfaceBuilder
 {
     public static final SurfaceBuilderFactory INSTANCE = RiverSurfaceBuilder::new;
 
-    protected RiverSurfaceBuilder(long seed)
+    protected RiverSurfaceBuilder(Seed seed)
     {
         super(seed);
     }
@@ -37,13 +38,13 @@ public class RiverSurfaceBuilder extends ShoreSurfaceBuilder
             SurfaceState state = SurfaceStates.GRAVEL;
             if (context.getSlope() < 2)
             {
-                state = SurfaceStates.GRASS;
+                state = SurfaceStates.TOP_GRASS_TO_GRAVEL;
             }
             else if (context.getSlope() < 5)
             {
                 state = SurfaceStates.RIVER_SAND;
             }
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.SANDSTONE_OR_GRAVEL);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL);
         }
     }
 }
