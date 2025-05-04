@@ -246,6 +246,9 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     @Override
     public void applyCarvers(WorldGenRegion level, long seed, RandomState state, BiomeManager biomeManager, StructureManager structureFeatureManager, ChunkAccess chunk, GenerationStep.Carving step)
     {
+        // TODO: Remove this line
+        if (true) return;
+
         // Skip water carving, only do air carving, since we use aquifers
         if (step != GenerationStep.Carving.AIR)
         {

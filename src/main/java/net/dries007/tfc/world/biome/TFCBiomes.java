@@ -41,7 +41,9 @@ import net.dries007.tfc.world.surface.builder.SeaCliffSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.ShieldVolcanoSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.ShilinSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.ShoreSurfaceBuilder;
+import net.dries007.tfc.world.surface.builder.SimpleSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.StoneCirclesSurfaceBuilder;
+import net.dries007.tfc.world.surface.builder.SurfaceBuilder;
 
 import static net.dries007.tfc.world.biome.BiomeBuilder.*;
 
@@ -100,14 +102,14 @@ public final class TFCBiomes
     // Vegetated zone below shore cliffs -- Mid-high biome shore
     public static final BiomeExtension SETBACK_CLIFFS = register("setback_cliffs", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SETBACK_CLIFFS));
     // Vegetated coastal Dunes -- Below setback cliffs
-    public static final BiomeExtension COASTAL_DUNES = register("coastal_dunes", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(ShoreSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.DUNES));
+    public static final BiomeExtension COASTAL_DUNES = register("coastal_dunes", builder().heightmap(seed -> BiomeNoise.constant(0)).surface(ShoreSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.DUNES));
 
     // TODO: Make flood fill lakes salty and very common in this biome
     // Chaotic rock formations, tide pools, and blowholes
-    public static final BiomeExtension ROCKY_SHORES = register("rocky_shores", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.ROCKY_SHORES));
+    public static final BiomeExtension ROCKY_SHORES = register("rocky_shores", builder().heightmap(seed -> BiomeNoise.constant(-15)).surface(SimpleSurfaceBuilder.ROCKY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.ROCKY_SHORES));
 
     // Similar Rocky Shores, but with beaches mixed in
-    public static final BiomeExtension EMBAYMENTS = register("embayments", builder().heightmap(BiomeNoise::shore).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.EMBAYMENTS)); //
+    public static final BiomeExtension EMBAYMENTS = register("embayments", builder().heightmap(BiomeNoise::shore).surface(NormalSurfaceBuilder.ROCKY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.EMBAYMENTS)); //
 
 
     // Water
