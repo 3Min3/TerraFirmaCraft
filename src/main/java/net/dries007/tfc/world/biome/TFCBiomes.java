@@ -109,7 +109,7 @@ public final class TFCBiomes
     public static final BiomeExtension ROCKY_SHORES = register("rocky_shores", builder().heightmap(seed -> BiomeNoise.constant(-15)).surface(SimpleSurfaceBuilder.ROCKY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.ROCKY_SHORES));
 
     // Similar Rocky Shores, but with beaches mixed in
-    public static final BiomeExtension EMBAYMENTS = register("embayments", builder().heightmap(BiomeNoise::shore).surface(NormalSurfaceBuilder.ROCKY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.EMBAYMENTS)); //
+    public static final BiomeExtension EMBAYMENTS = register("embayments", builder().heightmap(BiomeNoise::shore).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.EMBAYMENTS)); //
 
 
     // Water

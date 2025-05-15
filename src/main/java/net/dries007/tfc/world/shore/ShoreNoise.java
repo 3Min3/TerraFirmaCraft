@@ -161,7 +161,83 @@ public final class ShoreNoise
         };
     }
 
-    // TODO:
+    // Complex rocks and tidepools with sandy beaches
+    public static ShoreNoiseSampler embayments(Seed seed)
+    {
+        return new ShoreNoiseSampler()
+        {
+            private final Noise2D rockShelfIntensity = new OpenSimplex2D(seed.seed() + 5252L).octaves(3).spread(0.03).scaled(-0.8, 1);
+            private final Noise2D steepnessNoise = new OpenSimplex2D(seed.seed() + 224L).octaves(2).spread(0.11).clampedScaled(-0.7, 0.7, 0, 0.3);
+            private final Noise2D roughnessNoise = new OpenSimplex2D(seed.seed()).octaves(3).spread(0.09).scaled(-3, 3);
+            private final Noise2D tidepoolNoise = new OpenSimplex2D(seed.seed() + 492L).octaves(3).spread(0.09).clampedScaled(-1, 0, -5, 0);
+            private final Noise3D caveNoise = BiomeNoise.cliffNoise(seed).scaled(0, 0.12);
+
+            final double topShelfEdge = 0.7;
+            final double midShelfEdge = 0.35;
+
+            int x, z;
+
+            double tideLevel;
+            double oceanWeight;
+            double sandHeight;
+            double shelfProgress;
+            double height;
+            double topShelfHeight;
+            double midShelfHeight;
+
+            @Override
+            public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
+            {
+                tideLevel = BiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
+                sandHeight = ShoreNoise.simpleBeach(seed, tideLevel, heightIn, landWeight, oceanWeight);
+                this.x = x;
+                this.z = z;
+                this.oceanWeight = oceanWeight;
+
+                final double roughness = roughnessNoise.noise(x, z) + tidepoolNoise.noise(x, z);
+                topShelfHeight = SEA_LEVEL_Y + roughness + 15;
+                midShelfHeight = SEA_LEVEL_Y + roughness + 9;
+
+                final double baseRockShelfNoise = rockShelfIntensity.noise(x, z);
+                if (oceanWeight > 0.10)
+                {
+                    shelfProgress = Mth.clampedMap(oceanWeight, 0.1, 0.3, baseRockShelfNoise, baseRockShelfNoise - oceanWeight * 3);
+                }
+                else
+                {
+                    final double landInfluence = Mth.clampedMap(landWeight, 0.4, 0, baseRockShelfNoise + landWeight * 2, baseRockShelfNoise);
+                    shelfProgress = Mth.clampedMap(oceanWeight, 0, 0.1, baseRockShelfNoise + landInfluence, baseRockShelfNoise);
+                }
+
+                final double steepness = steepnessNoise.noise(x, z);
+                height = shelfProgress > topShelfEdge + steepness ? topShelfHeight
+                    : shelfProgress > topShelfEdge ? Mth.map(shelfProgress, topShelfEdge, topShelfEdge + steepness, midShelfHeight, topShelfHeight)
+                    : shelfProgress > midShelfEdge + steepness ? midShelfHeight
+                    : shelfProgress > midShelfEdge ? Mth.map(shelfProgress, midShelfEdge, midShelfEdge + steepness, sandHeight, midShelfHeight)
+                    : sandHeight;
+
+                return height;
+            }
+
+            @Override
+            public double noise(int yIn, double noiseIn)
+            {
+                if (yIn <= sandHeight) return -0.6;
+
+                if (height <= midShelfHeight)
+                {
+                    final double cliffCurveDepth = caveNoise.noise(x, yIn, z);
+                    final double cliffProgress = widthFunction(true, yIn - tideLevel, midShelfHeight - tideLevel, midShelfEdge + cliffCurveDepth, midShelfEdge);
+                    return 0.4 + 3 * (cliffProgress - shelfProgress);
+                }
+
+                if (yIn <= height) return 0;
+
+                return 0.7;
+            }
+        };
+    }
+
     // Complex rocks and tidepools
     public static ShoreNoiseSampler rockyShores(Seed seed)
     {
@@ -212,9 +288,16 @@ public final class ShoreNoise
                 midShelfHeight = SEA_LEVEL_Y + roughness + 9;
                 lowShelfHeight = SEA_LEVEL_Y + roughness + 3;
 
-                if (landWeight > 0) shelfProgress = rockShelfIntensity.noise(x, z) + landWeight * 3;
-                else if (oceanWeight > 0) shelfProgress = Math.min(rockShelfIntensity.noise(x, z), 1 - oceanWeight * 3);
-                else shelfProgress = rockShelfIntensity.noise(x, z);
+                final double baseRockShelfNoise = rockShelfIntensity.noise(x, z);
+                if (oceanWeight > 0.10)
+                {
+                    shelfProgress = Mth.clampedMap(oceanWeight, 0.1, 0.3, baseRockShelfNoise, baseRockShelfNoise - oceanWeight * 3);
+                }
+                else
+                {
+                    final double landInfluence = Mth.clampedMap(landWeight, 0.4, 0, baseRockShelfNoise + landWeight * 2, baseRockShelfNoise);
+                    shelfProgress = Mth.clampedMap(oceanWeight, 0, 0.1, baseRockShelfNoise + landInfluence, baseRockShelfNoise);
+                }
 
                 final double steepness = steepnessNoise.noise(x, z);
                 height = shelfProgress > topShelfEdge + steepness ? topShelfHeight
@@ -244,26 +327,12 @@ public final class ShoreNoise
                 if (height <= lowShelfHeight)
                 {
                     final double cliffProgress = widthFunction(true, yIn - oceanEdgeHeight, lowShelfHeight - oceanEdgeHeight, lowShelfEdge + 0.11, lowShelfEdge);
-                    return 3 * (cliffProgress - shelfProgress) + (oceanWeight > 0 ? Mth.clampedMap(oceanWeight, 0, 0.2, 0, 0.35) : 0);
+                    return 0.4 + 3 * (cliffProgress - shelfProgress);
                 }
 
                 if (yIn <= height) return 0;
 
                 return 0.7;
-            }
-        };
-    }
-
-    // Typical monoslope beaches interspersed with rocky outcrops
-    // TODO:
-    public static ShoreNoiseSampler embayments(Seed seed)
-    {
-        return new ShoreNoiseSampler()
-        {
-            @Override
-            public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
-            {
-                return heightIn;
             }
         };
     }
@@ -541,13 +610,14 @@ public final class ShoreNoise
         final double simpleShoreSelfHeight = tideLevel - 1;
         final double simpleShoreOceanHeight = tideLevel - 4;
 
-        if (landWeight > 0)
+        if (oceanWeight > 0.10)
         {
-            return Mth.clampedMap(landWeight, 0.4, 0, Math.min(heightIn, simpleShoreLandHeight), simpleShoreSelfHeight);
+            return Mth.clampedMap(oceanWeight, 0.1, 0.25, simpleShoreSelfHeight, simpleShoreOceanHeight);
         }
         else
         {
-            return Mth.clampedMap(oceanWeight, 0, 0.5, simpleShoreSelfHeight, simpleShoreOceanHeight);
+            final double landDerivedHeight = Mth.clampedMap(landWeight, 0.4, 0, Math.min(heightIn, simpleShoreLandHeight), simpleShoreSelfHeight);
+            return Mth.clampedMap(oceanWeight, 0, 0.1, landDerivedHeight, simpleShoreSelfHeight);
         }
     }
 

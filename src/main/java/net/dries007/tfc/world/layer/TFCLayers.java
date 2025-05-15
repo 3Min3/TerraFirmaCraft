@@ -295,11 +295,11 @@ public class TFCLayers
         {
             return TERRACE_UPPER;
         }
-        if (value == PLATEAU || value == DOLINE_PLATEAU || value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU)
+        if (value == PLATEAU || value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU)
         {
             return SEA_STACKS;
         }
-        if (value == PLATEAU_WIDE || value == ROCKY_PLATEAU)
+        if (value == PLATEAU_WIDE || value == ROCKY_PLATEAU || value == DOLINE_PLATEAU)
         {
             return SETBACK_CLIFFS;
         }
