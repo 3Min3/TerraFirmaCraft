@@ -638,10 +638,6 @@ def generate(rm: ResourceManager):
         block.with_block_model().with_item_model().with_block_loot('tfc:dirt/%s' % soil).with_lang(lang('%s Dirt', soil))
         block = rm.blockstate(('coarse_dirt', soil), variants={'': [{'model': 'tfc:block/coarse_dirt/%s' % soil}]}, use_default_model=False)
         block.with_block_model().with_item_model().with_block_loot('tfc:coarse_dirt/%s' % soil).with_lang(lang('Coarse %s', soil))
-        block = rm.blockstate(('cracked_earth', soil), variants={'': [{'model': 'tfc:block/cracked_earth/%s' % soil}]}, use_default_model=False)
-        block.with_block_model().with_item_model().with_block_loot('tfc:cracked_earth/%s' % soil).with_lang(lang('%s Cracked Mud', soil))
-        block = rm.blockstate(('salted_earth', soil), variants={'': [{'model': 'tfc:block/salted_earth/%s' % soil}]}, use_default_model=False)
-        block.with_block_model().with_item_model().with_lang(lang('%s Salted Earth' % soil)).with_block_loot('tfc:cracked_earth/%s' % soil, '1-2 tfc:powder/salt')
         for variant in ('mud', 'rooted_dirt', 'mud_bricks'):
             rm.blockstate((variant, soil)).with_block_model().with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
 
@@ -763,6 +759,14 @@ def generate(rm: ResourceManager):
         clay_count += 1
     rm.blockstate_multipart('kaolin_clay_grass', *grass_multipart('tfc:block/kaolin_clay_grass')).with_block_loot('1-2 tfc:kaolin_clay').with_lang(lang('kaolin clay grass'))
     grass_models('kaolin_clay_grass', 'tfc:block/kaolin_clay_grass')
+
+    # Dry clay
+    rm.blockstate('hardened_clay', use_default_model=False).with_block_model().with_block_loot('tfc:hardened_clay').with_item_model().with_lang(lang('hardened clay'))
+
+    # Stone-less Minerals
+    rm.blockstate('halite', use_default_model=False).with_block_model().with_block_loot('1-3 tfc:powder/salt').with_item_model().with_lang(lang('halite'))
+    rm.blockstate('lignite', use_default_model=False).with_block_model().with_block_loot('tfc:ore/lignite').with_item_model().with_lang(lang('lignite'))
+    rm.blockstate('bituminous_coal', use_default_model=False).with_block_model().with_block_loot('tfc:ore/bituminous_coal').with_item_model().with_lang(lang('bituminous_coal'))
 
     # Snow Piles
     block = rm.blockstate('snow_pile', variants=dict((('layers=%d' % i), {'model': 'minecraft:block/snow_height%d' % (i * 2) if i != 8 else 'minecraft:block/snow_block'}) for i in range(1, 1 + 8)))
@@ -1009,6 +1013,7 @@ def generate(rm: ResourceManager):
     rm.blockstate('barrel_rack').with_item_model().with_lang(lang('barrel rack')).with_block_loot('tfc:barrel_rack')
     rm.lang('item.tfc.pan.empty', lang('Empty Pan'))
     rm.item_model('firestarter', parent='item/handheld').with_lang(lang('firestarter'))
+    rm.item_model('flint_and_pyrite', parent='item/handheld').with_lang(lang('flint and pyrite'))
 
     for metal_id, metal in enumerate(('copper', 'silver', 'gold', 'tin')):
         ore = 'native_' + metal if metal != 'tin' else 'cassiterite'
@@ -1309,6 +1314,16 @@ def generate(rm: ResourceManager):
                 'name': 'tfc:straw',
                 'conditions': [match_tag_1_21_plus(TAG_SHARP)]
             }))
+        elif plant in DROPS_MORE_FOR_AGE:
+            rm.block_loot(p, (
+                {'name': p, 'conditions': [shears_or_knife], 'functions': [
+                {**loot_tables.set_count(2), 'conditions': [loot_tables.block_state_property(p + '[age=1]')]},
+                {**loot_tables.set_count(3), 'conditions': [loot_tables.block_state_property(p + '[age=2]')]},
+                {**loot_tables.set_count(4), 'conditions': [loot_tables.block_state_property(p + '[age=3]')]},
+                loot_tables.explosion_decay()
+            ]
+                }
+            ))
         elif plant in SEAWEED:
             rm.block_loot(p, (
                 {'name': 'tfc:food/fresh_seaweed', 'conditions': [match_tag_1_21_plus(TAG_SHARP), loot_tables.random_chance(0.3)]},
@@ -1330,14 +1345,14 @@ def generate(rm: ResourceManager):
         else:
             rm.block_loot(p, {'name': p, 'conditions': [shears_or_knife]})
     # todo this is a mess
-    for plant in ('hanging_vines', 'jungle_vines', 'ivy', 'liana', 'tree_fern', 'arundo', 'spanish_moss', 'golden_bamboo_sapling'):
+    for plant in ('hanging_vines', 'jungle_vines', 'ivy', 'liana', 'tree_fern', 'arundo', 'spanish_moss', 'golden_bamboo_sapling', 'flame_vine', 'cycad'):
         rm.lang('block.tfc.plant.%s' % plant, lang(plant))
     for plant in ('tree_fern', 'arundo', 'winged_kelp', 'leafy_kelp', 'giant_kelp_flower', 'dry_phragmite', 'golden_bamboo'):
         rm.lang('block.tfc.plant.%s' % plant, lang(plant))
         rm.block_loot('tfc:plant/%s' % plant, 'tfc:plant/%s' % plant)
-    for plant in ('tree_fern', 'arundo', 'winged_kelp', 'leafy_kelp', 'giant_kelp', 'hanging_vines', 'spanish_moss', 'liana', 'dry_phragmite'):
+    for plant in ('tree_fern', 'arundo', 'winged_kelp', 'leafy_kelp', 'giant_kelp', 'hanging_vines', 'spanish_moss', 'liana', 'dry_phragmite', 'flame_vine', 'cycad'):
         rm.lang('block.tfc.plant.%s_plant' % plant, lang(plant))
-    for plant in ('hanging_vines', 'jungle_vines', 'liana', 'spanish_moss'):
+    for plant in ('hanging_vines', 'jungle_vines', 'liana', 'spanish_moss', 'flame_vine', 'cycad'):
         rm.block_loot('tfc:plant/%s' % plant, {'name': 'tfc:plant/%s' % plant, 'conditions': [match_tag_1_21_plus(TAG_SHARP)]})
     rm.block_loot('plant/golden_bamboo_sapling', 'tfc:plant/golden_bamboo')
 
@@ -1350,7 +1365,7 @@ def generate(rm: ResourceManager):
             ({'south': True}, {'model': 'tfc:block/plant/%s_branch_side' % cactus, 'y': 270}),
             ({'west': True}, {'model': 'tfc:block/plant/%s_branch_side' % cactus}),
             ({'east': True}, {'model': 'tfc:block/plant/%s_branch_side' % cactus, 'y': 180})
-            ).with_lang(lang('%s Branch', cactus))
+            ).with_lang(lang('%s Branch', cactus)).with_block_loot('tfc:cactus_wood')
     for part in ('down', 'side', 'up'):
         rm.block_model('tfc:plant/%s_branch_%s' % (cactus, part), parent='tfc:block/plant/cactus_branch_%s' % part, textures={'0': 'tfc:block/plant/%s/bark' % cactus, '1': 'tfc:block/plant/%s/bark_top' % cactus})
     rm.item_model(('plant', cactus), 'tfc:item/plant/%s' % cactus)

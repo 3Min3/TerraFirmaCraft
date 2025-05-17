@@ -97,6 +97,7 @@ public final class TFCCreativeTabs
         out.accept(TFCBlocks.PINK_KAOLIN_CLAY);
         out.accept(TFCBlocks.RED_KAOLIN_CLAY);
         out.accept(TFCBlocks.KAOLIN_CLAY_GRASS);
+        out.accept(TFCBlocks.HARDENED_CLAY);
 
         TFCBlocks.GROUNDCOVER.forEach((type, reg) -> {
             if (type.getVanillaItem() == null)
@@ -269,6 +270,9 @@ public final class TFCCreativeTabs
     {
         out.accept(TFCItems.RAW_IRON_BLOOM);
         out.accept(TFCItems.REFINED_IRON_BLOOM);
+        out.accept(TFCBlocks.LIGNITE);
+        out.accept(TFCBlocks.BITUMINOUS_COAL);
+        out.accept(TFCBlocks.HALITE);
         for (Ore ore : Ore.values())
         {
             if (ore.isGraded())
@@ -368,6 +372,7 @@ public final class TFCCreativeTabs
         }
 
         out.accept(TFCItems.FIRESTARTER);
+        out.accept(TFCItems.FLINT_AND_PYRITE);
         out.accept(Items.FLINT_AND_STEEL);
         out.accept(TFCItems.SOOT);
         out.accept(TFCItems.SANDPAPER);
@@ -387,6 +392,8 @@ public final class TFCCreativeTabs
         out.accept(TFCItems.PURE_PHOSPHORUS);
         out.accept(TFCItems.DAUB);
         out.accept(TFCItems.DIRTY_JUTE_NET);
+        out.accept(TFCItems.CACTUS_WOOD);
+        out.accept(TFCItems.DRIED_CACTUS_WOOD);
         out.accept(TFCItems.FIRE_CLAY);
         out.accept(TFCItems.KAOLIN_CLAY);
         out.accept(TFCItems.GLUE);

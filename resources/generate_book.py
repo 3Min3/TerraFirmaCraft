@@ -16,6 +16,7 @@ Where <lang> is your language, i.e. en_us. This will do several things
 
 === Style Guide ===
 
+
 - Entries and categories are named in easy to understand resource location IDs, matching the actual in-game name wherever possible
 - The book is written, generally, in second-person as guide (i.e. using 'you' pronouns)
 - It SHOULD contain all information that someone would NEED to play TFC, to a reasonable degree of competence.
@@ -196,9 +197,9 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             page_break(),
             # === Non-Metal / Mineral Ores Listing ===
             item_spotlight('tfc:ore/lignite', 'Lignite', text_contents='Lignite is a type of low-grade $(thing)Coal$() ore. It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.').link('tfc:ore/%s' % 'lignite').anchor('lignite'),
-            block_spotlight('', 'Lignite in Dolomite.', 'tfc:ore/%s/%s' % ('lignite', 'dolomite')),
+            block_spotlight('', 'Lignite', 'tfc:lignite'),
             item_spotlight('tfc:ore/bituminous_coal', 'Bituminous Coal', text_contents='Bituminous Coal is a type of mid-grade $(thing)Coal$() ore. It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.').link('tfc:ore/%s' % 'bituminous_coal').anchor('bituminous_coal'),
-            block_spotlight('', 'Bituminous Coal in Chert.', 'tfc:ore/%s/%s' % ('bituminous_coal', 'chert')),
+            block_spotlight('', 'Bituminous Coal.', 'tfc:bituminous_coal'),
             item_spotlight('tfc:kaolin_clay', 'Kaolinite', text_contents='Kaolinite is a soft $(thing)Mineral$() which is used in the construction of $(l:mechanics/fire_clay)Fire Clay$(). It can be found spawning at high altitudes in Plateaus, Old Mountains, Rolling Hills, and Highlands, at a $(l:the_world/climate#temperature)temperature$() of at least 18°C, with a $(l:the_world/climate#rainfall)rainfall$() of at least 300mm. The $(thing)Blood Lily$() flower grows on Kaolin clay.').link('tfc:red_kaolin_clay', 'tfc:pink_kaolin_clay', 'tfc:white_kaolin_clay', 'tfc:kaolin_clay_grass', 'tfc:kaolin_clay').anchor('kaolinite'),
             multimultiblock('Variants of kaolin clay.', *[two_tall_block_spotlight('', '', 'tfc:%s' % b, 'tfc:plant/blood_lily') for b in ('kaolin_clay_grass', 'red_kaolin_clay', 'white_kaolin_clay', 'pink_kaolin_clay')]),
             item_spotlight('tfc:ore/graphite', 'Graphite', text_contents='Graphite is a $(thing)Mineral$() which is used in the construction of $(l:mechanics/fire_clay)Fire Clay$(). It can be found in $(thing)Gneiss$(), $(thing)Marble$(), $(thing)Quartzite$(), and $(thing)Schist$() rocks, in elevations below y=60.').link('tfc:ore/%s' % 'graphite').anchor('graphite'),
@@ -218,7 +219,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             item_spotlight('tfc:ore/gypsum', 'Gypsum', text_contents='Gypsum is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/advanced_building_materials#alabaster)Alabaster$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.').link('tfc:ore/%s' % 'gypsum').anchor('gypsum'),
             block_spotlight('', 'Gypsum in Chalk.', 'tfc:ore/%s/%s' % ('gypsum', 'chalk')),
             item_spotlight('tfc:ore/halite', 'Halite', text_contents='Halite is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$() to make $(thing)Salt$(), which is an important $(l:mechanics/decay#salting)Preservative$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.').link('tfc:ore/%s' % 'halite').anchor('halite'),
-            block_spotlight('', 'Halite in Chalk.', 'tfc:ore/%s/%s' % ('halite', 'chalk')),
+            block_spotlight('', 'Halite.', 'tfc:halite'),
             item_spotlight('tfc:ore/emerald', 'Emerald', text_contents='Emerald is a decorative $(l:mechanics/gems)Gemstone$(). It looks quite pretty, maybe if you could find someone else in this incredibly lonely world you could trade it with them...$(br2)It appears in thin vertical ore formations which can be up to a hundred blocks tall. It can be found in $(l:the_world/geology#igneous_intrusive)Igneous Intrusive$() rocks.').link('tfc:ore/%s' % 'emerald').anchor('emerald'),
             block_spotlight('', 'Emerald in Diorite.', 'tfc:ore/%s/%s' % ('emerald', 'diorite')),
             item_spotlight('tfc:ore/diamond', 'Kimberlite', text_contents='Kimberlite is a decorative and priceless $(l:mechanics/gems)Gemstone$(). It appears in thin vertical ore formations called $(l:https://en.wikipedia.org/wiki/Volcanic_pipe)Kimberlite Pipes$() which can be up to a hundred blocks tall. It can only be found in $(thing)Gabbro$().').link('tfc:ore/%s' % 'diamond').anchor('diamond'),
@@ -532,7 +533,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
                 block_spotlight('', '', 'tfc:pot'),
             ),
             text('Firepit fuels have different levels of purity. Adding impure fuels to fires makes them more smokey. If the fire burns very impurely, smoke will start to fly very high in the air. The most pure fuels are logs, with pine being the least pure log. Fuels like pinecones and fallen leaves do not hot enough to do much cooking, and are very impure.'),
-            empty_last_page()
+            crafting('tfc:crafting/flint_and_pyrite', text_contents='A more advanced firestarter can be formed using flint and pyrite, or later flint and steel.'),
         )),
         entry('pottery', 'Pottery', 'tfc:ceramic/vessel', pages=(
             text('$(thing)Clay$() is an incredibly useful and balanced material which can be used for pottery. It can prove challenging to locate at first. Clay is usually hidden by grass, but it is often found in two locations. In areas with at least 175mm $(l:the_world/climate#rainfall)Annual Rainfall$(), clay can be found in patches all over the place, usually marked by the presence of certain $(thing)Plants$().').link('minecraft:clay'),
@@ -1129,7 +1130,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             image('tfc:textures/gui/book/gui/blast_furnace.png', text_contents='The Blast Furnace Interface', border=False),
             text('You will also need a $(l:mechanics/bellows)Bellows$() in order for the Blast Furnace to reach a temperature which will melt iron. This can be placed on any of the four sides of the blast furnace.'),
             multiblock('', 'A full size blast furnace with bellows and crucible attached.', True, multiblock_id='tfc:full_blast_furnace'),
-            text('Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$() or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$().'),
+            text('Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$(), a $(thing)Flint and Pyrite$(), or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$().'),
             text('This liquid metal will drip into any metal fluid container placed immediately below the blast furnace, such as a $(l:mechanics/crucible)Crucible$(). It can be cast into ingot molds from the output slot of the crucible and worked into $(l:mechanics/steel)Steel$().'),
         )),
         entry('steel', 'Steel', 'tfc:metal/ingot/steel', pages=(

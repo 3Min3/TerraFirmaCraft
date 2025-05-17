@@ -85,7 +85,12 @@ public class AdvancedShapedRecipe extends ShapedRecipe
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input)
     {
-        return remainder.map(remainder -> RecipeHelpers.getRemainderItemsWithProvider(input, remainder))
+        return remainder.map(remainder -> {
+                RecipeHelpers.setCraftingInput(input);
+                final var remain = RecipeHelpers.getRemainderItemsWithProvider(input, remainder);
+                RecipeHelpers.clearCraftingInput();
+                return remain;
+            })
             .orElseGet(() -> super.getRemainingItems(input));
     }
 

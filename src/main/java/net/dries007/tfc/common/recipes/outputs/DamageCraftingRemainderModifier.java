@@ -9,7 +9,6 @@ package net.dries007.tfc.common.recipes.outputs;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.CommonHooks;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.recipes.RecipeHelpers;
@@ -19,36 +18,31 @@ public enum DamageCraftingRemainderModifier implements ItemStackModifier
 {
     INSTANCE;
 
+
     @Override
     @SuppressWarnings("deprecation") // For damageItem(), but we don't have access to a level here
     public ItemStack apply(ItemStack stack, ItemStack input, Context context)
     {
-        if (stack.isDamageableItem())
+        for (ItemStack craftingStack : RecipeHelpers.getCraftingInput())
         {
-            final ItemStack copy = stack.copy();
-            final @Nullable Player player = RecipeHelpers.getCraftingPlayer();
-            if (player != null)
+            if (craftingStack.isDamageableItem())
             {
-                Helpers.damageItem(copy, player.level());
+                final @Nullable Player player = RecipeHelpers.getCraftingPlayer();
+                if (player != null)
+                {
+                    Helpers.damageItem(craftingStack, player.level());
+                }
+                else
+                {
+                    Helpers.damageItem(craftingStack);
+                }
             }
-            else
-            {
-                Helpers.damageItem(copy);
-            }
-            return copy;
         }
-        else if (stack.has(DataComponents.UNBREAKABLE)) // unbreakable items are not damageable, but should still be able to be used in crafting
+        if (input.isDamageableItem() || input.has(DataComponents.UNBREAKABLE) || input.hasCraftingRemainingItem())
         {
-            return stack.copy();
+            return input.copy();
         }
-        else if (stack.hasCraftingRemainingItem())
-        {
-            return stack.getCraftingRemainingItem();
-        }
-        else
-        {
-            return ItemStack.EMPTY;
-        }
+        return ItemStack.EMPTY;
     }
 
     @Override
