@@ -67,6 +67,16 @@ public enum Plant implements RegistryPlant
     RADDIA_GRASS(BlockType.SHORT_GRASS, 0.9F),
     RED_OAT_GRASS(BlockType.SHORT_GRASS, 0.9F, true, -0.1f, 0.33f, 0.45f, 0.55f, 0.75f, 0.85f),
 
+    // Intertidal Plant-Likes
+    ANEMONE_GREEN(BlockType.ANENOME_CLUSTER_LIKE, 1.0F),
+    ANEMONE_PURPLE(BlockType.ANENOME_CLUSTER_LIKE, 1.0F),
+    ANEMONE_LARGE_ORANGE(BlockType.STARFISH_LIKE, 1.0F),
+    ANEMONE_LARGE_PURPLE(BlockType.STARFISH_LIKE, 1.0F),
+    BARNACLES(BlockType.BARNACLE_LIKE, 1.0F),
+    MUSSELS(BlockType.BARNACLE_LIKE, 1.0F),
+    STARFISH(BlockType.STARFISH_LIKE, 1.0F),
+    ZOSTERA(BlockType.ANENOME_CLUSTER_LIKE, 1.0F),
+
     // Other Plants
     ALLIUM(BlockType.STANDARD, 1.0F, false, -0.15F, 0.2F, 0.3F, 0.4F, 0.64F, 0.92F),
     ANTHURIUM(BlockType.STANDARD, 1.0F),
@@ -478,6 +488,9 @@ public enum Plant implements RegistryPlant
         BRANCHING_CACTUS((plant, type) -> BranchingCactusBlock.createBody(fire(solid()).strength(0.25f).sound(SoundType.WOOL).pathType(PathType.DAMAGE_OTHER))),
         BRANCHING_CACTUS_TOP((plant, type) -> GrowingBranchingCactusBlock.createGrowing(fire(solid()).randomTicks().strength(0.25f).sound(SoundType.WOOL).pathType(PathType.DAMAGE_OTHER), plant.transform(), plant.secondTransform())),
         // Water
+        BARNACLE_LIKE((plant, type) -> CreepingWaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, ExtendedProperties.of(nonSolid(plant).sound(SoundType.BASALT)))),
+        ANENOME_CLUSTER_LIKE((plant, type) -> CreepingWaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, ExtendedProperties.of(nonSolid(plant).sound(SoundType.BASALT)))),
+        STARFISH_LIKE((plant, type) -> RotatableWaterPlantBlock.create(plant, TFCBlockStateProperties.SALT_WATER, ExtendedProperties.of(nonSolid(plant).sound(SoundType.SLIME_BLOCK)))),
         KELP((plant, type) -> TFCKelpBlock.create(nonSolidTallPlant(plant).lootFrom(plant.transform()), plant.transform(), Direction.UP, BodyPlantBlock.THIN_BODY_SHAPE, TFCBlockStateProperties.SALT_WATER, plant)),
         KELP_TOP(((plant, type) -> TFCKelpTopBlock.create(nonSolidTallPlant(plant), plant.transform(), Direction.UP, BodyPlantBlock.TWISTING_THIN_SHAPE, TFCBlockStateProperties.SALT_WATER, plant))),
         KELP_TREE((plant, type) -> KelpTreeBlock.create(ExtendedProperties.of(kelp(plant)), TFCBlockStateProperties.SALT_WATER)),
