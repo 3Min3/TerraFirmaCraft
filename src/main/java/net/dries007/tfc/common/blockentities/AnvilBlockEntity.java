@@ -6,9 +6,14 @@
 
 package net.dries007.tfc.common.blockentities;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -131,6 +136,16 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         {
             ForgingCapability.clearRecipeIfNotWorked(stack);
         }
+
+        // If items are taken from the main or secondary slots, move excess output items into the freed up item slot
+        if (slot == SLOT_INPUT_MAIN || slot == SLOT_INPUT_SECOND)
+        {
+            final List<ItemStack> excess = inventory.excess;
+            if (!excess.isEmpty() && inventory.getStackInSlot(slot).isEmpty())
+            {
+                inventory.setStackInSlot(slot, excess.remove(0));
+            }
+        }
     }
 
     @Override
@@ -155,6 +170,19 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
                         recipe = all.iterator().next();
                         if (!level.isClientSide)
                         {
+                            // If multiple items are in the main slot, all but 1 are moved to the secondary slot, or put into the excess output list if the secondary item slot is full
+                            if (stack.getCount() != 1)
+                            {
+                                final ItemStack overflow = stack.split(stack.getCount() - 1);
+                                if (inventory.getStackInSlot(SLOT_INPUT_SECOND).isEmpty())
+                                {
+                                    inventory.setStackInSlot((SLOT_INPUT_SECOND), overflow);
+                                }
+                                else
+                                {
+                                    inventory.excess.add(overflow);
+                                }
+                            }
                             forge.setRecipe(recipe, inventory);
                         }
                     }
@@ -173,6 +201,10 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
             ForgingCapability.clearRecipeIfNotWorked(stack);
         }
         super.ejectInventory();
+
+        // Account for all the excess output items that have not yet been moved into actual item slots
+        assert level != null;
+        inventory.excess.stream().filter(item -> !item.isEmpty()).forEach(item -> Helpers.spawnItem(level, worldPosition, item));
     }
 
     public void chooseRecipe(@Nullable AnvilRecipe recipe)
@@ -185,6 +217,20 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
             final Forging forge = ForgingCapability.get(stack);
             if (forge != null)
             {
+                // If multiple items are in the main slot, all but 1 are moved to the secondary slot, or put into the excess output list if the secondary item slot is full
+                if (stack.getCount() != 1)
+                {
+                    final ItemStack overflow = stack.split(stack.getCount() - 1);
+                    if (inventory.getStackInSlot(SLOT_INPUT_SECOND).isEmpty())
+                    {
+                        inventory.setStackInSlot((SLOT_INPUT_SECOND), overflow);
+                    }
+                    else
+                    {
+                        inventory.excess.add(overflow);
+                    }
+                }
+
                 forge.setRecipe(recipe, inventory);
             }
         }
@@ -433,9 +479,26 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
             final ItemStack result = recipe.assemble(inventory, level.registryAccess());
             final @Nullable IHeat resultHeat = HeatCapability.get(result);
 
-            inventory.setStackInSlot(SLOT_INPUT_MAIN, result);
-            inventory.setStackInSlot(SLOT_INPUT_SECOND, ItemStack.EMPTY);
+            inventory.getStackInSlot(SLOT_INPUT_MAIN).shrink(1);
+            inventory.getStackInSlot(SLOT_INPUT_SECOND).shrink(1);
             inventory.getStackInSlot(SLOT_CATALYST).shrink(1);
+
+            // If the main item slot is free, we move the result into it, otherwise we simply add it to the excess item list
+            // We don't just put the result into the main item slot due to recipes which can output multiple items, as these could lead to unintended item deletion
+            if (inventory.getStackInSlot(SLOT_INPUT_MAIN).isEmpty())
+            {
+                inventory.setStackInSlot(SLOT_INPUT_MAIN, result);
+            }
+            else
+            {
+                inventory.excess.add(result);
+            }
+
+            // If there are excess output items, we move them into the newly freed up item slot
+            if (!inventory.excess.isEmpty())
+            {
+                inventory.setStackInSlot(SLOT_INPUT_SECOND, inventory.excess.remove(0));
+            }
 
             // Always copy heat from inputs since we have two
             if (resultHeat != null)
@@ -469,11 +532,13 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
     public static class AnvilInventory extends InventoryItemHandler implements AnvilRecipe.Inventory, WeldingRecipe.Inventory
     {
         private final AnvilBlockEntity anvil;
+        private final List<ItemStack> excess;
 
         public AnvilInventory(InventoryBlockEntity<AnvilInventory> anvil)
         {
             super(anvil, 4);
             this.anvil = (AnvilBlockEntity) anvil;
+            this.excess = new ArrayList<>();
         }
 
         @Override
@@ -513,7 +578,51 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         {
             final ItemStack stack = super.extractItem(slot, amount, simulate);
             ForgingCapability.clearRecipeIfNotWorked(stack);
+
+            // If there are excess output items, we move them into the newly freed up item slot
+            if (!excess.isEmpty() && getStackInSlot(slot).isEmpty())
+            {
+                anvil.inventory.setStackInSlot(slot, excess.remove(0));
+            }
+
             return stack;
         }
+
+        @Override
+        public CompoundTag serializeNBT()
+        {
+            final CompoundTag nbt = super.serializeNBT();
+
+            // Adding all excess output items to the NBT
+            if (!excess.isEmpty())
+            {
+                final ListTag excessNbt = new ListTag();
+                for (ItemStack stack : excess)
+                {
+                    excessNbt.add(stack.save(new CompoundTag()));
+                }
+                nbt.put("excess", excessNbt);
+            }
+
+            return nbt;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag nbt)
+        {
+            super.deserializeNBT(nbt);
+
+            // Reading all excess output items from the NBT
+            excess.clear();
+            if (nbt.contains("excess"))
+            {
+                final ListTag excessNbt = nbt.getList("excess", Tag.TAG_COMPOUND);
+                for (int i = 0; i < excessNbt.size(); i++)
+                {
+                    excess.add(ItemStack.of(excessNbt.getCompound(i)));
+                }
+            }
+        }
+
     }
 }
