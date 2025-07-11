@@ -13,7 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
@@ -71,7 +72,9 @@ public abstract class BiomeMixin implements BiomeBridge
      * <p>
      * This is better than redirecting known calls to getPrecipitationAt because other mods sometimes
      * use this method to get weather information.
+     * This is only done on the client, where we can get the client level.
      */
+    @OnlyIn(Dist.CLIENT)
     @Inject(method = "getPrecipitationAt", at = @At("HEAD"), cancellable = true)
     private void getPrecipitationFromClimate(BlockPos pos, CallbackInfoReturnable<Biome.Precipitation> cir) {
         Minecraft minecraft = Minecraft.getInstance();
