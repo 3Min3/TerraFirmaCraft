@@ -158,11 +158,13 @@ public class JarsBlock extends BottomSupportedDeviceBlock implements IHighlightH
     {
         if (!Helpers.isItem(player.getItemInHand(InteractionHand.MAIN_HAND), TFCTags.Items.JARS) && !Helpers.isItem(player.getItemInHand(InteractionHand.OFF_HAND), TFCTags.Items.JARS))
         {
-            return true;
+            return false;
         }
         final int slot = PlacedItemBlockEntity.getSlotSelected(rayTrace);
-        IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, pos, rendererPosition, 1f, 0f, 0f, 1f);
-        return BOUNDS[slot].move(pos).contains(rayTrace.getLocation());
+        final boolean lookingAtJar = BOUNDS[slot].move(pos).contains(rayTrace.getLocation());
+        final BlockPos adjustedPos = lookingAtJar ? pos : pos.above();
+        IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, adjustedPos, rendererPosition, 1f, 0f, 0f, 1f);
+        return lookingAtJar;
     }
 
     @Override
