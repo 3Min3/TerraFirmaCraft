@@ -18,7 +18,7 @@ public enum ShoreBlendType
     EMBAYMENTS(ShoreNoise::embayments),
     UPPER_TERRACE(ShoreNoise::upperTerrace),
     LOWER_TERRACE(ShoreNoise::lowerTerrace),
-    SETBACK_CLIFFS(ShoreNoise::setbackCliffs), // TODO:
+    SETBACK_CLIFFS(ShoreNoise::setbackCliffs),
     DUNES(ShoreNoise::dunes),
     ROCKY_SHORES(ShoreNoise::rockyShores),
     SEA_STACKS(ShoreNoise::seaStacks); // Monoslopes mixed with protruding rocks

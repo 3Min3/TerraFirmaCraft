@@ -82,10 +82,8 @@ public final class TFCBiomes
     // Shores
     // Each shore type is paired with a secondary shore type, which is sometimes applied
     // TODO: Consider sandstone variants of some biomes
-    // TODO: Actually implement gravel beaches
     // Standard shore / beach. Material will vary based on location
     public static final BiomeExtension SHORE = register("shore", builder().heightmap(BiomeNoise::shore).surface(ShoreSurfaceBuilder.SANDY).aquiferHeightOffset(-16).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SANDY).setShoreBaseHeight(-4));
-    // TODO: Figure out identity of this biome
     public static final BiomeExtension TIDAL_FLATS = register("tidal_flats", builder().heightmap(BiomeNoise::shore).surface(ShoreSurfaceBuilder.SANDY).aquiferHeightOffset(-16).type(BiomeBlendType.OCEAN).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SANDY).setShoreBaseHeight(-4));
 
     // Inspired by Bay of Fundy, 12 Apostles, etc. -- High biome shore

@@ -45,7 +45,7 @@ public final class ShoreNoise
         };
     }
 
-    // TODO:
+
     // Cliffs at a distance from the shore with vegetated shoreline below
     public static ShoreNoiseSampler setbackCliffs(Seed seed)
     {
@@ -123,9 +123,8 @@ public final class ShoreNoise
     {
         return new ShoreNoiseSampler()
         {
-
             final OpenSimplex2D warpNoise = new OpenSimplex2D(seed.seed()).scaled(-10, 10).spread(0.05);
-            final Noise2D duneNoise = new OpenSimplex2D(seed.seed()).spread(0.03).abs().scaled(-2, 8).warped(warpNoise);
+            final Noise2D duneNoise = new OpenSimplex2D(seed.seed()).spread(0.03).abs().scaled(-2, 6.5).warped(warpNoise);
 
             double duneHeight;
             double sandHeight;
@@ -147,16 +146,18 @@ public final class ShoreNoise
                 }
                 this.duneHeight = Mth.clampedMap(thisWeight, 0.5, 1, sandHeight, duneHeight);
 
-
                 return duneHeight;
             }
 
             @Override
             public double noise(int yIn, double noiseIn)
             {
-                if (yIn <= duneHeight) return 0;
+                if (yIn <= duneHeight)
+                {
+                    return Mth.clampedMap(yIn, sandHeight, duneHeight, -0.5, 0);
+                }
 
-                return 0.7;
+                return 1.3;
             }
         };
     }
@@ -418,6 +419,7 @@ public final class ShoreNoise
             private double sandHeight;
             private double landWeight;
             private double tideLevel;
+            private double oceanWeightFactor;
 
             private int x, z;
 
@@ -427,6 +429,7 @@ public final class ShoreNoise
                 this.x = x;
                 this.z = z;
                 this.landWeight = landWeight;
+                this.oceanWeightFactor = Mth.clampedMap(oceanWeight, 0.1, 0.25, 1, 0);
 
                 this.tideLevel = BiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
                 final double typicalBeachSandHeight = ShoreNoise.simpleBeach(tideLevel, heightIn, landWeight, oceanWeight);
@@ -452,8 +455,8 @@ public final class ShoreNoise
                 double y = yIn - stackBaseHeight;
 
                 final double cliffNoiseModifier = 0.04 * Math.abs(cliffNoise.noise(x, y, z));
-                final double stackMinWidth = 0.06 + cliffNoiseModifier;
-                final double stackMaxWidth = 0.18 + cliffNoiseModifier;
+                final double stackMinWidth = (0.06 + cliffNoiseModifier) * oceanWeightFactor;
+                final double stackMaxWidth = (0.18 + cliffNoiseModifier) * oceanWeightFactor;
                 final double cliffBorderTopWeight = 0.22 + cliffNoiseModifier;
                 final double cliffBorderBaseWeight = 0.26 + cliffNoiseModifier;
 
@@ -461,6 +464,7 @@ public final class ShoreNoise
 
                 final double stackWidth = widthFunction(false, y, height, stackMinWidth, stackMaxWidth);
                 final double stackOutput = Math.clamp((stackNoiseValue - stackWidth) * 10, 0, 1) * Mth.clampedMap(yIn, stackBaseHeight, overhangHeight, noiseScale, 0.75);
+
                 // landWeight where cliff top edges form
                 if (landWeight >= cliffBorderTopWeight)
                 {
@@ -541,7 +545,6 @@ public final class ShoreNoise
             final Noise2D lowerTerraceNoise = BiomeNoise.lowerTerraceNoise(seed);
 
             private double oceanWeight;
-            private double thisWeight;
             private double lowerTerraceHeight;
             private double sandHeight;
 
@@ -553,8 +556,6 @@ public final class ShoreNoise
                 this.x = x;
                 this.z = z;
                 this.oceanWeight = oceanWeight;
-                // TODO: Using thisWeight vs oceanWeight doesn't appear to help, probably remove thisWeight in the long run, but keep for now
-                this.thisWeight = thisWeight;
                 this.lowerTerraceHeight = lowerTerraceNoise.noise(x, z);
                 this.sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
 

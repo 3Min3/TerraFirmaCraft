@@ -76,7 +76,7 @@ public class BiomeBuilder
         spawnable = false;
         rivers = true;
         shore = false;
-        shoreBaseHeight = SEA_LEVEL_Y; // TODO: This is quickly becoming a bit redundant, and could just be moved to the shore blend type
+        shoreBaseHeight = SEA_LEVEL_Y;
         sandyRiverShores = true;
     }
 
