@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -50,7 +51,7 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
 
         // Common Tags
         add("chests", Tags.Items.CHESTS, Size.LARGE, Weight.LIGHT);
-        add("ingots", Tags.Items.INGOTS, Size.LARGE, Weight.MEDIUM);
+        add("ingots", DifferenceIngredient.of(Ingredient.of(Tags.Items.INGOTS), Ingredient.of(Tags.Items.BRICKS)), Size.LARGE, Weight.MEDIUM);
         add("double_ingots", TFCTags.Items.DOUBLE_INGOTS, Size.LARGE, Weight.MEDIUM);
         add("sheets", TFCTags.Items.SHEETS, Size.LARGE, Weight.MEDIUM);
         add("double_sheets", TFCTags.Items.DOUBLE_SHEETS, Size.LARGE, Weight.MEDIUM);
@@ -70,7 +71,8 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         ), Size.LARGE, Weight.LIGHT);
         add("vessels", TFCTags.Items.VESSELS, Size.NORMAL, Weight.HEAVY);
         add("large_vessels", TFCTags.Items.LARGE_VESSELS, Size.HUGE, Weight.HEAVY);
-        add("molds", TFCTags.Items.MOLDS, Size.NORMAL, Weight.MEDIUM);
+        add("unfired_molds", TFCTags.Items.UNFIRED_MOLDS, Size.NORMAL, Weight.MEDIUM);
+        add("fired_molds", TFCTags.Items.FIRED_MOLDS, Size.NORMAL, Weight.VERY_HEAVY);
         add("powders", TFCTags.Items.BOWL_POWDERS, Size.TINY, Weight.VERY_LIGHT);
         add("stick_bunch", TFCItems.STICK_BUNCH, Size.NORMAL, Weight.LIGHT);
         add("stick_bundle", TFCItems.STICK_BUNDLE, Size.VERY_LARGE, Weight.MEDIUM);

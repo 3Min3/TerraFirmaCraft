@@ -37,18 +37,22 @@ import net.dries007.tfc.common.blockentities.ComposterBlockEntity;
 import net.dries007.tfc.common.blockentities.CropBlockEntity;
 import net.dries007.tfc.common.blockentities.CrucibleBlockEntity;
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
+import net.dries007.tfc.common.blockentities.FireboxBlockEntity;
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
 import net.dries007.tfc.common.blockentities.LoomBlockEntity;
 import net.dries007.tfc.common.blockentities.NestBoxBlockEntity;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
+import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
 import net.dries007.tfc.common.blockentities.SheetPileBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
 import net.dries007.tfc.common.blocks.BloomBlock;
+import net.dries007.tfc.common.blocks.FireboxBlock;
 import net.dries007.tfc.common.blocks.HotPouredGlassBlock;
+import net.dries007.tfc.common.blocks.ShelfBlock;
 import net.dries007.tfc.common.blocks.TFCCandleBlock;
 import net.dries007.tfc.common.blocks.TFCCandleCakeBlock;
 import net.dries007.tfc.common.blocks.TFCTorchBlock;
@@ -68,6 +72,7 @@ import net.dries007.tfc.common.blocks.devices.JackOLanternBlock;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
 import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
 import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
+import net.dries007.tfc.common.blocks.devices.PlacedItemBlock;
 import net.dries007.tfc.common.blocks.devices.PowderkegBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.dries007.tfc.common.blocks.devices.SheetPileBlock;
@@ -116,6 +121,7 @@ public final class BlockEntityTooltips
         callback.register("composter", COMPOSTER, TFCComposterBlock.class);
         callback.register("crop", CROP, CropBlock.class);
         callback.register("crucible", CRUCIBLE, CrucibleBlock.class);
+        callback.register("firebox", FIREBOX, FireboxBlock.class);
         callback.register("firepit", FIREPIT, FirepitBlock.class);
         callback.register("fruit_tree_sapling", FRUIT_TREE_SAPLING, FruitTreeSaplingBlock.class);
         callback.register("hoe_overlay", HOE_OVERLAY, Block.class);
@@ -143,6 +149,8 @@ public final class BlockEntityTooltips
         callback.register("water_wheel", ROTATING, WaterWheelBlock.class);
         callback.register("windmill", ROTATING, WindmillBlock.class);
         callback.register("hot_poured_glass", HOT_POURED_GLASS, HotPouredGlassBlock.class);
+        callback.register("placed_item", PLACED_ITEM, PlacedItemBlock.class);
+        callback.register("shelf", PLACED_ITEM, ShelfBlock.class);
     }
 
     public static final BlockEntityTooltip HOT_POURED_GLASS = (level, state, pos, entity, tooltip) -> {
@@ -472,6 +480,25 @@ public final class BlockEntityTooltips
             }
         }
     };
+
+    public static final BlockEntityTooltip FIREBOX = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof FireboxBlockEntity firebox)
+        {
+            heat(tooltip, firebox.getTemperature());
+        }
+    };
+
+    public static final BlockEntityTooltip PLACED_ITEM = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof PlacedItemBlockEntity placedItem)
+        {
+            for (ItemStack stack : Helpers.iterate(placedItem.getInventory()))
+            {
+                if (!stack.isEmpty())
+                    tooltip.accept(stack.getHoverName());
+            }
+        }
+    };
+
 
     private static void pitKiln(Level level, BlockPos pos, Consumer<Component> tooltip)
     {

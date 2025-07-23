@@ -2,6 +2,7 @@
 #  See the project README.md and LICENSE.txt for more information.
 
 import itertools
+from typing import List
 
 from mcresources import ResourceManager, ItemContext, utils, block_states, loot_tables, atlases, BlockContext
 from mcresources.type_definitions import ResourceIdentifier, Json, JsonObject
@@ -19,6 +20,20 @@ def match_tag_1_21_plus(tag: str) -> Json:
         'predicate': {'items': tag}
     }
 
+def silk_touch() -> Json:
+    return {
+        'condition': 'minecraft:match_tool',
+        'predicate': {
+            'predicates': {
+                'minecraft:enchantments': [{
+                    'enchantments': 'minecraft:silk_touch',
+                    'levels': {'min': 1}
+                }]
+            }
+
+        }
+    }
+
 STICKS_WHEN_NOT_SHEARED = loot_tables.alternatives({
     'name': 'minecraft:stick',
     'conditions': [match_tag_1_21_plus(TAG_SHARP), loot_tables.random_chance(0.2)],
@@ -27,7 +42,7 @@ STICKS_WHEN_NOT_SHEARED = loot_tables.alternatives({
     'name': 'minecraft:stick',
     'conditions': [loot_tables.random_chance(0.05)],
     'functions': [loot_tables.set_count(1, 2)]
-}, conditions=[loot_tables.inverted(loot_tables.any_of(match_tag_1_21_plus(TAG_SHEARS), loot_tables.silk_touch()))])
+}, conditions=[loot_tables.inverted(loot_tables.any_of(match_tag_1_21_plus(TAG_SHEARS), silk_touch()))])
 
 
 def copy_block_entity(*components: str):
@@ -928,6 +943,23 @@ def generate(rm: ResourceManager):
                 })
             rm.item_model(bars, 'tfc:block/%s' % bars)
 
+            if metal_data.type == 'all':
+                if metal_data.weathering:
+                    for variant, word in (
+                        ('grate', ''),
+                        ('exposed_grate', 'exposed'),
+                        ('weathered_grate', 'weathered'),
+                        ('oxidized_grate', None)
+                    ):
+                        if metal_data.has_block(variant):
+                            if word is None:
+                                word = OXIDIZED_METAL_NAMES[metal]
+                            block = rm.blockstate(('metal', variant, metal))
+                            block.with_block_model().with_lang(lang('%s %s grate', word, metal)).with_item_model().with_block_loot('tfc:metal/%s/%s' % (variant, metal))
+                else:
+                    block = rm.blockstate(('metal', 'grate', metal))
+                    block.with_block_model().with_lang(lang('%s grate', metal)).with_item_model().with_block_loot('tfc:metal/grate/%s' % metal)
+
         # Storage Blocks (+ Stair, Slab)
         # Includes weathering variants for metals that support that
         for variant, word in (
@@ -1295,7 +1327,11 @@ def generate(rm: ResourceManager):
     # Plants
     shears_or_knife = loot_tables.any_of(match_tag_1_21_plus(TAG_SHARP), match_tag_1_21_plus(TAG_SHEARS))
     for plant, plant_data in PLANTS.items():
-        rm.lang('block.tfc.plant.%s' % plant, lang(plant))
+        plant_lang = lang(plant)
+        if 'tulip' in plant or 'snapdragon' in plant:
+            parts = plant.split('_')
+            plant_lang = lang(parts[1] + '_' + parts[0])
+        rm.lang('block.tfc.plant.%s' % plant, plant_lang)
         p = 'tfc:plant/%s' % plant
         lower_only = loot_tables.block_state_property(p + '[part=lower]')
         if plant_data.type == 'short_grass' or plant_data.type == 'beach_grass':
@@ -1514,7 +1550,7 @@ def generate(rm: ResourceManager):
                                 loot_tables.block_state_property('tfc:plant/%s_branch[up=true,%s=true]' % (fruit, direction))
                                 for direction in ('west', 'east', 'north', 'south')
                             ]),
-                            match_tag_1_21_plus('tfc:axes')
+                            match_tag_1_21_plus('minecraft:axes')
                         )
                     }, {
                         'name': 'minecraft:stick',
@@ -1587,7 +1623,7 @@ def generate(rm: ResourceManager):
 
             stick_with_hammer = {
                 'name': 'minecraft:stick',
-                'conditions': [match_tag_1_21_plus('tfc:hammers')],
+                'conditions': [match_tag_1_21_plus('c:tools/hammer')],
                 'functions': [loot_tables.set_count(1, 4)]
             }
             if variant == 'wood' or variant == 'stripped_wood':
@@ -1659,7 +1695,7 @@ def generate(rm: ResourceManager):
                 ({'snowy': True, 'bottom': True}, {'model': 'minecraft:block/snow_height2'})
             ).with_lang(lang('%s krummholz', wood))
             block.with_block_loot(loot_tables.alternatives(
-                {'name': 'tfc:plant/%s_krummholz' % wood, 'conditions': [loot_tables.block_state_property('tfc:plant/%s_krummholz[tip=true]' % wood), match_tag_1_21_plus('tfc:axes')]},
+                {'name': 'tfc:plant/%s_krummholz' % wood, 'conditions': [loot_tables.block_state_property('tfc:plant/%s_krummholz[tip=true]' % wood), match_tag_1_21_plus('minecraft:axes')]},
                 {'name': 'tfc:wood/sapling/%s' % wood, 'conditions': [loot_tables.random_chance(0.02)]},
                 '1-3 minecraft:stick'
             ))
@@ -1678,13 +1714,15 @@ def generate(rm: ResourceManager):
         else:
             block.with_block_model('tfc:block/wood/leaves/%s' % wood, parent='block/leaves')
         block.with_item_model()
+
         block.with_block_loot(
             when_sheared('tfc:wood/leaves/%s' % wood),
             {
                 'name': 'tfc:wood/sapling/%s' % wood,
                 'conditions': ['minecraft:survives_explosion', loot_tables.random_chance(TREE_SAPLING_DROP_CHANCES[wood])]
             },
-            STICKS_WHEN_NOT_SHEARED)
+            STICKS_WHEN_NOT_SHEARED
+        )
 
         # Sapling
         block = rm.blockstate(('wood', 'sapling', wood), 'tfc:block/wood/sapling/%s' % wood).with_lang(lang('%s %s', wood, 'propagule' if wood == 'mangrove' else 'seed' if wood == 'palm' else 'sapling'))
@@ -2055,6 +2093,31 @@ def generate(rm: ResourceManager):
     rm.blockstate('tree_roots', model='minecraft:block/mangrove_roots').with_block_loot('tfc:tree_roots').with_lang(lang('tree roots'))
     rm.item_model('tree_roots', parent='minecraft:block/mangrove_roots', no_textures=True)
 
+    block = rm.blockstate('fire_brick_shelf', variants=four_rotations('tfc:block/fire_brick_shelf', (90, None, 180, 270)))
+    block.with_item_model()
+    block.with_lang(lang('fire brick shelf'))
+    block.with_block_loot('tfc:fire_brick_shelf')
+
+    block = rm.blockstate('fireproof_door', variants=door_blockstate('tfc:block/fireproof_door'))
+    rm.item_model('tfc:fireproof_door', 'tfc:item/fireproof_door')
+    block.with_lang(lang('fireproof door'))
+    block.with_block_loot({
+        'name': 'tfc:fireproof_door',
+        'conditions': [loot_tables.block_state_property('tfc:fireproof_door[half=lower]')]
+    })
+
+    for model in ('bottom_left', 'bottom_left_open', 'bottom_right', 'bottom_right_open', 'top_left', 'top_left_open', 'top_right', 'top_right_open'):
+        rm.block_model('tfc:fireproof_door_%s' % model, {
+            'top': 'tfc:block/fireproof_door_top',
+            'bottom': 'tfc:block/fireproof_door_bottom'
+        }, parent='block/door_%s' % model)
+
+    block = rm.blockstate('firebox', variants={'lit=true': {'model': 'tfc:block/firebox_on'}, 'lit=false': {'model': 'tfc:block/firebox_off'}})
+    block.with_lang(lang('firebox')).with_block_loot('tfc:firebox')
+    rm.item_model('firebox', parent='tfc:block/firebox_off', no_textures=True)
+    for state in ('on', 'off'):
+        rm.block_model('firebox_%s' % state, {'side': 'tfc:block/devices/firebox/%s' % state, 'end': 'tfc:block/devices/firebox/top'}, parent='block/cube_column')
+
     rm.blockstate('light', variants={'level=%s' % i: {'model': 'minecraft:block/light_%s' % i if i >= 10 else 'minecraft:block/light_0%s' % i} for i in range(0, 15 + 1)}).with_lang(lang('Light'))
     rm.item_model('light', no_textures=True, parent='minecraft:item/light')
 
@@ -2259,6 +2322,12 @@ def generate(rm: ResourceManager):
         permutations=dict((mat + '_tfc', 'tfc:color_palettes/trims/%s' % mat) for mat in TRIM_MATERIALS)
     ))
 
+    for but in BUTTERFLIES:
+        particle(rm, but, ['tfc:butterfly/' + but + '_' + str(i) for i in range(1, 5)])
+
+
+def particle(rm: ResourceManager, name: str, textures: List[str]):
+    rm.write(('assets', rm.domain, 'particles', name), {'textures': textures})
 
 def flower_pot_cross(rm: ResourceManager, simple_name: str, name: str, model: str, texture: str, loot: str):
     rm.blockstate(name, model='tfc:block/%s' % model).with_lang(lang('potted %s', simple_name)).with_block_loot(loot, 'minecraft:flower_pot')
@@ -2428,17 +2497,16 @@ def door_blockstate(base: str) -> JsonObject:
     }
 
 def when_silk_touch(item: str):
-    return {'name': item, 'conditions': [loot_tables.silk_touch()]}
+    return {'name': item, 'conditions': [silk_touch()]}
 
 
 def when_sheared(item: str):
     return {'name': item, 'conditions': [loot_tables.any_of(
         match_tag_1_21_plus(TAG_SHEARS),
-        loot_tables.silk_touch()
+        silk_touch()
     )]}
 
 
 def override(model: str, name: str, value: float = 1.0):
     return {'predicate': {name: value}, 'model': model}
-
 

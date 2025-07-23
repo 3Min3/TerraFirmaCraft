@@ -127,12 +127,14 @@ import net.dries007.tfc.common.blockentities.BloomeryBlockEntity;
 import net.dries007.tfc.common.blockentities.BowlBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blockentities.CrucibleBlockEntity;
+import net.dries007.tfc.common.blockentities.FireboxBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
 import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
+import net.dries007.tfc.common.blocks.FireboxBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.TFCCandleBlock;
 import net.dries007.tfc.common.blocks.TFCCandleCakeBlock;
@@ -593,6 +595,13 @@ public final class ForgeEventHandler
                 }
             });
         }
+        else if (block == TFCBlocks.FIREBOX.get() && !state.getValue(FireboxBlock.LIT) && event.isStrong())
+        {
+            if (level.getBlockEntity(pos) instanceof FireboxBlockEntity box && box.light(state))
+            {
+                event.setCanceled(true);
+            }
+        }
         else if (block instanceof LampBlock)
         {
             if (!state.getValue(LampBlock.LIT))
@@ -607,7 +616,7 @@ public final class ForgeEventHandler
                 event.setCanceled(true);
             }
         }
-        else if (block instanceof TFCCandleBlock || block instanceof TFCCandleCakeBlock)
+        else if ((block instanceof TFCCandleBlock || block instanceof TFCCandleCakeBlock) && state.getFluidState().isEmpty())
         {
             level.setBlock(pos, state.setValue(TFCCandleBlock.LIT, true), Block.UPDATE_ALL_IMMEDIATE);
             TickCounterBlockEntity.reset(level, pos);
@@ -722,6 +731,11 @@ public final class ForgeEventHandler
         else if (blockEntity instanceof CrucibleBlockEntity crucible)
         {
             crucible.getInventory().setTemperature(0f);
+        }
+        else if (blockEntity instanceof FireboxBlockEntity firebox)
+        {
+            firebox.extinguish(state);
+            event.setCanceled(true);
         }
     }
 

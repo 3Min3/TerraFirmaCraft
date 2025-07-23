@@ -81,6 +81,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(BlockTags.WOODEN_BUTTONS).add(TFCBlocks.WOODS, Wood.BlockType.BUTTON);
         tag(BlockTags.STONE_BUTTONS).add(TFCBlocks.ROCK_BLOCKS, Rock.BlockType.BUTTON);
         tag(BlockTags.WOODEN_DOORS).add(TFCBlocks.WOODS, Wood.BlockType.DOOR);
+        tag(BlockTags.DOORS).add(TFCBlocks.FIREPROOF_DOOR);
         tag(BlockTags.WOODEN_STAIRS).add(TFCBlocks.WOODS, Wood.BlockType.STAIRS);
         tag(BlockTags.WOODEN_SLABS).add(TFCBlocks.WOODS, Wood.BlockType.SLAB);
         tag(BlockTags.WOODEN_FENCES)
@@ -226,6 +227,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .addAll(TFCBlocks.ALABASTER_POLISHED_DECORATIONS)
             .add(TFCBlocks.GROUNDCOVER)
             .add(TFCBlocks.GLAZED_LARGE_VESSELS)
+            .add(TFCBlocks.FIRE_BRICK_SHELF)
+            .add(TFCBlocks.FIREPROOF_DOOR)
+            .add(TFCBlocks.FIREBOX)
             .add(
                 TFCBlocks.ICICLE,
                 TFCBlocks.SEA_ICE,
@@ -438,6 +442,12 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(CHARCOAL_FORGE_INVISIBLE).add(TFCBlocks.CRUCIBLE);
         tag(BLOOMERY_INSULATION).addTag(INSULATION);
         tag(BLAST_FURNACE_INSULATION).add(TFCBlocks.REINFORCED_FIRE_BRICKS);
+        tag(HEAT_INSULATION).add(TFCBlocks.FIRE_BRICKS).add(Blocks.BRICKS).add(Blocks.BRICK_STAIRS).add(Blocks.BRICK_SLAB).add(Blocks.TINTED_GLASS).add(TFCBlocks.FIREPROOF_DOOR);
+        tag(HEAT_PASSABLE)
+            .add(TFCBlocks.METALS, Metal.BlockType.GRATE)
+            .add(TFCBlocks.METALS, Metal.BlockType.EXPOSED_GRATE)
+            .add(TFCBlocks.METALS, Metal.BlockType.OXIDIZED_GRATE)
+            .add(TFCBlocks.METALS, Metal.BlockType.WEATHERED_GRATE);
         tag(SCRAPING_SURFACE).addTag(BlockTags.LOGS);
         tag(GLASS_POURING_TABLE).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));
         tag(GLASS_BASIN_BLOCKS).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));
@@ -473,6 +483,59 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.WILD_CROPS)
             .add(TFCBlocks.WOODS, Wood.BlockType.TWIG)
             .addOnly(TFCBlocks.PLANTS, Plant::canBeSnowPiled);
+        tag(BlockTags.SMALL_FLOWERS).add(
+            TFCBlocks.PLANTS.get(Plant.GOLDENROD),
+            TFCBlocks.PLANTS.get(Plant.ROSE),
+            TFCBlocks.PLANTS.get(Plant.ALLIUM),
+            TFCBlocks.PLANTS.get(Plant.ANTHURIUM),
+            TFCBlocks.PLANTS.get(Plant.BLOOD_LILY),
+            TFCBlocks.PLANTS.get(Plant.BLUE_GINGER),
+            TFCBlocks.PLANTS.get(Plant.BLUE_ORCHID),
+            TFCBlocks.PLANTS.get(Plant.BUTTERCUP),
+            TFCBlocks.PLANTS.get(Plant.BUTTERFLY_MILKWEED),
+            TFCBlocks.PLANTS.get(Plant.BLACK_ORCHID),
+            TFCBlocks.PLANTS.get(Plant.CALENDULA),
+            TFCBlocks.PLANTS.get(Plant.CORNFLOWER),
+            TFCBlocks.PLANTS.get(Plant.DANDELION),
+            TFCBlocks.PLANTS.get(Plant.DESERT_FLAME),
+            TFCBlocks.PLANTS.get(Plant.EDELWEISS),
+            TFCBlocks.PLANTS.get(Plant.FIELD_HORSETAIL),
+            TFCBlocks.PLANTS.get(Plant.GRAPE_HYACINTH),
+            TFCBlocks.PLANTS.get(Plant.HELICONIA),
+            TFCBlocks.PLANTS.get(Plant.HEATHER),
+            TFCBlocks.PLANTS.get(Plant.HOUSTONIA),
+            TFCBlocks.PLANTS.get(Plant.NASTURTIUM),
+            TFCBlocks.PLANTS.get(Plant.OXEYE_DAISY),
+            TFCBlocks.PLANTS.get(Plant.POPPY),
+            TFCBlocks.PLANTS.get(Plant.PULSATILLA),
+            TFCBlocks.PLANTS.get(Plant.SILVER_SPURFLOWER),
+            TFCBlocks.PLANTS.get(Plant.SNAPDRAGON_PINK),
+            TFCBlocks.PLANTS.get(Plant.SNAPDRAGON_RED),
+            TFCBlocks.PLANTS.get(Plant.SNAPDRAGON_WHITE),
+            TFCBlocks.PLANTS.get(Plant.SNAPDRAGON_YELLOW),
+            TFCBlocks.PLANTS.get(Plant.TRILLIUM),
+            TFCBlocks.PLANTS.get(Plant.TROPICAL_MILKWEED),
+            TFCBlocks.PLANTS.get(Plant.TULIP_ORANGE),
+            TFCBlocks.PLANTS.get(Plant.TULIP_RED),
+            TFCBlocks.PLANTS.get(Plant.TULIP_PINK),
+            TFCBlocks.PLANTS.get(Plant.TULIP_WHITE),
+            TFCBlocks.PLANTS.get(Plant.YELLOW_SAXIFRAGE)
+        );
+        tag(BlockTags.TALL_FLOWERS).add(
+            TFCBlocks.PLANTS.get(Plant.ROSE),
+            TFCBlocks.PLANTS.get(Plant.SUNFLOWER),
+            TFCBlocks.PLANTS.get(Plant.FOXGLOVE),
+            TFCBlocks.PLANTS.get(Plant.LILAC),
+            TFCBlocks.PLANTS.get(Plant.SAPPHIRE_TOWER)
+        );
+        tag(BlockTags.FLOWERS).add(
+            TFCBlocks.PLANTS.get(Plant.WHITE_WATER_LILY),
+            TFCBlocks.PLANTS.get(Plant.YELLOW_WATER_LILY),
+            TFCBlocks.PLANTS.get(Plant.PURPLE_WATER_LILY),
+            TFCBlocks.PLANTS.get(Plant.SARGASSUM),
+            TFCBlocks.PLANTS.get(Plant.LOTUS),
+            TFCBlocks.PLANTS.get(Plant.PISTIA)
+        );
         tag(CAN_BE_ICE_PILED).addOnly(TFCBlocks.PLANTS, Plant::canBeIcePiled);
         tag(CONVERTS_TO_HUMUS).addTag(FALLEN_LEAVES);
         tag(SOLID_TOP_FACE).add(Blocks.HOPPER);

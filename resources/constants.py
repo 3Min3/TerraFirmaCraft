@@ -231,6 +231,10 @@ METAL_BLOCKS: dict[str, MetalItem] = {
     'exposed_block_stairs': MetalItem('weathering', 'block/block', False),
     'weathered_block_stairs': MetalItem('weathering', 'block/block', False),
     'oxidized_block_stairs': MetalItem('weathering', 'block/block', False),
+    'grate': MetalItem('all', 'block/block', False),
+    'exposed_grate': MetalItem('all', 'block/block', False),
+    'weathered_grate': MetalItem('all', 'block/block', False),
+    'oxidized_grate': MetalItem('all', 'block/block', False),
     'anvil': MetalItem('part', 'tfc:block/anvil', False),
     'bars': MetalItem('part', 'item/generated', False),
     'chain': MetalItem('part', 'tfc:block/chain', False),
@@ -881,13 +885,15 @@ NUTRIENTS = ('grain', 'fruit', 'vegetables', 'protein', 'dairy')
 SPAWN_EGG_ENTITIES = ('isopod', 'lobster', 'crayfish', 'cod', 'pufferfish', 'tropical_fish', 'jellyfish', 'orca', 'dolphin', 'manatee', 'penguin', 'frog', 'turtle', 'horseshoe_crab', 'polar_bear', 'grizzly_bear', 'black_bear', 'cougar', 'panther', 'lion', 'sabertooth', 'squid', 'octopoteuthis', 'pig', 'cow', 'goat', 'yak', 'alpaca', 'musk_ox', 'sheep', 'chicken', 'duck', 'quail', 'rabbit', 'fox', 'boar', 'donkey', 'mule', 'horse', 'deer', 'moose', 'boar', 'rat', 'cat', 'dog', 'wolf', 'panda', 'grouse', 'pheasant', 'turkey', 'ocelot', 'direwolf', 'hyena', 'tiger', 'crocodile', 'bongo', 'caribou', 'gazelle', 'wildebeest', 'peafowl', *SIMPLE_FRESHWATER_FISH)
 BUCKETABLE_FISH = ('cod', 'pufferfish', 'tropical_fish', 'jellyfish', *SIMPLE_FRESHWATER_FISH)
 
-BLOCK_ENTITIES = ('log_pile', 'burning_log_pile', 'placed_item', 'pit_kiln', 'charcoal_forge', 'quern', 'scraping', 'crucible', 'bellows', 'composter', 'chest', 'trapped_chest', 'barrel', 'loom', 'sluice', 'tool_rack', 'sign', 'lamp', 'berry_bush', 'crop', 'firepit', 'pot', 'grill', 'pile', 'farmland', 'tick_counter', 'nest_box', 'bloomery', 'bloom', 'anvil', 'ingot_pile', 'sheet_pile', 'blast_furnace', 'large_vessel', 'powderkeg', 'bowl', 'hot_poured_glass', 'glass_basin', 'axle', 'hand_wheel', 'sewing_table', 'shelf', 'thatch_bed', 'trip_hammer', 'windmill')
+BLOCK_ENTITIES = ('log_pile', 'burning_log_pile', 'placed_item', 'pit_kiln', 'charcoal_forge', 'quern', 'scraping', 'crucible', 'bellows', 'composter', 'chest', 'trapped_chest', 'barrel', 'loom', 'sluice', 'tool_rack', 'sign', 'lamp', 'berry_bush', 'crop', 'firepit', 'pot', 'grill', 'pile', 'farmland', 'tick_counter', 'nest_box', 'bloomery', 'bloom', 'anvil', 'ingot_pile', 'sheet_pile', 'blast_furnace', 'large_vessel', 'powderkeg', 'bowl', 'hot_poured_glass', 'glass_basin', 'axle', 'hand_wheel', 'sewing_table', 'shelf', 'thatch_bed', 'trip_hammer', 'windmill', 'firebox')
 
 ARMOR_SECTIONS = ('chestplate', 'leggings', 'boots', 'helmet')
 TFC_ARMOR_SECTIONS = ('helmet', 'chestplate', 'greaves', 'boots')
 # TODO: Ensure all new biomes added here
 TFC_BIOMES = ('badlands', 'inverted_badlands', 'canyons', 'low_canyons', 'plains', 'plateau', 'hills', 'rolling_hills', 'lake', 'lowlands', 'salt_marsh', 'mountains', 'volcanic_mountains', 'old_mountains', 'oceanic_mountains', 'volcanic_oceanic_mountains', 'ocean', 'ocean_reef', 'deep_ocean', 'deep_ocean_trench', 'river', 'shore', 'tidal_shore', 'mountain_river', 'volcanic_mountain_river', 'old_mountain_river', 'oceanic_mountain_river', 'volcanic_oceanic_mountain_river', 'mountain_lake', 'volcanic_mountain_lake', 'old_mountain_lake', 'oceanic_mountain_lake', 'volcanic_oceanic_mountain_lake', 'plateau_lake')
 VANILLA_TRIMS = ('coast', 'sentry', 'dune', 'wild', 'ward', 'eye', 'vex', 'tide', 'snout', 'rib', 'spire', 'wayfinder', 'shaper', 'silence', 'raiser', 'host')
+
+BUTTERFLIES = ('golden_birdwing', 'papilio_rumanzovia', 'papilio_palinurus', 'moth_diaphora', 'peacock', 'sericinus', 'papilio_blumei', 'adonis_blue', 'silverwashhed_frittilary', 'moth_saturnia', 'moth_argema', 'moth_attacus', 'moth_luna', 'moth_trosia')
 
 ALLOYS: Dict[str, Tuple[Tuple[str, float, float], ...]] = {
     'bismuth_bronze': (('zinc', 0.2, 0.3), ('copper', 0.5, 0.65), ('bismuth', 0.1, 0.2)),
@@ -1309,6 +1315,9 @@ DEFAULT_LANG = {
     'tfc.tooltip.sewing.stitch': 'Stitch',
     'tfc.tooltip.sewing.remove_stitch': 'Remove Stitch',
     'tfc.tooltip.sewing.select_recipe': 'Select Recipe',
+    'tfc.tooltip.firebox.time_to_heat': 'Heating %s blocks in %s',
+    'tfc.tooltip.firebox.heated': 'Heated %s blocks',
+    'tfc.tooltip.firebox.no_heat': 'No heatable area detected',
 
     **dict(('trim_material.tfc.%s' % mat, lang('%s material', mat)) for mat in TRIM_MATERIALS),
 
@@ -1366,6 +1375,7 @@ DEFAULT_LANG = {
     'config.jade.plugin_tfc.composter': 'Composter',
     'config.jade.plugin_tfc.crop': 'Crop',
     'config.jade.plugin_tfc.crucible': 'Crucible',
+    'config.jade.plugin_tfc.firebox': 'Firebox',
     'config.jade.plugin_tfc.firepit': 'Firepit',
     'config.jade.plugin_tfc.fruit_tree_sapling': 'Fruit Tree Sapling',
     'config.jade.plugin_tfc.hoe_overlay': 'Hoe Overlay',
@@ -1394,6 +1404,8 @@ DEFAULT_LANG = {
     'config.jade.plugin_tfc.water_wheel': 'Water Wheel',
     'config.jade.plugin_tfc.windmill': 'Windmill',
     'config.jade.plugin_tfc.hot_poured_glass': 'Hot Poured Glass',
+    'config.jade.plugin_tfc.shelf': 'Shelf',
+    'config.jade.plugin_tfc.placed_item': 'Placed Item',
 
     'config.jade.plugin_tfc.animal': 'Animal',
     'config.jade.plugin_tfc.frog': 'Frog',
