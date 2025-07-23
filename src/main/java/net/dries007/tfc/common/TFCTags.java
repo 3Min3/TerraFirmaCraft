@@ -178,6 +178,7 @@ public class TFCTags
          * These are all used for various types of plants, as the block that they grow on. They can also be used during world generation,
          * for blocks that these will spawn on (typically the difference between "grows on" and "plantable on").
          */
+        public static final TagKey<Block> ANEMONE_PLANTABLE_ON = tag("anemone_plantable_on");
         public static final TagKey<Block> TREE_GROWS_ON = tag("tree_grows_on");
         public static final TagKey<Block> WILD_CROP_GROWS_ON = tag("wild_crop_grows_on");
         public static final TagKey<Block> SPREADING_FRUIT_GROWS_ON = tag("spreading_fruit_grows_on");
