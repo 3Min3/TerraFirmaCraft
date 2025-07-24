@@ -17,11 +17,20 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.dries007.tfc.util.Helpers;
 
-public class TFCMagmaBlock extends MagmaBlock
+public class TFCMagmaBlock extends MagmaBlock implements IForgeBlockExtension
 {
-    public TFCMagmaBlock(Properties properties)
+    private final ExtendedProperties properties;
+
+    public TFCMagmaBlock(ExtendedProperties properties)
     {
-        super(properties);
+        super(properties.properties());
+
+        this.properties = properties;
+    }
+
+    @Override
+    public ExtendedProperties getExtendedProperties() {
+        return properties;
     }
 
     @Override
