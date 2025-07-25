@@ -645,6 +645,12 @@ PLANTS: dict[str, Plant] = {
 
     'anemone_purple': Plant(False, -14, 12, 50, 470, 'ocean_creeping'),
     'anemone_green': Plant(False, -16, 10, 50, 470, 'ocean_creeping'),
+    'barnacles': Plant(False, -25, 25, 0, 500, 'ocean_creeping'),
+    'mussels': Plant(False, -15, 10, 0, 500, 'ocean_creeping'),
+    'zostera': Plant(False, 5, 15, 0, 500, 'ocean_creeping'),
+    'starfish': Plant(False, -25, 35, 0, 500, 'rotatable_water_plant'),
+    'anemone_large_purple': Plant(False, -10, 8, 0, 500, 'ocean_creeping'),
+    'anemone_large_orange': Plant(False, 0, 16, 0, 500, 'ocean_creeping'),
 }
 
 FLOWERPOT_CROSS_PLANTS = {
@@ -836,7 +842,7 @@ SIMPLE_UNFIRED_POTTERY = ('brick', 'crucible', 'flower_pot', 'jug', 'pan', 'blow
 GLASS_TYPES = ('silica', 'hematitic', 'olivine', 'volcanic')
 SHORE_DECORATORS = ('driftwood', 'clam', 'mollusk', 'mussel', 'seaweed', 'sticks_shore', 'guano')
 FOREST_DECORATORS = ('sticks_forest', 'pinecone', 'salt_lick', 'humus', 'rotten_flesh', 'bone')
-OCEAN_PLANT_TYPES = ('grass_water', 'floating', 'water', 'emergent', 'tall_water', 'ocean_creeping', 'ocean_rotatable', 'ocean_rock_creeping')
+OCEAN_PLANT_TYPES = ('grass_water', 'floating', 'water', 'emergent', 'tall_water', 'ocean_creeping', 'rotatable_water_plant', 'ocean_rock_creeping')
 MISC_PLANT_FEATURES = ('hanging_vines', 'hanging_vines_cave', 'spanish_moss', 'saguaro_patch', 'jungle_vines', 'liana', 'moss_cover', 'reindeer_lichen_cover', 'morning_glory_cover', 'philodendron_cover', 'tree_fern', 'arundo', 'flame_vine', 'cycad')
 UNDERGROUND_FEATURES = ('cave_column', 'cave_spike', 'large_cave_spike', 'water_spring', 'lava_spring', 'water_surface_spring', 'extra_water_surface_spring', 'glacial_spring', 'ice_sheet_spring', 'calcite', 'mega_calcite', 'icicle', 'underground_loose_rocks', 'underground_guano_patch')
 

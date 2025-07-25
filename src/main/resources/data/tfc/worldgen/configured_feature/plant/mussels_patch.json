@@ -2,9 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "type": "tfc:creeping_ocean_plant",
   "config": {
-    "block": "tfc:plant/anemone_purple",
+    "block": "tfc:plant/mussels",
     "height": 5,
     "radius": 3,
-    "integrity": 0.45
+    "integrity": 0.6
   }
 }

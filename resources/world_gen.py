@@ -951,9 +951,15 @@ def generate(rm: ResourceManager):
     configured_placed_feature(rm, ('plant', 'elegant_sunburst_lichen_patch'), 'tfc:creeping_plant', {'block': 'tfc:plant/elegant_sunburst_lichen', 'height': 5, 'radius': 5, 'integrity': 0.4}, decorate_chance(5), decorate_climate_121(-33, -11.5, 0, 225, -1, 1, False, 1, 4, fuzzy=True), decorate_square(), decorate_heightmap('world_surface_wg'))
 
     # Shore "Plants"
-    configured_placed_feature(rm, ('plant', 'anemone_purple_patch'), 'tfc:creeping_ocean_plant', {'block': 'tfc:plant/anemone_purple', 'height': 5, 'radius': 3, 'integrity': 0.6}, decorate_chance(10), decorate_climate(-14, 12, 0, 500), decorate_square(), decorate_heightmap('ocean_floor_wg'))
-    configured_placed_feature(rm, ('plant', 'anemone_green_patch'), 'tfc:creeping_ocean_plant', {'block': 'tfc:plant/anemone_green', 'height': 5, 'radius': 3, 'integrity': 0.6}, decorate_chance(10), decorate_climate(-16, 10, 0, 500), decorate_square(), decorate_heightmap('ocean_floor_wg'))
+    configured_placed_feature(rm, ('plant', 'anemone_purple_patch'), 'tfc:creeping_ocean_plant', {'block': 'tfc:plant/anemone_purple', 'height': 5, 'radius': 3, 'integrity': 0.45}, decorate_chance(10), decorate_climate(-10, 16, 0, 500), decorate_square(), decorate_heightmap('ocean_floor_wg'))
+    configured_placed_feature(rm, ('plant', 'anemone_green_patch'), 'tfc:creeping_ocean_plant', {'block': 'tfc:plant/anemone_green', 'height': 5, 'radius': 3, 'integrity': 0.45}, decorate_chance(10), decorate_climate(-16, 10, 0, 500), decorate_square(), decorate_heightmap('ocean_floor_wg'))
+    configured_placed_feature(rm, ('plant', 'barnacles_patch'), 'tfc:creeping_ocean_plant', {'block': 'tfc:plant/barnacles', 'height': 5, 'radius': 3, 'integrity': 0.6}, decorate_count(2), decorate_climate(-25, 20, 0, 500), decorate_square(), decorate_heightmap('ocean_floor_wg'))
+    configured_placed_feature(rm, ('plant', 'mussels_patch'), 'tfc:creeping_ocean_plant', {'block': 'tfc:plant/mussels', 'height': 5, 'radius': 3, 'integrity': 0.6}, decorate_chance(2), decorate_climate(-15, 10, 0, 500), decorate_square(), decorate_heightmap('ocean_floor_wg'))
+    configured_placed_feature(rm, ('plant', 'zostera_patch'), 'tfc:creeping_ocean_plant', {'block': 'tfc:plant/zostera', 'height': 5, 'radius': 3, 'integrity': 0.6}, decorate_chance(3), decorate_climate(5, 15, 0, 500), decorate_square(), decorate_heightmap('ocean_floor_wg'))
 
+    configured_plant_patch_feature(rm, ('plant', 'starfish_patch'), plant_config('tfc:plant/starfish', 5, 10, 10, rotatable_water_plant=True, intertidal_plant=True), decorate_chance(2), decorate_square(), decorate_heightmap('ocean_floor_wg'))
+    configured_plant_patch_feature(rm, ('plant', 'anemone_large_purple_patch'), plant_config('tfc:plant/anemone_large_purple', 5, 10, 10, rotatable_water_plant=True, intertidal_plant=True), decorate_chance(2), decorate_square(), decorate_climate(-10, 8, 0, 500), decorate_heightmap('ocean_floor_wg'))
+    configured_plant_patch_feature(rm, ('plant', 'anemone_large_orange_patch'), plant_config('tfc:plant/anemone_large_orange', 5, 10, 10, rotatable_water_plant=True, intertidal_plant=True), decorate_chance(2), decorate_square(), decorate_climate(0, 16, 0, 500), decorate_heightmap('ocean_floor_wg'))
 
     # Clay Indicator Plants
     # These piggyback on the clay disc feature, and so have limited decorators
@@ -1138,9 +1144,10 @@ class PlantConfig(NamedTuple):
     tall_water_plant: bool
     above_tide_plant: bool
     intertidal_plant: bool
+    rotatable_water_plant: bool
 
-def plant_config(block: str, y_spread: int, xz_spread: int, tries: int = None, requires_clay: bool = False, water_plant: bool = False, emergent_plant: bool = False, tall_plant: bool = False, epiphyte_plant: bool = False, limit_density: bool = False, no_solid_neighbors: bool = False, tall_water_plant: bool = False, above_tide_plant: bool = False, intertidal_plant: bool = False) -> PlantConfig:
-    return PlantConfig(block, y_spread, xz_spread, tries, requires_clay, water_plant, emergent_plant, tall_plant, epiphyte_plant, limit_density, no_solid_neighbors, tall_water_plant, above_tide_plant, intertidal_plant)
+def plant_config(block: str, y_spread: int, xz_spread: int, tries: int = None, requires_clay: bool = False, water_plant: bool = False, emergent_plant: bool = False, tall_plant: bool = False, epiphyte_plant: bool = False, limit_density: bool = False, no_solid_neighbors: bool = False, tall_water_plant: bool = False, above_tide_plant: bool = False, intertidal_plant: bool = False, rotatable_water_plant: bool = False) -> PlantConfig:
+    return PlantConfig(block, y_spread, xz_spread, tries, requires_clay, water_plant, emergent_plant, tall_plant, epiphyte_plant, limit_density, no_solid_neighbors, tall_water_plant, above_tide_plant, intertidal_plant, rotatable_water_plant)
 
 def configured_plant_patch_feature(rm: ResourceManager, name_parts: ResourceIdentifier, config: PlantConfig, *patch_decorators: Json):
     state_provider = {
@@ -1163,6 +1170,8 @@ def configured_plant_patch_feature(rm: ResourceManager, name_parts: ResourceIden
         feature = 'tfc:tall_plant', {'block': utils.block_state(config.block)['Name']}
     if config.epiphyte_plant:
         feature = 'tfc:epiphyte_plant', {'block': utils.block_state(config.block)['Name']}
+    if config.rotatable_water_plant:
+        feature = 'tfc:rotatable_water_plant', {'block': utils.block_state(config.block)['Name']}
     if config.tall_water_plant:
         feature = 'tfc:submerged_tall_plant', {'block': utils.block_state(config.block)['Name']}
 

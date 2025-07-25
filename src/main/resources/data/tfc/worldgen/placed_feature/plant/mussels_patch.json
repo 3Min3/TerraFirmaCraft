@@ -1,15 +1,15 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "feature": "tfc:plant/anemone_purple_patch",
+  "feature": "tfc:plant/mussels_patch",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 10
+      "chance": 2
     },
     {
       "type": "tfc:climate",
-      "min_temperature": -10,
-      "max_temperature": 16,
+      "min_temperature": -15,
+      "max_temperature": 10,
       "min_groundwater": 0,
       "max_groundwater": 500,
       "min_elevation": -64,
