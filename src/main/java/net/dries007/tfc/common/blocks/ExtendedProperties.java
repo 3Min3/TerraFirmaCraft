@@ -73,6 +73,7 @@ public class ExtendedProperties
     private int flammability;
     private int fireSpreadSpeed;
     @Nullable private BlockPathTypes pathType;
+    @Nullable private BlockPathTypes adjacentPathType;
     private ToDoubleFunction<BlockState> enchantmentPowerGetter;
 
     private ExtendedProperties(BlockBehaviour.Properties properties)
@@ -87,6 +88,7 @@ public class ExtendedProperties
         flammability = 0;
         fireSpreadSpeed = 0;
         pathType = null;
+        adjacentPathType = null;
         enchantmentPowerGetter = s -> 0;
     }
 
@@ -145,6 +147,12 @@ public class ExtendedProperties
     public ExtendedProperties pathType(BlockPathTypes type)
     {
         pathType = type;
+        return this;
+    }
+
+    public ExtendedProperties adjacentPathType(BlockPathTypes type)
+    {
+        adjacentPathType = type;
         return this;
     }
 
@@ -254,6 +262,12 @@ public class ExtendedProperties
     BlockPathTypes getPathType()
     {
         return pathType;
+    }
+
+    @Nullable
+    BlockPathTypes getAdjacentPathType()
+    {
+        return adjacentPathType;
     }
 
     float getEnchantmentPower(BlockState state)

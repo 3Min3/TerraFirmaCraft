@@ -51,6 +51,14 @@ public interface IForgeBlockExtension extends IForgeBlock
         return type != null ? type : IForgeBlock.super.getBlockPathType(state, level, pos, entity);
     }
 
+    @Nullable
+    @Override
+    default BlockPathTypes getAdjacentBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity, BlockPathTypes originalType)
+    {
+        final BlockPathTypes type = getExtendedProperties().getAdjacentPathType();
+        return type != null ? type : IForgeBlock.super.getAdjacentBlockPathType(state, level, pos, entity, originalType);
+    }
+
     @Override
     default float getEnchantPowerBonus(BlockState state, LevelReader level, BlockPos pos)
     {
