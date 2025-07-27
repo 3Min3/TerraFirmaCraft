@@ -20,7 +20,10 @@
         "tag": "tfc:knives"
       },
       {
-        "item": "minecraft:egg"
+        "type": "tfc:not_rotten",
+        "ingredient": {
+          "item": "minecraft:egg"
+        }
       },
       {
         "item": "minecraft:sugar"
