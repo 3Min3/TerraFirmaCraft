@@ -249,8 +249,8 @@ def generate(rm: ResourceManager):
     rm.crafting_shaped('crafting/nest_box', ['Y Y', 'XYX', 'XXX'], {'Y': 'tfc:straw', 'X': '#tfc:lumber'}, 'tfc:nest_box').with_advancement('#tfc:lumber')
     rm.crafting_shaped('crafting/blast_furnace', ['XXX', 'XCX', 'XXX'], {'X': 'tfc:metal/sheet/wrought_iron', 'C': 'tfc:crucible'}, 'tfc:blast_furnace').with_advancement('tfc:metal/sheet/wrought_iron')
     damage_shapeless(rm, 'crafting/melon_slice', ('#tfc:knives', not_rotten('tfc:melon')), (4, 'tfc:food/melon_slice')).with_advancement('tfc:melon')
-    damage_shapeless(rm, 'crafting/pumpkin_pie', (not_rotten('#tfc:foods/dough'), not_rotten('tfc:food/pumpkin_chunks'), '#tfc:knives', 'minecraft:egg', 'minecraft:sugar'), 'minecraft:pumpkin_pie').with_advancement('tfc:pumpkin')
-    rm.crafting_shaped('crafting/cake', ['AAA', 'BEB', 'CCC'], {'A': fluid_item_ingredient('100 #tfc:milks'), 'B': 'minecraft:sugar', 'E': 'minecraft:egg', 'C': '#tfc:foods/grains'}, 'tfc:cake').with_advancement('#tfc:foods/grains')
+    damage_shapeless(rm, 'crafting/pumpkin_pie', (not_rotten('#tfc:foods/dough'), not_rotten('tfc:food/pumpkin_chunks'), '#tfc:knives', not_rotten('minecraft:egg'), 'minecraft:sugar'), 'minecraft:pumpkin_pie').with_advancement('tfc:pumpkin')
+    rm.crafting_shaped('crafting/cake', ['AAA', 'BEB', 'CCC'], {'A': fluid_item_ingredient('100 #tfc:milks'), 'B': 'minecraft:sugar', 'E': not_rotten('minecraft:egg'), 'C': '#tfc:foods/grains'}, 'tfc:cake').with_advancement('#tfc:foods/grains')
     rm.crafting_shapeless('crafting/soot', ('tfc:glue', 'tfc:powder/charcoal', 'tfc:powder/wood_ash'), 'tfc:soot').with_advancement('tfc:glue')
     rm.crafting_shapeless('crafting/rotten_compost', ('tfc:soot', 'tfc:compost'), 'tfc:rotten_compost').with_advancement('tfc:soot')
     rm.crafting_shapeless('crafting/blank_disc', ('tfc:soot', 'minecraft:glass_pane'), 'tfc:blank_disc').with_advancement('tfc:blank_disc')
@@ -717,7 +717,7 @@ def generate(rm: ResourceManager):
     simple_pot_recipe(rm, 'lye', [utils.ingredient('tfc:powder/wood_ash')] * 5, '1000 minecraft:water', '1000 tfc:lye', None, 2000, 600)
     for count in range(1, 1 + 5):
         simple_pot_recipe(rm, 'cooked_rice_%d' % count, [not_rotten(utils.ingredient('tfc:food/rice_grain'))] * count, '100 minecraft:water', None, ['tfc:food/cooked_rice'] * count, 1000, 300)
-        simple_pot_recipe(rm, 'boiled_egg_%d' % count, [utils.ingredient('minecraft:egg')] * count, '100 minecraft:water', None, ['tfc:food/boiled_egg'] * count, 1000, 300)
+        simple_pot_recipe(rm, 'boiled_egg_%d' % count, [not_rotten(utils.ingredient('minecraft:egg'))] * count, '100 minecraft:water', None, ['tfc:food/boiled_egg'] * count, 1000, 300)
     for color in COLORS:
         simple_pot_recipe(rm, '%s_dye' % color, [utils.ingredient('minecraft:%s_dye' % color)], '1000 minecraft:water', '1000 tfc:%s_dye' % color, None, 2000, 600)
 
