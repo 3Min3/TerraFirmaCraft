@@ -9,10 +9,12 @@ package net.dries007.tfc.mixin;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
@@ -20,7 +22,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Biome.class)
 public abstract class BiomeMixin implements BiomeBridge
@@ -61,5 +65,20 @@ public abstract class BiomeMixin implements BiomeBridge
     private boolean shouldFreezeWithClimate(Biome biome, BlockPos pos, LevelReader level)
     {
         return Climate.warmEnoughToRain(level, pos, biome);
+    }
+
+    /**
+     * Replace {@link Biome#getPrecipitationAt(BlockPos)} with a method that takes our climate model into account
+     * <p>
+     * This is better than redirecting known calls to getPrecipitationAt because other mods sometimes
+     * use this method to get weather information.
+     * This is only done on the client, where we can get the client level.
+     */
+    @OnlyIn(Dist.CLIENT)
+    @Inject(method = "getPrecipitationAt", at = @At("HEAD"), cancellable = true)
+    private void getPrecipitationFromClimate(BlockPos pos, CallbackInfoReturnable<Biome.Precipitation> cir) {
+        Minecraft minecraft = Minecraft.getInstance();
+        cir.setReturnValue(Climate.getPrecipitation(minecraft.level, pos));
+        cir.cancel();
     }
 }
