@@ -70,6 +70,13 @@ public class Drinkable extends FluidDefinition
      */
     public static InteractionResult attemptDrink(Level level, Player player, boolean doDrink)
     {
+        // Create mod sometimes fakes player interactions with an
+        // entity that has already been removed, see issue #2971
+        if (player.isRemoved())
+        {
+            return InteractionResult.PASS;
+        }   
+
         final BlockHitResult hit = Helpers.rayTracePlayer(level, player, ClipContext.Fluid.SOURCE_ONLY);
         if (hit.getType() == HitResult.Type.BLOCK)
         {
