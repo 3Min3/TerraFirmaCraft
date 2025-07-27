@@ -9,6 +9,9 @@ package net.dries007.tfc.common.blocks;
 import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -27,13 +30,18 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.IHighlightHandler;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.JarsBlockEntity;
+import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
 import net.dries007.tfc.common.blocks.devices.BottomSupportedDeviceBlock;
+import net.dries007.tfc.util.Helpers;
 
 public class JarShelfBlock extends JarsBlock
 {
@@ -125,5 +133,27 @@ public class JarShelfBlock extends JarsBlock
             jars.clearContent();
         }
         return facing == state.getValue(FACING) && !facingState.isFaceSturdy(level, facingPos, facing.getOpposite()) ? Blocks.AIR.defaultBlockState() : updateStateValues(level, currentPos, state);
+    }
+
+    @Override
+    public boolean drawHighlight(Level level, BlockPos pos, Player player, BlockHitResult rayTrace, PoseStack stack, MultiBufferSource buffers, Vec3 rendererPosition)
+    {
+        final int slot = PlacedItemBlockEntity.getSlotSelected(rayTrace);
+        final boolean lookingAtJar = BOUNDS[slot].move(pos).contains(rayTrace.getLocation());
+        if (lookingAtJar) {
+            return super.drawHighlight(level, pos, player, rayTrace, stack, buffers, rendererPosition);
+        }
+
+        final BlockPos above = pos.above();
+        final BlockState aboveState = level.getBlockState(above);
+        final boolean holdingJar = Helpers.isItem(player.getItemInHand(InteractionHand.MAIN_HAND), TFCTags.Items.JARS) || Helpers.isItem(player.getItemInHand(InteractionHand.OFF_HAND), TFCTags.Items.JARS);
+        final boolean filledSlotAbove = aboveState.getBlock() instanceof JarsBlock && aboveState.getValue(ITEM_PROPERTIES[slot]);
+        
+        IHighlightHandler.drawBox(stack, TOP_SHAPE, buffers, pos, rendererPosition, 0f, 0f, 0f, 0.4f);
+        if (holdingJar && !filledSlotAbove) {
+            IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, above, rendererPosition, 1f, 0f, 0f, 1f);
+        }
+
+        return true;
     }
 }

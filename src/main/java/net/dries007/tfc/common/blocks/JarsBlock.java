@@ -122,7 +122,7 @@ public class JarsBlock extends BottomSupportedDeviceBlock implements IHighlightH
     public JarsBlock(ExtendedProperties properties, boolean buildCache)
     {
         super(properties, InventoryRemoveBehavior.DROP, SHAPE_1);
-        registerDefaultState(getStateDefinition().any().setValue(ITEM_0, true).setValue(ITEM_1, true).setValue(ITEM_2, true).setValue(ITEM_3, true));
+        registerDefaultState(getStateDefinition().any().setValue(ITEM_0, false).setValue(ITEM_1, false).setValue(ITEM_2, false).setValue(ITEM_3, false));
         this.cachedShapes = buildCache ? makeShapes(getStateDefinition().getPossibleStates()) : new HashMap<>();
     }
 
@@ -156,13 +156,9 @@ public class JarsBlock extends BottomSupportedDeviceBlock implements IHighlightH
     @Override
     public boolean drawHighlight(Level level, BlockPos pos, Player player, BlockHitResult rayTrace, PoseStack stack, MultiBufferSource buffers, Vec3 rendererPosition)
     {
-        if (!Helpers.isItem(player.getItemInHand(InteractionHand.MAIN_HAND), TFCTags.Items.JARS) && !Helpers.isItem(player.getItemInHand(InteractionHand.OFF_HAND), TFCTags.Items.JARS))
-        {
-            return true;
-        }
         final int slot = PlacedItemBlockEntity.getSlotSelected(rayTrace);
-        IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, pos, rendererPosition, 1f, 0f, 0f, 1f);
-        return BOUNDS[slot].move(pos).contains(rayTrace.getLocation());
+        IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, pos, rendererPosition, 0f, 0f, 0f, 0.4f);
+        return true;
     }
 
     @Override
