@@ -3,7 +3,10 @@
   "type": "tfc:pot",
   "ingredients": [
     {
-      "item": "minecraft:egg"
+      "type": "tfc:not_rotten",
+      "ingredient": {
+        "item": "minecraft:egg"
+      }
     }
   ],
   "fluid_ingredient": {

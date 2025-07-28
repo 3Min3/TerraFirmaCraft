@@ -20,7 +20,10 @@
       "item": "minecraft:sugar"
     },
     "E": {
-      "item": "minecraft:egg"
+      "type": "tfc:not_rotten",
+      "ingredient": {
+        "item": "minecraft:egg"
+      }
     },
     "C": {
       "tag": "tfc:foods/grains"
