@@ -827,7 +827,8 @@ public final class ForgeEventHandler
         float amount = event.getAmount();
         
         // Vanilla kill command uses Float.MAX_VALUE, possibly others
-        if (amount == Float.MAX_VALUE) {
+        if (amount == Float.MAX_VALUE)
+        {
             return;
         }
 
