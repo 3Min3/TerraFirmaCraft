@@ -146,11 +146,7 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
     {
         final Optional<PileBlockEntity> snowPile = level.getBlockEntity(pos, TFCBlockEntities.PILE.get()); // Store the blockentity before it is removed
         super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
-
-        if (!level.isClientSide())
-        {
-            removePileOrSnow(level, pos, state, snowPile);
-        }
+        removePileOrSnow(level, pos, state, snowPile);
         return true; // Cause drops and other stuff to occur
     }
 
