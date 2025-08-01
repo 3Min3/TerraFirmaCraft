@@ -5,6 +5,7 @@
     "block": "tfc:plant/barnacles",
     "height": 5,
     "radius": 3,
-    "integrity": 0.6
+    "integrity": 0.6,
+    "tide_height": 2
   }
 }

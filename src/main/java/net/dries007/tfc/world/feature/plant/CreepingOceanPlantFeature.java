@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.plant.CreepingPlantBlock;
 import net.dries007.tfc.common.blocks.plant.CreepingWaterPlantBlock;
@@ -54,14 +55,15 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig>
                     if (x * x + z + z < radius * radius && context.random().nextFloat() < context.config().integrity())
                     {
                         cursor.setWithOffset(pos, x, y, z);
-                        if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor) && cursor.getY() <= maxTideHeight.noise(cursor.getX(), cursor.getZ()))
+                        if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor) && cursor.getY() <= context.config().heightAboveTide() + maxTideHeight.noise(cursor.getX(), cursor.getZ()))
                         {
                             final BlockState newState = CreepingWaterPlantBlock.updateStateFromSides(level, cursor, state);
                             if (!newState.isAir())
                             {
                                 final Fluid fluidAt = level.getFluidState(cursor).getType();
+                                final boolean isOpen = fluidAt.isSame(TFCFluids.SALT_WATER.getSource());
                                 final BlockState waterloggedState = FluidHelpers.fillWithFluid(newState, fluidAt);
-                                setBlock(level, cursor, Objects.requireNonNullElse(waterloggedState, newState));
+                                setBlock(level, cursor, Objects.requireNonNullElse(waterloggedState, newState).setValue(TFCBlockStateProperties.OPEN, isOpen));
                             }
                         }
                     }

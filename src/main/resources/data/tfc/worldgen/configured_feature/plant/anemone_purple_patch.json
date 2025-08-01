@@ -5,6 +5,7 @@
     "block": "tfc:plant/anemone_purple",
     "height": 5,
     "radius": 3,
-    "integrity": 0.45
+    "integrity": 0.45,
+    "tide_height": 2
   }
 }

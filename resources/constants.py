@@ -647,7 +647,6 @@ PLANTS: dict[str, Plant] = {
     'anemone_green': Plant(False, -16, 10, 50, 470, 'ocean_creeping'),
     'barnacles': Plant(False, -25, 25, 0, 500, 'ocean_creeping'),
     'mussels': Plant(False, -15, 10, 0, 500, 'ocean_creeping'),
-    'zostera': Plant(False, 5, 15, 0, 500, 'ocean_creeping'),
     'starfish': Plant(False, -25, 35, 0, 500, 'rotatable_water_plant'),
     'anemone_large_purple': Plant(False, -10, 8, 0, 500, 'ocean_creeping'),
     'anemone_large_orange': Plant(False, 0, 16, 0, 500, 'ocean_creeping'),

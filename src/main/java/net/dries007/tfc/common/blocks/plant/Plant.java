@@ -77,7 +77,6 @@ public enum Plant implements RegistryPlant
     BARNACLES(BlockType.OCEAN_ROCK_CREEPING, 1.0F),
     MUSSELS(BlockType.OCEAN_ROCK_CREEPING, 1.0F),
     STARFISH(BlockType.OCEAN_ROTATABLE, 1.0F),
-    ZOSTERA(BlockType.OCEAN_CREEPING, 1.0F),
 
     // Other Plants
     ALLIUM(BlockType.STANDARD, 1.0F, false, -0.15F, 0.2F, 0.3F, 0.4F, 0.64F, 0.92F),
