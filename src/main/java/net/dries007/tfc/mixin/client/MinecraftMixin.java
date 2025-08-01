@@ -35,6 +35,10 @@ public abstract class MinecraftMixin
     @Shadow @Nullable
     public MultiPlayerGameMode gameMode;
 
+    /**
+     * Prevents the client from trying to instantly break the same block twice in a tick. This would cause
+     * issues with blocks that turn into another block when broken, such as snow piles and charcoal piles.
+     */
     @ModifyExpressionValue(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;isAir()Z", ordinal = 1))
     private boolean startAttackPreventDoubleBreaking(boolean original)
     {
