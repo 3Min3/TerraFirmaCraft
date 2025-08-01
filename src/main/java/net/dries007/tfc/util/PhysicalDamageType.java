@@ -207,9 +207,8 @@ public enum PhysicalDamageType implements StringRepresentable
         // Passing source so we can check if it bypasses.
         default float value(@Nullable PhysicalDamageType type, DamageSource source)
         {
-            if (source.is(BYPASSES_DAMAGE_RESISTANCES)) {
+            if (source.is(BYPASSES_DAMAGE_RESISTANCES))
                 return 0;
-            }
 
             if (type == null)
             {
