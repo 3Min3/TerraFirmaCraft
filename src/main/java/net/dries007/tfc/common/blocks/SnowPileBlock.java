@@ -74,14 +74,13 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
 
     public static void removePileOrSnow(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        removePileOrSnow(level, pos, state, Optional.empty());
+        removePileOrSnow(level, pos, state, level.getBlockEntity(pos, TFCBlockEntities.PILE.get()).orElse(null));
     }
 
     /**
-     * @param snowPile If {@code null}, then there is no provided block entity and one should be queried from the world. If not-null, this
-     *                 represents the block entity present in the world, possibly empty.
+     * @param snowPile The snow pile block entity present in the world, possibly null.
      */
-    public static void removePileOrSnow(LevelAccessor level, BlockPos pos, BlockState state, @Nullable Optional<PileBlockEntity> snowPile)
+    public static void removePileOrSnow(LevelAccessor level, BlockPos pos, BlockState state, @Nullable PileBlockEntity snowPile)
     {
         final int layers = state.getValue(SnowLayerBlock.LAYERS);
         if (layers > 1)
@@ -94,30 +93,27 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
             // Remove a single snow layer block
             level.removeBlock(pos, false);
         }
-        else
+        else if (snowPile != null)
         {
             // Otherwise, remove a snow pile, restoring the internal states
-            if (snowPile == null) snowPile = level.getBlockEntity(pos, TFCBlockEntities.PILE.get());
-            snowPile.ifPresent(pile -> {
-                final BlockPos above = pos.above();
+            final BlockPos above = pos.above();
 
-                level.setBlock(pos, pile.getInternalState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-                if (pile.getAboveState() != null && level.isEmptyBlock(above))
-                {
-                    level.setBlock(above, pile.getAboveState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-                }
+            level.setBlock(pos, snowPile.getInternalState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+            if (snowPile.getAboveState() != null && level.isEmptyBlock(above))
+            {
+                level.setBlock(above, snowPile.getAboveState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+            }
 
-                // Update neighbors shapes from the bottom block (this is important to get grass blocks to adjust to snowy/non-snowy states)
-                pile.getInternalState().updateNeighbourShapes(level, pos, Block.UPDATE_CLIENTS);
-                level.getBlockState(above).updateNeighbourShapes(level, above, Block.UPDATE_CLIENTS);
+            // Update neighbors shapes from the bottom block (this is important to get grass blocks to adjust to snowy/non-snowy states)
+            snowPile.getInternalState().updateNeighbourShapes(level, pos, Block.UPDATE_CLIENTS);
+            level.getBlockState(above).updateNeighbourShapes(level, above, Block.UPDATE_CLIENTS);
 
-                // Block ticks after both blocks are placed
-                level.blockUpdated(pos, pile.getInternalState().getBlock());
-                if (pile.getAboveState() != null)
-                {
-                    level.blockUpdated(above, pile.getAboveState().getBlock());
-                }
-            });
+            // Block ticks after both blocks are placed
+            level.blockUpdated(pos, snowPile.getInternalState().getBlock());
+            if (snowPile.getAboveState() != null)
+            {
+                level.blockUpdated(above, snowPile.getAboveState().getBlock());
+            }
         }
     }
 
@@ -144,7 +140,8 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
     {
-        final Optional<PileBlockEntity> snowPile = level.getBlockEntity(pos, TFCBlockEntities.PILE.get()); // Store the blockentity before it is removed
+        @Nullable final PileBlockEntity snowPile =
+            level.getBlockEntity(pos, TFCBlockEntities.PILE.get()).orElse(null); // Store the blockentity before it is removed
         super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
         removePileOrSnow(level, pos, state, snowPile);
         return true; // Cause drops and other stuff to occur
