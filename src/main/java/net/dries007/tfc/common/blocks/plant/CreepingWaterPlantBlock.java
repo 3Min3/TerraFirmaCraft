@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
@@ -98,13 +99,12 @@ public abstract class CreepingWaterPlantBlock extends CreepingPlantBlock impleme
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockPos pos = context.getClickedPos();
-        FluidState fluidState = context.getLevel().getFluidState(pos);
+        Fluid fluid = context.getLevel().getFluidState(pos).getType();
         BlockState state = defaultBlockState();
-        if (getFluidProperty().canContain(fluidState.getType()))
+        if (getFluidProperty().canContain(fluid))
         {
-            state = state.setValue(getFluidProperty(), getFluidProperty().keyFor(fluidState.getType()));
-            if (fluidState.getType() != Fluids.EMPTY) state.setValue(OPEN, true);;
-
+            state = state.setValue(getFluidProperty(), getFluidProperty().keyFor(fluid));
+            if (fluid == TFCFluids.SALT_WATER.getSource()) state = state.setValue(OPEN, true);
         }
         return updateStateFromSides(context.getLevel(), context.getClickedPos(), state);
     }

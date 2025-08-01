@@ -17,8 +17,10 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.material.Fluid;
 
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.plant.RotatableWaterPlantBlock;
 import net.dries007.tfc.common.fluids.FluidHelpers;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.world.feature.BlockConfig;
 
@@ -46,9 +48,13 @@ public class RotatableWaterPlantFeature extends Feature<BlockConfig<RotatableWat
             if (state.canSurvive(level, pos))
             {
                 final Fluid fluidAt = level.getFluidState(pos).getType();
+                final boolean isOpen = fluidAt.isSame(TFCFluids.SALT_WATER.getSource());
                 final BlockState waterloggedState = FluidHelpers.fillWithFluid(state, fluidAt);
-                setBlock(level, pos, Objects.requireNonNullElse(waterloggedState, state));
-                return true;
+                if (waterloggedState != null)
+                {
+                    setBlock(level, pos, waterloggedState.setValue(TFCBlockStateProperties.OPEN, isOpen));
+                    return true;
+                }
             }
         }
         return false;

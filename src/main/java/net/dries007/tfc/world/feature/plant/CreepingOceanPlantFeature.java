@@ -63,7 +63,10 @@ public class CreepingOceanPlantFeature extends Feature<CreepingPlantConfig>
                                 final Fluid fluidAt = level.getFluidState(cursor).getType();
                                 final boolean isOpen = fluidAt.isSame(TFCFluids.SALT_WATER.getSource());
                                 final BlockState waterloggedState = FluidHelpers.fillWithFluid(newState, fluidAt);
-                                setBlock(level, cursor, Objects.requireNonNullElse(waterloggedState, newState).setValue(TFCBlockStateProperties.OPEN, isOpen));
+                                if (waterloggedState != null)
+                                {
+                                    setBlock(level, cursor, waterloggedState.setValue(TFCBlockStateProperties.OPEN, isOpen));
+                                }
                             }
                         }
                     }

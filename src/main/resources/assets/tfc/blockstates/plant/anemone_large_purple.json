@@ -2,7 +2,8 @@
   "multipart": [
     {
       "when": {
-        "facing": "east"
+        "facing": "east",
+		"open": "true"
       },
       "apply": [
         {
@@ -14,7 +15,8 @@
     },
     {
       "when": {
-        "facing": "south"
+        "facing": "south",
+		"open": "true"
       },
       "apply": [
         {
@@ -26,7 +28,8 @@
     },
     {
       "when": {
-        "facing": "west"
+        "facing": "west",
+		"open": "true"
       },
       "apply": [
         {
@@ -38,7 +41,8 @@
     },
     {
       "when": {
-        "facing": "north"
+        "facing": "north",
+		"open": "true"
       },
       "apply": [
         {
@@ -49,7 +53,8 @@
     },
     {
       "when": {
-        "facing": "up"
+        "facing": "up",
+		"open": "true"
       },
       "apply": [
         {
@@ -59,11 +64,86 @@
     },
     {
       "when": {
-        "facing": "down"
+        "facing": "down",
+		"open": "true"
       },
       "apply": [
         {
           "model": "tfc:block/plant/anemone_large_purple",
+          "x": 180
+        }
+      ]
+    },
+	{
+      "when": {
+        "facing": "east",
+		"open": "false"
+      },
+      "apply": [
+        {
+          "model": "tfc:block/plant/anemone_large_purple_closed",
+          "x": 90,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "when": {
+        "facing": "south",
+		"open": "false"
+      },
+      "apply": [
+        {
+          "model": "tfc:block/plant/anemone_large_purple_closed",
+          "x": 90,
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {
+        "facing": "west",
+		"open": "false"
+      },
+      "apply": [
+        {
+          "model": "tfc:block/plant/anemone_large_purple_closed",
+          "x": 90,
+          "y": 270
+        }
+      ]
+    },
+    {
+      "when": {
+        "facing": "north",
+		"open": "false"
+      },
+      "apply": [
+        {
+          "model": "tfc:block/plant/anemone_large_purple_closed",
+          "x": 90
+        }
+      ]
+    },
+    {
+      "when": {
+        "facing": "up",
+		"open": "false"
+      },
+      "apply": [
+        {
+          "model": "tfc:block/plant/anemone_large_purple_closed"
+        }
+      ]
+    },
+    {
+      "when": {
+        "facing": "down",
+		"open": "false"
+      },
+      "apply": [
+        {
+          "model": "tfc:block/plant/anemone_large_purple_closed",
           "x": 180
         }
       ]
