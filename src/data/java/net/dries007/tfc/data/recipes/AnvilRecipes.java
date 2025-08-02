@@ -33,7 +33,7 @@ public interface AnvilRecipes extends Recipes
             {
                 anvil(metal, ItemType.DOUBLE_INGOT, ItemType.SHEET, false, hitX3);
                 anvil(
-                    ingredientOf(metal, ItemType.DOUBLE_INGOT),
+                    ingredientOf(metal, ItemType.INGOT),
                     ItemStackProvider.of(TFCItems.METAL_ITEMS.get(metal).get(ItemType.ROD), 2), metal.tier(), false, hitX3);
             }
 

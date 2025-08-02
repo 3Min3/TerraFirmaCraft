@@ -1123,6 +1123,9 @@ public interface CraftingRecipes extends Recipes
         recipe("from_bundle")
             .input(TFCItems.STICK_BUNDLE)
             .shapeless(Items.STICK, 18);
+        recipe("from_twigs")
+            .input(TFCTags.Items.TWIGS)
+            .shapeless(Items.STICK, 1);
         recipe().to2x2(TFCItems.STRAW, TFCBlocks.THATCH, 1);
         recipe()
             .input(TFCBlocks.THATCH)

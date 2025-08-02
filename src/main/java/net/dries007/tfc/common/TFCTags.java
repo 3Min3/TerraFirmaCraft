@@ -411,6 +411,7 @@ public class TFCTags
         public static final TagKey<Item> LOOMS = tag("looms");
         /** Tag for only TFC barrels, unlike {@link Tags.Items#BARRELS} which includes vanilla type barrels */
         public static final TagKey<Item> BARRELS = tag("barrels");
+        public static final TagKey<Item> TWIGS = tag("twigs");
         public static final TagKey<Item> VESSELS = tag("vessels");
         public static final TagKey<Item> UNFIRED_VESSELS = tag("unfired_vessels");
         public static final TagKey<Item> FIRED_VESSELS = tag("fired_vessels");
