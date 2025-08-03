@@ -46,7 +46,7 @@ public class CraftingRecipesTest implements TestSetup
                 "tfc:crafting/add_small_bait"
             ),
             Arrays.stream(Wood.VALUES).map(wood -> "tfc:crafting/wood/sewing_table/" + wood.getSerializedName())
-        ).flatMap(s -> s).collect(Collectors.toSet());
+        ).flatMap(s -> s).collect(Collectors.toSet()); // Exclude recipes that consume the tool
 
         final RecipeManager manager = Helpers.getUnsafeRecipeManager();
 
