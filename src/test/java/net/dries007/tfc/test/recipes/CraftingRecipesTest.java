@@ -58,12 +58,12 @@ public class CraftingRecipesTest implements TestSetup
                 if (recipe instanceof AdvancedShapedRecipe || recipe instanceof AdvancedShapelessRecipe)
                 {
                     Class<?> recipeType = recipe instanceof AdvancedShapedRecipe ? AdvancedShapedRecipe.class : AdvancedShapelessRecipe.class;
-                    Field remainder = null;
+                    Field remainder;
                     try
                     {
                         remainder = recipeType.getDeclaredField("remainder");
                         remainder.setAccessible(true);
-                        Optional<ItemStackProvider> remainderProvider = null;
+                        Optional<ItemStackProvider> remainderProvider;
                         try {
                             remainderProvider = (Optional<ItemStackProvider>) remainder.get(recipe);
                             if (remainderProvider.isPresent() && remainderProvider.get().modifiers().stream().anyMatch(modifier ->  modifier instanceof DamageCraftingRemainderModifier))
