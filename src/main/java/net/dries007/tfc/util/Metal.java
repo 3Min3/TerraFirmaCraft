@@ -56,6 +56,7 @@ import net.dries007.tfc.common.blocks.WeatheringStairBlock;
 import net.dries007.tfc.common.blocks.devices.AnvilBlock;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
 import net.dries007.tfc.common.items.ChiselItem;
+import net.dries007.tfc.common.items.HammerItem;
 import net.dries007.tfc.common.items.JavelinItem;
 import net.dries007.tfc.common.items.LampBlockItem;
 import net.dries007.tfc.common.items.TFCMaceItem;
@@ -346,7 +347,7 @@ public enum Metal implements StringRepresentable, RegistryMetal
         HOE_HEAD(PartType.ALL, true),
         CHISEL(PartType.ALL, metal -> new ChiselItem(metal.toolTier(), tool(metal, -0.27f, 1.5f))),
         CHISEL_HEAD(PartType.ALL, true),
-        HAMMER(PartType.ALL, metal -> new ToolItem(metal.toolTier(), TFCTags.Blocks.MINEABLE_WITH_HAMMER, tool(metal, 1f, -3f))),
+        HAMMER(PartType.ALL, metal -> new HammerItem(metal.toolTier(), tool(metal, 1f, -3f))),
         HAMMER_HEAD(PartType.ALL, true),
         SAW(PartType.ALL, metal -> new AxeItem(metal.toolTier(), tool(metal, 0.5f, -3f))),
         SAW_BLADE(PartType.ALL, true),
