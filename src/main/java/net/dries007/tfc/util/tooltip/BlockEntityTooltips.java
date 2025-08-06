@@ -53,6 +53,7 @@ import net.dries007.tfc.common.blocks.BloomBlock;
 import net.dries007.tfc.common.blocks.FireboxBlock;
 import net.dries007.tfc.common.blocks.HotPouredGlassBlock;
 import net.dries007.tfc.common.blocks.ShelfBlock;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.TFCCandleBlock;
 import net.dries007.tfc.common.blocks.TFCCandleCakeBlock;
 import net.dries007.tfc.common.blocks.TFCTorchBlock;
@@ -511,7 +512,7 @@ public final class BlockEntityTooltips
             }
             else
             {
-                tooltip.accept(Component.translatable("tfc.jade.straws", kiln.getStraws().stream().filter(s1 -> !s1.isEmpty()).toList().size()));
+                tooltip.accept(Component.translatable("tfc.jade.straws", kiln.getStraws().stream().filter(s1 -> !s1.isEmpty()).mapToInt(s1 -> s1.getItem() == TFCBlocks.THATCH.asItem() ? 4 : 1).sum()));
                 tooltip.accept(Component.translatable("tfc.jade.logs", kiln.getLogs().stream().filter(s -> !s.isEmpty()).toList().size()));
             }
         }

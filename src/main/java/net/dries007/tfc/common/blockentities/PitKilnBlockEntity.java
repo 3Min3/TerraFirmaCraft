@@ -183,14 +183,14 @@ public class PitKilnBlockEntity extends PlacedItemBlockEntity
     {
         if (state.hasProperty(PitKilnBlock.STAGE) && state.getValue(PitKilnBlock.STAGE) > 0)
         {
-            for (ItemStack item : logItems)
+            for (ItemStack item : logItems.reversed())
             {
                 if (!item.isEmpty())
                 {
                     return item.copy();
                 }
             }
-            for (ItemStack item : strawItems)
+            for (ItemStack item : strawItems.reversed())
             {
                 if (!item.isEmpty())
                 {
