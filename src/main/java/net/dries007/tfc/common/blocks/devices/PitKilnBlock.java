@@ -35,7 +35,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
@@ -47,6 +46,7 @@ public class PitKilnBlock extends DeviceBlock
     public static final IntegerProperty STAGE = TFCBlockStateProperties.PIT_KILN_STAGE;
     public static final int STRAW_END = 7;
     public static final int LOG_START = 8;
+    public static final int LOG_END = 15;
     public static final int LIT = 16;
     public static final VoxelShape[] SHAPE_BY_LAYER = Util.make(new VoxelShape[17], shapes -> {
         for (int i = 0; i < 8; i++)
@@ -215,5 +215,12 @@ public class PitKilnBlock extends DeviceBlock
             return placedItem.getCloneItemStack(state, blockResult);
         }
         return ItemStack.EMPTY;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos)
+    {
+        return state.getValue(STAGE) == LIT ? 0F : super.getDestroyProgress(state, player, level, pos);
     }
 }

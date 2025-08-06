@@ -223,7 +223,7 @@ public class PitKilnBlockEntity extends PlacedItemBlockEntity
 
     public boolean hasFuel()
     {
-        return !(logItems.stream().anyMatch(ItemStack::isEmpty) || strawItems.stream().anyMatch(ItemStack::isEmpty));
+        return this.getBlockState().getValue(PitKilnBlock.STAGE) == PitKilnBlock.LOG_END;
     }
 
     public boolean tryLight()
