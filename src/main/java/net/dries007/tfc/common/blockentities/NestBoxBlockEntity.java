@@ -6,6 +6,10 @@
 
 package net.dries007.tfc.common.blockentities;
 
+import java.util.Optional;
+
+import net.dries007.tfc.util.events.AnimalProductEvent;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -17,6 +21,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.ItemStackHandler;
 
 import net.dries007.tfc.common.capabilities.PartialItemHandler;
@@ -28,6 +33,7 @@ import net.dries007.tfc.common.entities.livestock.OviparousAnimal;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
+
 import org.jetbrains.annotations.Nullable;
 
 import static net.dries007.tfc.TerraFirmaCraft.MOD_ID;
@@ -46,13 +52,25 @@ public class NestBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 {
                     if (bird.getRandom().nextInt(7) == 0)
                     {
-                        Helpers.playSound(level, pos, SoundEvents.CHICKEN_EGG);
-                        if (Helpers.insertOne(level, pos, TFCBlockEntities.NEST_BOX.get(), bird.makeEgg()))
+                        final AnimalProductEvent event = bird.makeEggEvent();
+
+                        if (!MinecraftForge.EVENT_BUS.post(event))
                         {
-                            bird.setFertilized(false);
-                            bird.setProductsCooldown();
-                            bird.stopRiding();
-                            nest.markForSync();
+                            if (Helpers.insertOne(Optional.of(nest), event.getProduct()))
+                            {
+                                Helpers.playSound(level, pos, SoundEvents.CHICKEN_EGG);
+
+                                bird.addUses(event.getUses());
+                                bird.setFertilized(false);
+                                bird.setProductsCooldown();
+                                bird.stopRiding();
+                                nest.markForSync();
+                            }
+                            else
+                            {
+                                // the nest box is full, leave it be
+                                bird.stopRiding();
+                            }
                         }
                     }
                 }
