@@ -116,9 +116,9 @@ public class PitKilnBlock extends DeviceBlock
         {
             if (level.getBlockEntity(pos) instanceof PitKilnBlockEntity kiln)
             {
-                ItemStack held = player.getItemInHand(hand);
-                Item item = held.getItem();
-                int stage = state.getValue(STAGE);
+                final ItemStack held = player.getItemInHand(hand);
+                final Item item = held.getItem();
+                final int stage = state.getValue(STAGE);
                 if (stage < STRAW_END && Helpers.isItem(item, TFCTags.Items.PIT_KILN_STRAW))
                 {
                     level.setBlock(pos, state.setValue(STAGE, stage + 1), 10);
@@ -141,9 +141,9 @@ public class PitKilnBlock extends DeviceBlock
                 {
                     if (stage != LIT)
                     {
-                        NonNullList<ItemStack> logItems = kiln.getLogs();
-                        NonNullList<ItemStack> strawItems = kiln.getStraws();
-                        ItemStack dropStack;
+                        final NonNullList<ItemStack> logItems = kiln.getLogs();
+                        final NonNullList<ItemStack> strawItems = kiln.getStraws();
+                        final ItemStack dropStack;
                         final int stagesToRemove;
                         if (stage >= LOG_START)
                         {
@@ -155,13 +155,13 @@ public class PitKilnBlock extends DeviceBlock
                         {
                             dropStack = strawItems.get(stage).copy();
                             kiln.deleteStraw(stage);
-                            stagesToRemove = item == TFCBlocks.THATCH.asItem() ? 4 : 1;
+                            stagesToRemove = dropStack.getItem() == TFCBlocks.THATCH.asItem() ? 4 : 1;
                         }
                         if (!dropStack.isEmpty())
                         {
                             ItemHandlerHelper.giveItemToPlayer(player, dropStack);
                         }
-                        if (stage == 0)
+                        if (stage == stagesToRemove - 1)
                         {
                             PitKilnBlockEntity.convertPitKilnToPlacedItem(level, pos);
                         }
