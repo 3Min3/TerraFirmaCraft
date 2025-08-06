@@ -1123,6 +1123,9 @@ public interface CraftingRecipes extends Recipes
         recipe("from_bundle")
             .input(TFCItems.STICK_BUNDLE)
             .shapeless(Items.STICK, 18);
+        recipe("from_twigs")
+            .input(TFCTags.Items.TWIGS)
+            .shapeless(Items.STICK, 1);
         recipe().to2x2(TFCItems.STRAW, TFCBlocks.THATCH, 1);
         recipe()
             .input(TFCBlocks.THATCH)
@@ -1237,6 +1240,7 @@ public interface CraftingRecipes extends Recipes
             .input('B', notRotten(bread))
             .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_SANDWICH)))
             .pattern("KB ", "SSS", " B ")
+            .damageInputs()
             .addOutputModifier(meal)
             .shaped(TFCItems.FOOD.get(sandwich), 2);
 
@@ -1251,6 +1255,7 @@ public interface CraftingRecipes extends Recipes
                     .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_JAM_SANDWICH)))
                     .input('J', notRotten(Ingredient.of(tag)))
                     .pattern("KB ", pattern, " B ")
+                    .damageInputs()
                     .addOutputModifier(meal)
                     .shaped(TFCItems.FOOD.get(jamSandwich), 2);
                 variant = "_jam";
@@ -1324,7 +1329,7 @@ public interface CraftingRecipes extends Recipes
 
         void useTool(TagKey<Item> tool, ItemLike input, ItemLike output)
         {
-            input(input).input(tool).damageInputs().shapeless(output);
+            input(input).inputIsPrimary(tool).damageInputs().shapeless(output);
         }
 
         void bricksWithMortar(ItemLike brick, ItemLike bricks, int count)

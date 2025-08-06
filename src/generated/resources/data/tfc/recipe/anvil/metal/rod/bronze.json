@@ -1,7 +1,7 @@
 {
   "type": "tfc:anvil",
   "ingredient": {
-    "tag": "c:double_ingots/bronze"
+    "tag": "c:ingots/bronze"
   },
   "result": {
     "count": 2,

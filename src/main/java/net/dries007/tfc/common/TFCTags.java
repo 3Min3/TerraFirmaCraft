@@ -413,6 +413,7 @@ public class TFCTags
         public static final TagKey<Item> LOOMS = tag("looms");
         /** Tag for only TFC barrels, unlike {@link Tags.Items#BARRELS} which includes vanilla type barrels */
         public static final TagKey<Item> BARRELS = tag("barrels");
+        public static final TagKey<Item> TWIGS = tag("twigs");
         public static final TagKey<Item> VESSELS = tag("vessels");
         public static final TagKey<Item> UNFIRED_VESSELS = tag("unfired_vessels");
         public static final TagKey<Item> FIRED_VESSELS = tag("fired_vessels");
@@ -460,6 +461,7 @@ public class TFCTags
         public static final TagKey<Item> TOOLS_BLOWPIPE = commonTag("tools/blowpipe");
         /** Used in loot tables to prevent dropping of certain items */
         public static final TagKey<Item> TOOLS_SHARP = tag("tools/sharp");
+        public static final TagKey<Item> TOOLS_LARGE = tag("tools/large");
 
         // Damage Types
         public static final TagKey<Item> DEALS_SLASHING_DAMAGE = tag("deals_slashing_damage");
