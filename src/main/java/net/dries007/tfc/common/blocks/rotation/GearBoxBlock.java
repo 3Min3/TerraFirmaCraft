@@ -8,6 +8,7 @@ package net.dries007.tfc.common.blocks.rotation;
 
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -56,7 +57,12 @@ public class GearBoxBlock extends DeviceBlock implements DirectionPropertyBlock,
     {
         if (Helpers.isItem(player.getItemInHand(hand), TFCTags.Items.TOOLS_HAMMER))
         {
-            final BooleanProperty property = DirectionPropertyBlock.getProperty(hitResult.getDirection());
+            Direction direction = hitResult.getDirection();
+            if (player.isShiftKeyDown())
+            {
+                direction = direction.getOpposite();
+            }
+            final BooleanProperty property = DirectionPropertyBlock.getProperty(direction);
             final boolean prev = state.getValue(property);
             if (prev || canEnable(state, property))
             {
