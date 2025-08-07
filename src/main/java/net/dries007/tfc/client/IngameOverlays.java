@@ -103,11 +103,7 @@ public enum IngameOverlays
     public static void checkGuiOverlays(RenderGuiLayerEvent.Pre event)
     {
         final ResourceLocation id = event.getName();
-        if (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP))
-        {
-            event.setCanceled(true);
-        }
-        else if (enableThisOrThat(id, TFCConfig.CLIENT.enableHungerBar.get(), FOOD.id, VANILLA_FOOD) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), HEALTH.id, VANILLA_HEALTH) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), MOUNT_HEALTH.id, VANILLA_MOUNT_HEALTH))
+        if (enableThisOrThat(id, TFCConfig.CLIENT.enableHungerBar.get(), FOOD.id, VANILLA_FOOD) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), HEALTH.id, VANILLA_HEALTH) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), MOUNT_HEALTH.id, VANILLA_MOUNT_HEALTH))
         {
             event.setCanceled(true);
         }
@@ -116,12 +112,6 @@ public enum IngameOverlays
             event.setCanceled(true);
         }
         if (!TFCConfig.CLIENT.enableExperienceBar.get() && id.equals(VANILLA_EXP))
-        {
-            event.setCanceled(true);
-        }
-        final boolean isShowingExperience = TFCConfig.CLIENT.enableExperienceBar.get();
-        final boolean isStyleLeftHotbar = (TFCConfig.CLIENT.disabledExperienceBarStyle.get() == DisabledExperienceBarStyle.LEFT_HOTBAR);
-        if (!(isShowingExperience || !isStyleLeftHotbar))
         {
             event.setCanceled(true);
         }
