@@ -1,78 +1,72 @@
 {
-  "type": "tfc:advanced_shapeless_crafting",
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
-    {
-      "type": "tfc:and",
-      "children": [
-        {
-          "item": "tfc:food/barley_flour"
-        },
-        {
-          "type": "tfc:not_rotten"
-        }
-      ]
-    },
-    {
-      "type": "tfc:and",
-      "children": [
-        {
-          "item": "tfc:food/barley_flour"
-        },
-        {
-          "type": "tfc:not_rotten"
-        }
-      ]
-    },
-    {
-      "type": "tfc:and",
-      "children": [
-        {
-          "item": "tfc:food/barley_flour"
-        },
-        {
-          "type": "tfc:not_rotten"
-        }
-      ]
-    },
-    {
-      "type": "tfc:and",
-      "children": [
-        {
-          "item": "tfc:food/barley_flour"
-        },
-        {
-          "type": "tfc:not_rotten"
-        }
-      ]
-    },
-    {
-      "type": "tfc:and",
-      "children": [
-        {
-          "item": "tfc:food/barley_flour"
-        },
-        {
-          "type": "tfc:not_rotten"
-        }
-      ]
-    },
     {
       "type": "tfc:fluid_content",
       "fluid": {
         "amount": 100,
         "fluid": "minecraft:water"
       }
+    },
+    {
+      "type": "tfc:and",
+      "children": [
+        {
+          "item": "tfc:food/barley_flour"
+        },
+        {
+          "type": "tfc:not_rotten"
+        }
+      ]
+    },
+    {
+      "type": "tfc:and",
+      "children": [
+        {
+          "item": "tfc:food/barley_flour"
+        },
+        {
+          "type": "tfc:not_rotten"
+        }
+      ]
+    },
+    {
+      "type": "tfc:and",
+      "children": [
+        {
+          "item": "tfc:food/barley_flour"
+        },
+        {
+          "type": "tfc:not_rotten"
+        }
+      ]
+    },
+    {
+      "type": "tfc:and",
+      "children": [
+        {
+          "item": "tfc:food/barley_flour"
+        },
+        {
+          "type": "tfc:not_rotten"
+        }
+      ]
+    },
+    {
+      "type": "tfc:and",
+      "children": [
+        {
+          "item": "tfc:food/barley_flour"
+        },
+        {
+          "type": "tfc:not_rotten"
+        }
+      ]
     }
   ],
   "result": {
-    "modifiers": [
-      {
-        "type": "tfc:copy_oldest_food"
-      }
-    ],
-    "stack": {
-      "count": 5,
-      "id": "tfc:food/barley_dough"
-    }
+    "count": 5,
+    "id": "tfc:food/barley_dough"
   }
 }

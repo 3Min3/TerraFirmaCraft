@@ -1,6 +1,14 @@
 {
-  "type": "tfc:advanced_shapeless_crafting",
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
+    {
+      "type": "tfc:fluid_content",
+      "fluid": {
+        "amount": 100,
+        "fluid": "minecraft:water"
+      }
+    },
     {
       "type": "tfc:and",
       "children": [
@@ -11,24 +19,10 @@
           "type": "tfc:not_rotten"
         }
       ]
-    },
-    {
-      "type": "tfc:fluid_content",
-      "fluid": {
-        "amount": 100,
-        "fluid": "minecraft:water"
-      }
     }
   ],
   "result": {
-    "modifiers": [
-      {
-        "type": "tfc:copy_oldest_food"
-      }
-    ],
-    "stack": {
-      "count": 1,
-      "id": "tfc:food/rye_dough"
-    }
+    "count": 1,
+    "id": "tfc:food/rye_dough"
   }
 }

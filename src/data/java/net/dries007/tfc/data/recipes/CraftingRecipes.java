@@ -926,7 +926,7 @@ public interface CraftingRecipes extends Recipes
             .shaped(TFCBlocks.FIRE_BRICK_SHELF, 4);
         recipe().useTool(TFCTags.Items.TOOLS_KNIFE, Items.BONE, TFCItems.BONE_NEEDLE);
         recipe().bricksWithMortar(Items.BRICK, Items.BRICKS, 4);
-        replace("cake")
+        recipe()
             .input('M', FluidContentIngredient.of(Fluids.WATER, 100))
             .input('S', TFCTags.Items.SWEETENERS)
             .input('E', notRotten(Ingredient.of(Items.EGG)))
@@ -1265,8 +1265,8 @@ public interface CraftingRecipes extends Recipes
 
         for (int n = 1; n <= 8; n++)
             recipe("" + n)
-                .input(notRotten(flour), n)
                 .input(FluidContentIngredient.of(Fluids.WATER, 100))
+                .input(notRotten(flour), n)
                 .copyOldestFood()
                 .shapeless(TFCItems.FOOD.get(dough), n);
     }
