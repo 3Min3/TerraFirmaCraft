@@ -111,7 +111,7 @@ public enum IngameOverlays
         {
             event.setCanceled(true);
         }
-        if (!TFCConfig.CLIENT.enableExperienceBar.get() && id.equals(VANILLA_EXP))
+        if (!TFCConfig.CLIENT.enableExperienceBar.get() && (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP)))
         {
             event.setCanceled(true);
         }
