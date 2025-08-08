@@ -1,9 +1,6 @@
 {
   "type": "tfc:advanced_shapeless_crafting",
   "ingredients": [
-    {
-      "tag": "c:tools/hammer"
-    },
     [
       {
         "item": "tfc:food/shellfish"
@@ -56,7 +53,10 @@
       {
         "item": "tfc:plant/barnacles"
       }
-    ]
+    ],
+    {
+      "tag": "c:tools/hammer"
+    }
   ],
   "primary_ingredient": {
     "tag": "c:tools/hammer"
