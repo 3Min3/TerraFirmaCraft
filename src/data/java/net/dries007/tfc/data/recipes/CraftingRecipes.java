@@ -1013,8 +1013,9 @@ public interface CraftingRecipes extends Recipes
             .pattern(" XX", " XX", "X  ")
             .shaped(Items.LEAD);
         recipe()
+            .inputIsPrimary(TFCTags.Items.TOOLS_KNIFE)
             .input(notRotten(Ingredient.of(TFCBlocks.MELON)))
-            .input(TFCTags.Items.TOOLS_KNIFE)
+            .damageInputs()
             .shapeless(TFCItems.FOOD.get(Food.MELON_SLICE), 4);
         recipe()
             .input('L', TFCTags.Items.LUMBER)
