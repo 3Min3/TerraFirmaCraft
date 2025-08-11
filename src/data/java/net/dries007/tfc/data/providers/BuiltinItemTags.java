@@ -308,6 +308,24 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCItems.MOLDS)
             .add(TFCItems.FIRE_INGOT_MOLD)
             .add(TFCItems.BELL_MOLD);
+        tag(FLUXSTONE)
+            .add(TFCItems.FOOD.get(Food.SHELLFISH))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MUSSEL))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.SEA_URCHIN))
+            .add(Items.TURTLE_SCUTE)
+            .add(Items.ARMADILLO_SCUTE)
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.DOLOMITE).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.DOLOMITE).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.PLANTS.get(Plant.MUSSELS).get())
+            .add(TFCBlocks.PLANTS.get(Plant.BARNACLES).get());
 
         // Vanilla Tool Tags
         tag(ItemTags.SWORDS).add(TFCItems.METAL_ITEMS, Metal.ItemType.SWORD);
