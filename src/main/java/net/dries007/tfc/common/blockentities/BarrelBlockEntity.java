@@ -515,8 +515,9 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     public Component getRecipeTooltip()
     {
         getRecipe(); // Load recipe if present
+        ResourceLocation id = recipe.value().id();
         return recipe.value() != null
-            ? Component.translatable("tfc.recipe.barrel." + recipe.value().id())
+            ? Component.translatable("tfc.recipe.barrel." + id.getNamespace() + "." + id.getPath().replace('/', '.'))
             : null;
     }
 
