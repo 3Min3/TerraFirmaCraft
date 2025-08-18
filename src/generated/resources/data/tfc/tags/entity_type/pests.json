@@ -1,8 +1,8 @@
 {
   "values": [
-    "tfc:rat",
-    "tfc:jerboa",
-    "tfc:lemming",
-    "tfc:mongoose"
+    "#tfc:universal_pests",
+    "#tfc:cold_pests",
+    "#tfc:desert_pests",
+    "#tfc:tropical_pests"
   ]
 }

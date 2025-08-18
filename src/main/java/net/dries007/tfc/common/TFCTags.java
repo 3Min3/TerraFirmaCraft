@@ -634,7 +634,11 @@ public class TFCTags
         public static final TagKey<EntityType<?>> HORSES = tag("horses");
         public static final TagKey<EntityType<?>> DESTROYED_BY_LEAVES = tag("destroyed_by_leaves");
         public static final TagKey<EntityType<?>> LEASHABLE_WILD_ANIMALS = tag("leashable_wild_animals"); // entities that can be leashed that aren't normally leashable. default empty
-        public static final TagKey<EntityType<?>> PESTS = tag("pests"); // spawned during infestations
+        public static final TagKey<EntityType<?>> PESTS = tag("pests");
+        public static final TagKey<EntityType<?>> UNIVERSAL_PESTS = tag("universal_pests"); // spawned during infestations everywhere but the coldest biomes
+        public static final TagKey<EntityType<?>> COLD_PESTS = tag("cold_pests"); // spawned during infestations in boreal climates
+        public static final TagKey<EntityType<?>> DESERT_PESTS = tag("desert_pests"); // spawned during infestations in dry climates
+        public static final TagKey<EntityType<?>> TROPICAL_PESTS = tag("tropical_pests"); // spawned during infestations in tropical climates
         public static final TagKey<EntityType<?>> HUNTED_BY_CATS = tag("hunted_by_cats");
         public static final TagKey<EntityType<?>> HUNTED_BY_DOGS = tag("hunted_by_dogs");
         public static final TagKey<EntityType<?>> SMALL_FISH = tag("small_fish");

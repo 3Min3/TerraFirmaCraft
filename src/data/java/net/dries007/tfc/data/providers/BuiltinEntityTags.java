@@ -97,12 +97,15 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
             );
 
         tag(PESTS)
-            .add(
-                TFCEntities.RAT.get(),
-                TFCEntities.JERBOA.get(),
-                TFCEntities.LEMMING.get(),
-                TFCEntities.MONGOOSE.get()
-            );
+            .addTag(UNIVERSAL_PESTS)
+            .addTag(COLD_PESTS)
+            .addTag(DESERT_PESTS)
+            .addTag(TROPICAL_PESTS);
+
+        tag(COLD_PESTS).add(TFCEntities.LEMMING.get());
+        tag(UNIVERSAL_PESTS).add(TFCEntities.RAT.get());
+        tag(DESERT_PESTS).add(TFCEntities.JERBOA.get());
+        tag(TROPICAL_PESTS).add(TFCEntities.MONGOOSE.get());
 
         tag(BIRD_PREY)
             .add(
