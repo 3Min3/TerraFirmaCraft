@@ -72,7 +72,7 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("vessels", TFCTags.Items.VESSELS, Size.NORMAL, Weight.HEAVY);
         add("large_vessels", TFCTags.Items.LARGE_VESSELS, Size.HUGE, Weight.HEAVY);
         add("unfired_molds", TFCTags.Items.UNFIRED_MOLDS, Size.NORMAL, Weight.MEDIUM);
-        add("fired_molds", TFCTags.Items.FIRED_MOLDS, Size.NORMAL, Weight.VERY_HEAVY);
+        add("fired_molds", TFCTags.Items.FIRED_MOLDS, Size.NORMAL, Weight.MEDIUM);
         add("powders", TFCTags.Items.BOWL_POWDERS, Size.TINY, Weight.VERY_LIGHT);
         add("stick_bunch", TFCItems.STICK_BUNCH, Size.NORMAL, Weight.LIGHT);
         add("stick_bundle", TFCItems.STICK_BUNDLE, Size.VERY_LARGE, Weight.MEDIUM);

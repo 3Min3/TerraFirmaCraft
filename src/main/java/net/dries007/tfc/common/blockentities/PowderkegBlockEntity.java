@@ -11,6 +11,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundExplodePacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -76,9 +78,38 @@ public class PowderkegBlockEntity extends TickableInventoryBlockEntity<Powderkeg
     private static void explode(PowderkegBlockEntity powderkeg)
     {
         assert powderkeg.level != null;
-        PowderKegExplosion explosion = new PowderKegExplosion(powderkeg.level, powderkeg.igniter, powderkeg.worldPosition.getX(), powderkeg.worldPosition.getY(), powderkeg.worldPosition.getZ(), getStrength(powderkeg));
+        final int x = powderkeg.worldPosition.getX();
+        final int y = powderkeg.worldPosition.getY();
+        final int z = powderkeg.worldPosition.getZ();
+        final int strength = getStrength(powderkeg);
+        PowderKegExplosion explosion = new PowderKegExplosion(powderkeg.level, powderkeg.igniter, x, y, z, strength);
         explosion.explode();
         explosion.finalizeExplosion(true);
+
+        // Since we don't use the vanilla explosion logic in ServerLevel#explode,
+        // we must send explosion packets to clients ourselves
+        if (powderkeg.level instanceof ServerLevel serverLevel)
+        {
+            for (ServerPlayer serverplayer : serverLevel.players()) {
+                if (serverplayer.distanceToSqr(x, y, z) < 4096.0) {
+                    serverplayer.connection
+                        .send(
+                            new ClientboundExplodePacket(
+                                x,
+                                y,
+                                z,
+                                strength,
+                                explosion.getToBlow(),
+                                explosion.getHitPlayers().get(serverplayer),
+                                explosion.getBlockInteraction(),
+                                explosion.getSmallExplosionParticles(),
+                                explosion.getLargeExplosionParticles(),
+                                explosion.getExplosionSound()
+                            )
+                        );
+                }
+            }
+        }
     }
 
     private int fuse = -1;
@@ -178,25 +209,23 @@ public class PowderkegBlockEntity extends TickableInventoryBlockEntity<Powderkeg
     public static class PowderkegInventory extends InventoryItemHandler
     {
         private final PowderkegBlockEntity powderkeg;
-        private final InventoryItemHandler inventory;
 
         PowderkegInventory(InventoryBlockEntity<?> entity)
         {
             super(entity, SLOTS);
             powderkeg = (PowderkegBlockEntity) entity;
-            inventory = new InventoryItemHandler(entity, SLOTS);
         }
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
         {
-            return canModify() ? inventory.insertItem(slot, stack, simulate) : stack;
+            return canModify() ? super.insertItem(slot, stack, simulate) : stack;
         }
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate)
         {
-            return canModify() ? inventory.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
+            return canModify() ? super.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
         }
 
         private boolean canModify()
