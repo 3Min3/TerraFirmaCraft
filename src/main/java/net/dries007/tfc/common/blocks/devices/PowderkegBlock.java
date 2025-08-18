@@ -60,8 +60,8 @@ public class PowderkegBlock extends SealableDeviceBlock
             }
             else
             {
-                powderkeg.onSeal();
                 level.neighborChanged(pos, TFCBlocks.POWDERKEG.get(), pos); // Update the powderkeg so it checks if it should light
+                powderkeg.onSeal();
             }
         });
     }
@@ -149,7 +149,6 @@ public class PowderkegBlock extends SealableDeviceBlock
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
     {
-        System.out.println(Boolean.toString(state.getValue(SEALED)));
         if (level.hasNeighborSignal(pos) && !state.getValue(LIT) && state.getValue(SEALED))
         {
             level.getBlockEntity(pos, TFCBlockEntities.POWDERKEG.get()).ifPresent(keg -> keg.setLit(true, null));
