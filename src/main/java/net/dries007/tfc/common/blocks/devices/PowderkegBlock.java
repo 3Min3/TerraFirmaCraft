@@ -35,6 +35,7 @@ import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.TooltipBlock;
 import net.dries007.tfc.common.component.TFCComponents;
 import net.dries007.tfc.common.component.item.ItemListComponent;
@@ -55,10 +56,16 @@ public class PowderkegBlock extends SealableDeviceBlock
             level.setBlockAndUpdate(pos, state.setValue(SEALED, !previousSealed));
             if (previousSealed)
             {
+                if (state.getValue(LIT))
+                {
+                    powderkeg.setLit(false, null);
+                    Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
+                }
                 powderkeg.onUnseal();
             }
             else
             {
+                level.neighborChanged(pos, TFCBlocks.POWDERKEG.get(), pos); // Update the powderkeg so it checks if it should light
                 powderkeg.onSeal();
             }
         });
@@ -93,8 +100,8 @@ public class PowderkegBlock extends SealableDeviceBlock
             else if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer)
             {
                 serverPlayer.openMenu(powderkeg, powderkeg.getBlockPos());
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }

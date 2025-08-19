@@ -56,25 +56,15 @@ public class PowderKegExplosion extends Explosion
 
     /**
      * Does the second part of the explosion (sound, particles, drop spawn)
+     * This will only be called on the logical server, the particles and sounds are
+     * handled by the vanilla explosion code
      *
      * (Forgive the Mojang copypasta)
      */
     @Override
     public void finalizeExplosion(boolean spawnParticles)
     {
-        if (this.level.isClientSide)
-        {
-            this.level.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
-        }
-
-        if (size >= 2.0F)
-        {
-            this.level.addParticle(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 1.0d, 0.d, 0.0d);
-        }
-        else
-        {
-            this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-        }
+        assert !level.isClientSide;
 
         final List<BlockPos> affectedBlockPositions = this.getToBlow();
         final ObjectArrayList<Pair<ItemStack, BlockPos>> allDrops = new ObjectArrayList<>();
