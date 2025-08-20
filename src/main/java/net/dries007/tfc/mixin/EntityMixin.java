@@ -28,8 +28,6 @@ public abstract class EntityMixin
 {
     @Shadow public abstract FluidType getEyeInFluidType();
 
-    @Shadow public abstract double getFluidTypeHeight(FluidType type);
-
     @Inject(method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z", at = @At("RETURN"), cancellable = true)
     private void fixUpdateFluidPushingToTreatWaterLikeFluidsAsWater(TagKey<Fluid> fluidTag, double motionScale, CallbackInfoReturnable<Boolean> cir)
     {
