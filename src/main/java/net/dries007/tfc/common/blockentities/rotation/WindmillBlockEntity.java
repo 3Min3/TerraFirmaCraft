@@ -135,7 +135,7 @@ public class WindmillBlockEntity extends TickableInventoryBlockEntity<ItemStackH
                 count++;
             }
         }
-        if (count == 0) 
+        if (count == 0)
         {
             final AxleBlock axle = ((WindmillBlock) getBlockState().getBlock()).getAxle();
             BlockState axleState = axle.defaultBlockState().setValue(AxleBlock.AXIS, getBlockState().getValue(WindmillBlock.AXIS));
