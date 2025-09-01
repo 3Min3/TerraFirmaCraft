@@ -279,6 +279,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCBlocks.SMALL_ORES);
         tag(ItemTags.TRIM_MATERIALS)
             .add(TFCItems.GEMS)
+            .add(TFCItems.METAL_ITEMS.get(Metal.SILVER).get(Metal.ItemType.INGOT))
             .add(TFCItems.METAL_ITEMS.get(Metal.STERLING_SILVER).get(Metal.ItemType.INGOT))
             .add(TFCItems.METAL_ITEMS.get(Metal.GOLD).get(Metal.ItemType.INGOT))
             .add(TFCItems.METAL_ITEMS.get(Metal.ROSE_GOLD).get(Metal.ItemType.INGOT))
