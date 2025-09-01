@@ -1073,7 +1073,7 @@ def generate(rm: ResourceManager):
     configured_patch_feature(rm, 'sticks_shore', patch_config('tfc:groundcover/stick[fluid=empty]', 1, 15, 18, True), decorate_chance(2), decorate_square(), decorate_climate(-50, 50, 50, 500), extra_singular_decorators=[decorate_intertidal(1, 10)])
     configured_patch_feature(rm, 'seaweed', patch_config('tfc:groundcover/seaweed[fluid=empty]', 1, 15, 8, True), decorate_chance(5), decorate_square(), decorate_climate(-20, 50, 150, 500))
     configured_patch_feature(rm, 'tideline_seaweed', patch_config('tfc:groundcover/seaweed[fluid=empty]', 1, 15, 5, True), decorate_count(2), decorate_square(), decorate_climate(-20, 50, 150, 500), extra_singular_decorators=[decorate_intertidal(1, 1)])
-    configured_patch_feature(rm, 'guano', patch_config('tfc:groundcover/guano[fluid=empty]', 1, 10, 10), decorate_chance(15), decorate_square(), decorate_climate(-30, 10, 100, 500), decorate_on_top_of('tfc:creeping_stone_plantable_on'), extra_singular_decorators=[decorate_intertidal(0, 512)])
+    configured_patch_feature(rm, 'guano', patch_config('tfc:groundcover/guano[fluid=empty]', 1, 6, 25), decorate_chance(4), decorate_square(), decorate_climate(-30, 10, 100, 500), extra_singular_decorators=[decorate_intertidal(2, 32), decorate_on_top_of('tfc:creeping_stone_plantable_on')])
 
     # Forest Only
     configured_patch_feature(rm, 'sticks_forest', patch_config('tfc:groundcover/stick[fluid=empty]', 1, 15, 20), decorate_chance(3), decorate_square(), decorate_climate(-20, 50, 70, 500, True), biome_check=False)
@@ -1091,7 +1091,6 @@ def generate(rm: ResourceManager):
 
     # Underground decoration
     configured_placed_feature(rm, 'underground_loose_rocks', 'tfc:loose_rock', decorate_carving_mask(), decorate_chance(0.05), decorate_count(25), decorate_range(-32, 59), decorate_scanner('down', 12), decorate_random_offset(0, 1))
-    configured_patch_feature(rm, 'underground_guano', patch_config('tfc:groundcover/guano[fluid=empty]', 5, 5, 60), decorate_chance(40), decorate_count(25), decorate_range(-32, 32), decorate_scanner('down', 12), decorate_random_offset(0, 1), extra_singular_decorators=[decorate_underground()])
     rm.configured_feature('geode', 'tfc:geode', {'outer': 'tfc:rock/hardened/basalt', 'middle': 'tfc:rock/hardened/quartzite', 'inner': [
         {'data': 'tfc:ore/amethyst/quartzite', 'weight': 1}, {'data': 'tfc:rock/hardened/quartzite', 'weight': 5}
     ]})
