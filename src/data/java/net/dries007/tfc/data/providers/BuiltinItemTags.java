@@ -272,8 +272,8 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             TFCItems.RED_STEEL_BUCKET,
             TFCItems.BLUE_STEEL_BUCKET);
         tag(MINECARTS)
-            .add(TFCItems.CHEST_MINECARTS)
-            .add(Items.MINECART);
+            .add(Items.MINECART)
+            .add(TFCItems.CHEST_MINECARTS);
         tag(ORE_PIECES)
             .add(TFCItems.ORES)
             .addAll(TFCItems.GRADED_ORES);

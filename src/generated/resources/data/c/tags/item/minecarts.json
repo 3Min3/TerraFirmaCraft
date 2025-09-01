@@ -1,5 +1,6 @@
 {
   "values": [
+    "minecraft:minecart",
     "tfc:wood/chest_minecart/acacia",
     "tfc:wood/chest_minecart/ash",
     "tfc:wood/chest_minecart/aspen",
@@ -19,7 +20,6 @@
     "tfc:wood/chest_minecart/spruce",
     "tfc:wood/chest_minecart/sycamore",
     "tfc:wood/chest_minecart/white_cedar",
-    "tfc:wood/chest_minecart/willow",
-    "minecraft:minecart"
+    "tfc:wood/chest_minecart/willow"
   ]
 }
