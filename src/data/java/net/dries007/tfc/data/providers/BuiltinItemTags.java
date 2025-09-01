@@ -277,6 +277,12 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .addAll(TFCItems.GRADED_ORES);
         tag(SMALL_ORE_PIECES)
             .add(TFCBlocks.SMALL_ORES);
+        tag(ItemTags.TRIM_MATERIALS)
+            .add(TFCItems.GEMS)
+            .add(TFCItems.METAL_ITEMS.get(Metal.STERLING_SILVER).get(Metal.ItemType.INGOT))
+            .add(TFCItems.METAL_ITEMS.get(Metal.GOLD).get(Metal.ItemType.INGOT))
+            .add(TFCItems.METAL_ITEMS.get(Metal.ROSE_GOLD).get(Metal.ItemType.INGOT))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH).get(Metal.ItemType.INGOT));
         tag(WATER_WHEELS).add(TFCBlocks.WOODS, Wood.BlockType.WATER_WHEEL);
         tag(WINDMILL_BLADES)
             .addTag(COLORED_WINDMILL_BLADES)
