@@ -13,6 +13,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -214,12 +216,18 @@ public class TFCFallingBlockEntity extends FallingBlockEntity
                             else
                             {
                                 // Second check: try and place the block one block above from it's current position
-                                // This is to handle blocks such as soul sand or mud, which it will attempt to fall into (because it has a < a block collision shape), but then needs to pretend to place above the block (since they support falling blocks).
+                                // This is to handle blocks such as soul sand or mud, which it will attempt to fall into (because its collision shape is less than a block), but then needs to pretend to place above the block (since they support falling blocks).
                                 // Note that the second time we do this, we have to use bedrock as the toughness check - because we only want to place if we can't fall, and can't fall includes checks against toughness - not just against sturdy ground.
                                 final BlockPos posAbove = posAt.above();
                                 final BlockState hitAboveBlockState = level().getBlockState(posAbove);
                                 if (canPlaceAt(hitAboveBlockState, posAbove, fallingBlockState, Blocks.BEDROCK.defaultBlockState()))
                                 {
+                                    placeAsBlockOrDropAsItem(hitAboveBlockState, posAbove, fallingBlockState);
+                                }
+                                else if (canFallThrough(this.level(), posAbove, Direction.DOWN, Blocks.BEDROCK.defaultBlockState()))
+                                {
+                                    // Otherwise, try to destroy the above block on landing
+                                    level().destroyBlock(posAbove, true);
                                     placeAsBlockOrDropAsItem(hitAboveBlockState, posAbove, fallingBlockState);
                                 }
                                 else
@@ -244,7 +252,7 @@ public class TFCFallingBlockEntity extends FallingBlockEntity
     private boolean canPlaceAt(BlockState hitBlockState, BlockPos posAt, BlockState fallingBlockState, BlockState toughnessBlockState)
     {
         final BlockPos below = posAt.below();
-        return canFallThrough(this.level(), posAt, Direction.DOWN, toughnessBlockState)
+        return hitBlockState.canBeReplaced(new DirectionalPlaceContext(this.level(), posAt, Direction.DOWN, ItemStack.EMPTY, Direction.UP))
             && fallingBlockState.canSurvive(this.level(), posAt)
             && !canFallThrough(this.level(), below, Direction.DOWN, toughnessBlockState);
     }
