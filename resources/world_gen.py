@@ -184,19 +184,43 @@ def generate(rm: ResourceManager):
 
     # Carvers
     rm.configured_carver('cave', 'tfc:cave', {
-        'probability': 0.3,
+        'probability': 0.05,
         'y': height_provider(-56, 126),
         'yScale': uniform_float(0.1, 0.9),
         'lava_level': utils.vertical_anchor(8, 'above_bottom'),
         'aquifers_enabled': True,
-        'horizontal_radius_multiplier': uniform_float(0.7, 1.4),
-        'vertical_radius_multiplier': uniform_float(0.8, 1.3),
-        'floor_level': uniform_float(-1, -0.4),
+        'horizontal_radius_multiplier': uniform_float(1, 2.5),
+        'vertical_radius_multiplier': uniform_float(1, 2.5),
+        'floor_level': uniform_float(-1, 0.3),
         'replaceable': '#minecraft:overworld_carver_replaceables',
     })
 
+    rm.configured_carver('deep_caves', 'tfc:cave', {
+        'probability': 0.2,
+        'y': height_provider(-56, 48),
+        'yScale': uniform_float(0.1, 0.9),
+        'lava_level': utils.vertical_anchor(8, 'above_bottom'),
+        'aquifers_enabled': True,
+        'horizontal_radius_multiplier': uniform_float(1.3, 2.5),
+        'vertical_radius_multiplier': uniform_float(1.3, 2.5),
+        'floor_level': uniform_float(-1, 0.3),
+        'replaceable': '#minecraft:overworld_carver_replaceables',
+    })
+
+    rm.configured_carver('karst_caves', 'tfc:cave', {
+        'probability': 0.07,
+        'y': height_provider(-20, 70),
+        'yScale': uniform_float(0.1, 0.9),
+        'lava_level': utils.vertical_anchor(8, 'above_bottom'),
+        'aquifers_enabled': True,
+        'horizontal_radius_multiplier': uniform_float(1, 3.1),
+        'vertical_radius_multiplier': uniform_float(1, 3.1),
+        'floor_level': uniform_float(-1, 0.2),
+        'replaceable': '#tfc:extra_cave_carver_replaceable',
+    })
+
     rm.configured_carver('canyon', 'tfc:canyon', {
-        'probability': 0.03,
+        'probability': 0.01,
         'y': height_provider(10, 67),
         'yScale': 3,
         'lava_level': utils.vertical_anchor(8, 'above_bottom'),

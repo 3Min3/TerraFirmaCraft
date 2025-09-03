@@ -1,6 +1,7 @@
 {
   "values": [
-    "#tfc:hunted_by_land_predators",
+    "#tfc:bird_prey",
+    "#tfc:large_prey",
     "tfc:rat",
     "tfc:jerboa",
     "tfc:lemming",
