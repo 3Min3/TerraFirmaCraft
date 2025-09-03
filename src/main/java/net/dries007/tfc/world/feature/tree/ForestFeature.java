@@ -333,7 +333,10 @@ public class ForestFeature extends Feature<ForestConfig>
         mutablePos.move(random.nextInt(4) - 2, 0, random.nextInt(4) - 2);
         mutablePos.setY(level.getHeight(Heightmap.Types.OCEAN_FLOOR, mutablePos.getX(), mutablePos.getZ()));
 
-        entry.soilDiscFeature().get().value().place(level, generator, random, mutablePos);
+        if (entry.soilDiscFeature().isPresent())
+        {
+            entry.soilDiscFeature().get().value().place(level, generator, random, mutablePos);
+        }
     }
 
     @Nullable
