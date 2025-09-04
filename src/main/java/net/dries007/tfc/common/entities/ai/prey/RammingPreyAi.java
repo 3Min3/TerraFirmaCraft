@@ -23,10 +23,12 @@ import net.minecraft.world.entity.schedule.Activity;
 import com.mojang.datafixers.util.Pair;
 
 import net.dries007.tfc.client.TFCSounds;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.predator.PredatorAi;
 import net.dries007.tfc.common.entities.prey.RammingPrey;
+import net.dries007.tfc.util.Helpers;
 
 public class RammingPreyAi
 {
@@ -39,12 +41,12 @@ public class RammingPreyAi
     private static final UniformInt TIME_BETWEEN_RAMS_FEMALE = UniformInt.of(1000, 1600);
     protected static final TargetingConditions RAM_TARGET_CONDITIONS = TargetingConditions.forCombat().selector((target) ->
     {
-        return (target.level().getWorldBorder().isWithinBounds(target.getBoundingBox()) && !(target instanceof RammingPrey));
+        return (target.level().getWorldBorder().isWithinBounds(target.getBoundingBox()) && !(target instanceof RammingPrey) && !Helpers.isEntity(target, TFCTags.Entities.NOT_RAMMED_BY_RAMMERS));
     });
     protected static final TargetingConditions RAM_TARGET_CONDITIONS_ADULT_MALE = TargetingConditions.forCombat().selector((target) ->
     {
         return (target.level().getWorldBorder().isWithinBounds(target.getBoundingBox())
-            && !(target instanceof RammingPrey && (!((RammingPrey) target).isMale() || target.isBaby() || (target.getHealth() / target.getMaxHealth() < 0.7)))
+            && !(target instanceof RammingPrey && !Helpers.isEntity(target, TFCTags.Entities.NOT_RAMMED_BY_RAMMERS) && (!((RammingPrey) target).isMale() || target.isBaby() || (target.getHealth() / target.getMaxHealth() < 0.7)))
         );
     });
 
