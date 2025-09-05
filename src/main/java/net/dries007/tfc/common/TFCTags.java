@@ -663,6 +663,7 @@ public class TFCTags
         public static final TagKey<EntityType<?>> RAMMING_ANIMALS = tag("ramming_animals");
         public static final TagKey<EntityType<?>> BIRD_PREY = tag("bird_prey");
         public static final TagKey<EntityType<?>> LARGE_PREY = tag("large_prey");
+        public static final TagKey<EntityType<?>> NOT_RAMMED_BY_RAMMERS = tag("not_rammed_by_rammers");
 
         // ===== Data Generated ====== //
 
