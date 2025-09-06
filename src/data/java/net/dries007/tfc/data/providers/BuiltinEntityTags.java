@@ -158,15 +158,16 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
             );
 
         tag(HUNTED_BY_DOGS)
-            // todo
-//            .addTags(
-//                HUNTED_BY_LAND_PREDATORS
-//            )
             .add(
                 TFCEntities.RAT.get(),
                 TFCEntities.JERBOA.get(),
                 TFCEntities.LEMMING.get(),
                 TFCEntities.MONGOOSE.get()
             );
+
+        tag(NOT_RAMMED_BY_RAMMERS)
+            .addTags(BUBBLE_COLUMN_IMMUNE, PESTS, BIRD_PREY)
+            .add(TFCEntities.FROG.get());
+
     }
 }
