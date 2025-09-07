@@ -225,7 +225,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(LARGE_FISHING_BAIT)
             .add(Food.COD, Food.SALMON, Food.TROPICAL_FISH, Food.BLUEGILL);
         tag(HOLDS_SMALL_FISHING_BAIT)
-            .addTag(HOLDS_SMALL_FISHING_BAIT).add(
+            .addTag(HOLDS_LARGE_FISHING_BAIT).add(
             TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.FISHING_ROD),
             TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.FISHING_ROD),
             TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.FISHING_ROD),
