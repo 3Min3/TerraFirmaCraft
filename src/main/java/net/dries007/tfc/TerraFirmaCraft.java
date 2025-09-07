@@ -205,10 +205,10 @@ public final class TerraFirmaCraft
         InteractionManager.registerDefaultInteractions();
         ServerCalendar.overrideDoDaylightCycleCallback();
         ChiselMode.setupOrdering();
-        TFCFluids.setupFluidInteractions();
 
         event.enqueueWork(() -> {
             DispenserBehaviors.registerDispenserBehaviors();
+            TFCFluids.registerFluidInteractions();
             IBellowsConsumer.registerDefaultOffsets();
             Wood.registerBlockSetTypes();
             TFCBrain.initializeScheduleContents();

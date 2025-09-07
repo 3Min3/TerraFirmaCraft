@@ -153,7 +153,7 @@ public final class TFCFluids
         return RegistrationHelpers.registerFluid(FLUID_TYPES, FLUIDS, name, name, flowingName, builder, () -> new FluidType(typeProperties), sourceFactory, flowingFactory);
     }
 
-    public static void setupFluidInteractions()
+    public static void registerFluidInteractions()
     {
         // Fluid interactions of TFC water types still produce vanilla cobblestone and stone,
         // they will be replaced as the interaction happens in ForgeEventHandler#onFluidPlaceBlock
