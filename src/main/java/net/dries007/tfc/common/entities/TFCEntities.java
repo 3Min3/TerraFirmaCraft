@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.GlowSquid;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Dolphin;
@@ -251,13 +252,13 @@ public class TFCEntities
         event.put(DIREWOLF.get(), Predator.createAttributes().build());
         event.put(SQUID.get(), Squid.createAttributes().build());
         event.put(OCTOPOTEUTHIS.get(), GlowSquid.createAttributes().build());
-        event.put(PIG.get(), Pig.createAttributes().build());
-        event.put(COW.get(), Cow.createAttributes().build());
-        event.put(GOAT.get(), Pig.createAttributes().build());
-        event.put(YAK.get(), Cow.createAttributes().build());
-        event.put(ALPACA.get(), Cow.createAttributes().build());
-        event.put(SHEEP.get(), Cow.createAttributes().build());
-        event.put(MUSK_OX.get(), Cow.createAttributes().build());
+        event.put(PIG.get(), Pig.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
+        event.put(COW.get(), Cow.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
+        event.put(GOAT.get(), Pig.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
+        event.put(YAK.get(), Cow.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
+        event.put(ALPACA.get(), Cow.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
+        event.put(SHEEP.get(), Cow.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
+        event.put(MUSK_OX.get(), Cow.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
         event.put(CHICKEN.get(), OviparousAnimal.createAttributes().build());
         event.put(DUCK.get(), OviparousAnimal.createAttributes().build());
         event.put(QUAIL.get(), OviparousAnimal.createAttributes().build());
@@ -284,7 +285,7 @@ public class TFCEntities
         event.put(HORSE.get(), AbstractHorse.createBaseHorseAttributes().build());
         event.put(CAT.get(), TFCCat.createAttributes().build());
         event.put(DOG.get(), Dog.createAttributes().build());
-        event.put(PANDA.get(), TFCPanda.createAttributes().build());
+        event.put(PANDA.get(), TFCPanda.createAttributes().add(Attributes.STEP_HEIGHT, 1.0F).build());
         event.put(OCELOT.get(), TFCOcelot.createAttributes().build());
     }
 
