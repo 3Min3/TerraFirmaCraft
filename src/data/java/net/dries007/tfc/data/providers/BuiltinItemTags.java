@@ -224,13 +224,13 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(Food.SHELLFISH);
         tag(LARGE_FISHING_BAIT)
             .add(Food.COD, Food.SALMON, Food.TROPICAL_FISH, Food.BLUEGILL);
-        tag(HOLDS_SMALL_FISHING_BAIT).add(
+        tag(HOLDS_SMALL_FISHING_BAIT)
+            .addTag(HOLDS_SMALL_FISHING_BAIT).add(
             TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.FISHING_ROD),
             TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.FISHING_ROD),
             TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.FISHING_ROD),
             TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.FISHING_ROD));
         tag(HOLDS_LARGE_FISHING_BAIT)
-            .addTag(HOLDS_SMALL_FISHING_BAIT)
             .add(
                 TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.FISHING_ROD),
                 TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.FISHING_ROD),
@@ -357,6 +357,8 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.MOSSY_LOOSE))
             .add(TFCBlocks.PLANTS.get(Plant.MUSSELS).get())
             .add(TFCBlocks.PLANTS.get(Plant.BARNACLES).get());
+        tag(METAL_PLATED_BLOCKS)
+            .addAll(TFCBlocks.METALS);
 
         // Vanilla Armor Tags
         tag(ItemTags.HEAD_ARMOR).add(TFCItems.METAL_ITEMS, Metal.ItemType.HELMET);
@@ -411,6 +413,8 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             TOOLS_KNIFE,
             TOOLS_SCYTHE,
             TOOLS_SAW);
+        tag(SCRAPED_HIDES)
+            .add(TFCItems.HIDES.get(HideItemType.SCRAPED));
         tag(TOOLS_STONE)
             .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.HAMMER)
             .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.AXE)
@@ -435,6 +439,155 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.KNIFE))
             .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.SCYTHE))
             .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_BRONZE)
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BRONZE).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_BISMUTH_BRONZE)
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BISMUTH_BRONZE).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_BLACK_BRONZE)
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_WROUGHT_IRON)
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_STEEL)
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.STEEL).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_BLACK_STEEL)
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLACK_STEEL).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_RED_STEEL)
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.RED_STEEL).get(Metal.ItemType.SHEARS));
+        tag(TOOLS_BLUE_STEEL)
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.BLUE_STEEL).get(Metal.ItemType.SHEARS));
+
+        tag(METAL_ORES)
+            .addAll(TFCItems.GRADED_ORES);
+
+        tag(MUD_BRICK_ITEMS)
+            .add(TFCItems.ENTISOL_MUD_BRICK)
+            .add(TFCItems.ALFISOL_MUD_BRICK)
+            .add(TFCItems.PODZOL_MUD_BRICK)
+            .add(TFCItems.ANDISOL_MUD_BRICK)
+            .add(TFCItems.FLUVISOL_MUD_BRICK)
+            .add(TFCItems.ARIDISOL_MUD_BRICK)
+            .add(TFCItems.OXISOL_MUD_BRICK)
+            .add(TFCItems.MOLLISOL_MUD_BRICK);
 
         // Common `#c:tools`
         tag(Tags.Items.TOOLS).addTags(
@@ -654,7 +807,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         copy(TFCTags.Blocks.GRASS, GRASS);
         copy(TFCTags.Blocks.COARSE_DIRT, COARSE_DIRT);
         copy(TFCTags.Blocks.MUD, MUD);
-        copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICKS);
+        copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICK_ITEMS);
 
         copy(TFCTags.Blocks.ANVILS, ANVILS);
         copy(TFCTags.Blocks.WORKBENCHES, WORKBENCHES);

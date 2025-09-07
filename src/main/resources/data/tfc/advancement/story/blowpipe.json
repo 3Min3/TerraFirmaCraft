@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/sheet",
   "criteria": {
-    "blowpipes": {
+    "tools/blowpipe": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:blowpipes"
+            "items": "#c:tools/blowpipe"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "blowpipes"
+      "tools/blowpipe"
     ]
   ]
 }

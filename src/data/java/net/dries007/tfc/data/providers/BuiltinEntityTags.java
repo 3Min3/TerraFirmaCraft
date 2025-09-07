@@ -88,6 +88,107 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
                 TFCEntities.DOLPHIN.get()
             );
 
+        tag(WATER_AMBIENT)
+            .addTag(SMALL_FISH)
+            .add(TFCEntities.JELLYFISH.get())
+            .add(TFCEntities.ISOPOD.get())
+            .add(TFCEntities.LOBSTER.get())
+            .add(TFCEntities.CRAYFISH.get())
+            .add(TFCEntities.HORSESHOE_CRAB.get());
+
+        tag(WATER_CREATURES)
+            .add(TFCEntities.DOLPHIN.get())
+            .add(TFCEntities.ORCA.get())
+            .add(TFCEntities.MANATEE.get())
+            .add(TFCEntities.SQUID.get())
+            .add(TFCEntities.OCTOPOTEUTHIS.get());
+
+        tag(AMPHIBIOUS_CREATURES)
+            .add(TFCEntities.TURTLE.get())
+            .add(TFCEntities.PENGUIN.get())
+            .add(TFCEntities.FROG.get());
+
+        tag(BEARS)
+            .add(TFCEntities.POLAR_BEAR.get())
+            .add(TFCEntities.GRIZZLY_BEAR.get())
+            .add(TFCEntities.BLACK_BEAR.get());
+
+        tag(BIG_CATS)
+            .add(TFCEntities.COUGAR.get())
+            .add(TFCEntities.PANTHER.get())
+            .add(TFCEntities.LION.get())
+            .add(TFCEntities.SABERTOOTH.get())
+            .add(TFCEntities.TIGER.get());
+
+        tag(CANINE_PREDATORS)
+            .add(TFCEntities.WOLF.get())
+            .add(TFCEntities.HYENA.get())
+            .add(TFCEntities.DIREWOLF.get());
+
+        tag(LAND_PREDATORS)
+            .addTag(BEARS)
+            .addTag(BIG_CATS)
+            .addTag(CANINE_PREDATORS)
+            .add(TFCEntities.CROCODILE.get());
+
+        tag(DAIRY_ANIMALS)
+            .add(TFCEntities.COW.get())
+            .add(TFCEntities.YAK.get())
+            .add(TFCEntities.GOAT.get());
+
+        tag(OVIPAROUS_ANIMALS)
+            .add(TFCEntities.CHICKEN.get())
+            .add(TFCEntities.DUCK.get())
+            .add(TFCEntities.QUAIL.get());
+
+        tag(SHEARABLE_ANIMALS)
+            .add(TFCEntities.SHEEP.get())
+            .add(TFCEntities.ALPACA.get())
+            .add(TFCEntities.MUSK_OX.get());
+
+        tag(RIDEABLE_ANIMALS)
+            .add(TFCEntities.HORSE.get())
+            .add(TFCEntities.DONKEY.get())
+            .add(TFCEntities.MULE.get());
+
+        tag(FARM_ANIMALS)
+            .addTag(DAIRY_ANIMALS)
+            .addTag(OVIPAROUS_ANIMALS)
+            .addTag(SHEARABLE_ANIMALS)
+            .addTag(RIDEABLE_ANIMALS)
+            .add(TFCEntities.PIG.get())
+            .add(TFCEntities.RABBIT.get())
+            .add(TFCEntities.FROG.get());
+
+        tag(PETS)
+            .add(TFCEntities.CAT.get())
+            .add(TFCEntities.DOG.get());
+
+        tag(WILD_PREY_ANIMALS)
+            .add(TFCEntities.FOX.get())
+            .add(TFCEntities.PANDA.get())
+            .add(TFCEntities.OCELOT.get())
+            .add(TFCEntities.DEER.get())
+            .add(TFCEntities.CARIBOU.get())
+            .add(TFCEntities.BONGO.get())
+            .add(TFCEntities.GAZELLE.get())
+            .add(TFCEntities.GROUSE.get())
+            .add(TFCEntities.PHEASANT.get())
+            .add(TFCEntities.TURKEY.get())
+            .add(TFCEntities.PEAFOWL.get());
+
+        tag(ANIMALS)
+            .addTag(LAND_PREDATORS)
+            .addTag(WATER_AMBIENT)
+            .addTag(WATER_CREATURES)
+            .addTag(PESTS)
+            .addTag(PETS)
+            .addTag(RAMMING_ANIMALS)
+            .addTag(AMPHIBIOUS_CREATURES)
+            .addTag(FARM_ANIMALS)
+            .addTag(WILD_PREY_ANIMALS)
+            .add(TFCEntities.RABBIT.get());
+
         tag(RAMMING_ANIMALS)
             .add(
                 TFCEntities.BOAR.get(),

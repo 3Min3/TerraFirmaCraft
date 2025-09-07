@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:world/seeds",
   "criteria": {
-    "sandwich_bread": {
+    "foods/bread": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:sandwich_bread"
+            "items": "#c:foods/bread"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "sandwich_bread"
+      "foods/bread"
     ]
   ]
 }

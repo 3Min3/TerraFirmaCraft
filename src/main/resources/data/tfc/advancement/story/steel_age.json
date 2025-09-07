@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/blast_furnace",
   "criteria": {
-    "metal_item/steel": {
+    "tools/steel": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:metal_item/steel"
+            "items": "#tfc:tools/steel"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "metal_item/steel"
+      "tools/steel"
     ]
   ]
 }

@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/sheet",
   "criteria": {
-    "shields": {
+    "tools/shield": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:shields"
+            "items": "#c:tools/shield"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "shields"
+      "tools/shield"
     ]
   ]
 }

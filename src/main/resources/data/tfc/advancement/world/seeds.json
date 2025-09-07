@@ -7,7 +7,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#tfc:seeds"
+            "items": "#c:seeds"
           }
         ]
       }

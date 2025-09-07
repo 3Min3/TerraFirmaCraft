@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:world/root",
   "criteria": {
-    "nuggets": {
+    "metal_ores": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:nuggets"
+            "items": "tfc:metal_ores"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "nuggets"
+      "metal_ores"
     ]
   ]
 }
