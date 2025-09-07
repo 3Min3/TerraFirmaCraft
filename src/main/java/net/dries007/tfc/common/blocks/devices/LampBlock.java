@@ -115,6 +115,9 @@ public class LampBlock extends ExtendedBlock implements EntityBlockExtension
                 lamp.markForSync();
                 if (lamp.getFuel() != null && lamp.getFuel().burnRate() == -1 && player instanceof ServerPlayer serverPlayer)
                 {
+                    // special case, light automatically when lava is inserted.
+                    level.setBlockAndUpdate(pos, state.setValue(LIT, true));
+                    lamp.resetCounter();
                     TFCAdvancements.LAVA_LAMP.trigger(serverPlayer);
                 }
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);

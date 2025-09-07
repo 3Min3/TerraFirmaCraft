@@ -19,7 +19,12 @@
   },
   "display": {
     "icon": {
-      "id": "tfc:food/chevon"
+      "id": "tfc:food/chevon",
+      "components": {
+        "tfc:food": {
+          "creation_date": -3
+        }
+      }
     },
     "title": {
       "translate": "tfc.advancements.world.hunter.title"

@@ -13,7 +13,12 @@
   },
   "display": {
     "icon": {
-      "id": "tfc:food/wheat_grain"
+      "id": "tfc:food/wheat_grain",
+      "components": {
+        "tfc:food": {
+          "creation_date": -3
+        }
+      }
     },
     "title": {
       "translate": "tfc.advancements.world.familiarity.title"

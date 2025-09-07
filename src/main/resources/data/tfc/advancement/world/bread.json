@@ -15,7 +15,12 @@
   },
   "display": {
     "icon": {
-      "id": "tfc:food/rye_bread"
+      "id": "tfc:food/rye_bread",
+      "components": {
+        "tfc:food": {
+          "creation_date": -3
+        }
+      }
     },
     "title": {
       "translate": "tfc.advancements.world.bread.title"

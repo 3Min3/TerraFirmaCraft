@@ -440,7 +440,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.FIRE_BRICKS);
 
         tag(LAMPS).add(TFCBlocks.METALS, Metal.BlockType.LAMP);
-        tag(ANVILS).add(TFCBlocks.METALS, Metal.BlockType.ANVIL);
+        tag(ANVILS).add(TFCBlocks.METALS, Metal.BlockType.ANVIL).add(TFCBlocks.ROCK_ANVILS);
 
         tag(LOGS_THAT_LOG).addTag(BlockTags.LOGS);
         tag(WORKBENCHES).add(TFCBlocks.WOODS, Wood.BlockType.WORKBENCH);

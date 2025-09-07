@@ -115,7 +115,12 @@
   },
   "display": {
     "icon": {
-      "id": "tfc:food/rainbow_trout"
+      "id": "tfc:food/rainbow_trout",
+      "components": {
+        "tfc:food": {
+          "creation_date": -3
+        }
+      }
     },
     "title": {
       "translate": "tfc.advancements.world.all_fish.title"

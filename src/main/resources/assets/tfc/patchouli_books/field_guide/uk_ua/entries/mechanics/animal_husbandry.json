@@ -109,6 +109,19 @@
     },
     {
       "type": "patchouli:text",
+      "anchor": "rabbit",
+      "text": "$(thing)Rabbits$() spawn in $(l:the_world/climate#temperature)temperatures$() above -16°C, and at least 15mm of $(l:the_world/climate#rainfall)rainfall$(). They are $(l:mechanics/animal_husbandry#mammals)Mammals$() with no special abilities. They will eat any food, even if it is rotten. They have 1-6 children, are pregnant for just 19 days, and reach adulthood in 20 days. They can have children 6 times.",
+      "title": "Rabbits"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:rabbit{NoAI:1b,birth:-100000000L,oldDay:9223372036854775807L,geneticSize:16}",
+      "scale": 0.8,
+      "name": " ",
+      "text": "A rabbit."
+    },
+    {
+      "type": "patchouli:text",
       "anchor": "cow",
       "text": "$(thing)Корови$() живуть при $(l:the_world/climate#temperature)температурі$() від -10 до 35°C, та 250мм $(l:the_world/climate#rainfall)опадів$(). Вони є $(l:mechanics/animal_husbandry#dairy_animals)молочними тваринами$(). Їдять лише $(thing)зерно$(), навіть згнивше. Корова народжує 1-2 теля через 58 днів після запліднення. Телята досягають зрілого віку за 192 дні. Як корову не доїти, то вона може отелитися 13 разів протягом зрілого життя. Якщо її доїти та не парувати, то вона даватиме молоко 128 разів. Доїти можна один раз на день.",
       "title": "Корови"

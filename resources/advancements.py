@@ -21,7 +21,7 @@ def generate(rm: ResourceManager):
     # Parented to firestarter
     story.advancement('charcoal', icon('minecraft:charcoal'), 'A Better Fuel', 'Get some charcoal from a charcoal pit', 'firestarter', inventory_changed('minecraft:charcoal'))
     story.advancement('forge', icon('tfc:rock/cobble/andesite'), 'Forging', 'Light a charcoal forge', 'charcoal', generic('tfc:lit', {'ingredient': ['tfc:charcoal_forge']}))
-    story.advancement('stone_anvil', icon('tfc:stone/hammer/sedimentary'), 'Hammer Time', 'Create a stone anvil with a hammer', 'forge', generic('tfc:rock_anvil', {'ingredient': '#tfc:rock_anvils'}))
+    story.advancement('stone_anvil', icon('tfc:stone/hammer/sedimentary'), 'Hammer Time', 'Create a stone anvil with a hammer', 'forge', generic('tfc:rock_anvil', {'ingredient': '#tfc:anvils'}))
     story.advancement('metal_anvil', icon('tfc:metal/anvil/copper'), 'Dropping the Anvil', 'Create a copper anvil out of double ingots', 'stone_anvil', inventory_changed('tfc:metal/anvil/copper'))
     story.advancement('fire_clay', icon('tfc:fire_clay'), 'Fireproof', 'Craft some fire clay', 'metal_anvil', inventory_changed('tfc:fire_clay'))
     story.advancement('crucible', icon('tfc:crucible'), 'The Crucible', 'Knap a crucible out of some fire clay and fire it', 'fire_clay', inventory_changed('tfc:crucible'))
@@ -91,8 +91,8 @@ def generate(rm: ResourceManager):
     world.advancement('seeds', icon('tfc:seeds/tomato'), 'Gatherer', 'Get seeds from a wild crop', 'root', inventory_changed('#c:seeds'))
     world.advancement('eat_rotten_food', icon('minecraft:rotten_flesh'), 'Desperation', 'Eat something rotten', 'seeds', generic('tfc:eat_rotten_food', None), hidden=True)
     world.advancement('all_crops', icon('tfc:metal/hoe/black_steel'), 'True Farmer', 'Gather every seed in TFC', 'seeds', multiple_all(*[inventory_changed('tfc:seeds/%s' % c, name=c) for c in CROPS]), requirements=[[c] for c in CROPS])
-    world.advancement('bread', icon('tfc:food/rye_bread'), 'Baker', 'Make a loaf of bread', 'seeds', inventory_changed('#c:foods/bread'))
-    world.advancement('full_nutrition', icon('tfc:food/rye_bread_sandwich'), 'Doctors Hate Him', 'Get your nutrition to max', 'seeds', generic('tfc:full_nutrition', None), frame='challenge')
+    world.advancement('bread', food_icon('tfc:food/rye_bread'), 'Baker', 'Make a loaf of bread', 'seeds', inventory_changed('#c:foods/bread'))
+    world.advancement('full_nutrition', food_icon('tfc:food/rye_bread_sandwich'), 'Doctors Hate Him', 'Get your nutrition to max', 'seeds', generic('tfc:full_nutrition', None), frame='challenge')
     world.advancement('wattle', icon('tfc:wattle'), 'Wattle and Daub', 'Craft some wattle', 'root', inventory_changed('tfc:wattle'))
     world.advancement('mud_bricks', icon('tfc:mud_brick/podzol'), 'Playing in the Mud', 'Dry out some mud to make bricks', 'root', inventory_changed('#tfc:mud_brick_items'))
     world.advancement('lava_lamp', icon('tfc:metal/lamp/blue_steel'), 'Lava Lamp', 'Light a lamp that burns forever', 'root', generic('tfc:lava_lamp', None))
@@ -106,7 +106,7 @@ def generate(rm: ResourceManager):
     world.advancement('adventuring_time', icon('tfc:metal/boots/red_steel'), 'Adventuring Time', 'Discover every biome in TFC', 'volcano', multiple_all(*[biome(b) for b in TFC_BIOMES]), requirements=[[b] for b in TFC_BIOMES], frame='challenge')
     world.advancement('globe_trotter', icon('minecraft:map'), 'Globe Trotter', 'Travel to positive 10,000 and -10,000 z, the hottest and coldest points nearest to spawn', 'root', multiple_all(location({'position': {'z': {'min': 10000}}}, name='high'), location({'position': {'z': {'max': -10000}}}, name='low')), requirements=[['high'], ['low']], frame='challenge')
     world.advancement('dune', icon('tfc:plant/barrel_cactus'), 'Dune', 'Travel to a desert and find a barrel cactus', 'seeds', inventory_changed('tfc:plant/barrel_cactus'))
-    world.advancement('fruit', icon('tfc:food/orange'), 'Healthy Diet', 'Eat every berry and tree fruit in TFC', 'root', multiple_all(*[consume_item('tfc:food/%s' % f, name=f) for f in (*BERRIES, *FRUITS)]), requirements=[[f] for f in (*BERRIES, *FRUITS)], frame='challenge')
+    world.advancement('fruit', food_icon('tfc:food/orange'), 'Healthy Diet', 'Eat every berry and tree fruit in TFC', 'root', multiple_all(*[consume_item('tfc:food/%s' % f, name=f) for f in (*BERRIES, *FRUITS)]), requirements=[[f] for f in (*BERRIES, *FRUITS)], frame='challenge')
     world.advancement('saplings', icon('tfc:wood/sapling/pine'), 'Arborist', 'Find every (non-fruit) tree sapling in TFC', 'root', multiple_all(*[inventory_changed('tfc:wood/sapling/%s' % t, name=t) for t in WOODS.keys()]), requirements=[[t] for t in WOODS.keys()])
     world.advancement('nugget', icon('tfc:ore/small_native_copper'), 'A Weird Rock', 'Find a metal nugget on the ground', 'root', inventory_changed('tfc:metal_ores'))
     world.advancement('coal', icon('tfc:ore/lignite'), 'Carboniferous', 'Find Bituminous Coal or Lignite', 'nugget', multiple_all(inventory_changed('tfc:ore/lignite'), inventory_changed('tfc:ore/bituminous_coal')))
@@ -120,15 +120,15 @@ def generate(rm: ResourceManager):
     world.advancement('rotten_compost', icon('tfc:rotten_compost'), 'Wasteful', 'Kill a plant with rotten compost', 'compost', generic('tfc:rotten_compost_kill', None))
     world.advancement('guano', icon('tfc:groundcover/guano'), 'Gift from the Birds', 'Find guano', 'root', inventory_changed('tfc:groundcover/guano'))
     world.advancement('full_fertilizer', icon('tfc:pure_nitrogen'), 'Fully Fertile', 'Raise a block of farmland to 100% nutrients', 'seeds', generic('tfc:full_fertilizer', None))
-    world.advancement('hunter', icon('tfc:food/chevon'), 'Hunter', 'Kill an animal', 'root', kill_mob('#tfc:animals'))
+    world.advancement('hunter', food_icon('tfc:food/chevon'), 'Hunter', 'Kill an animal', 'root', kill_mob('#tfc:animals'))
     world.advancement('glow_hunter', icon('minecraft:glow_ink_sac'), 'Mystery of the Depths', 'Kill the Octopoteuthis', 'hunter', kill_mob('tfc:octopoteuthis'), hidden=True, frame='goal')
     world.advancement('bear_hunter', icon('tfc:large_raw_hide'), 'Bear Attack', 'Kill a Bear', 'hunter', kill_mob('#tfc:bears'))
     world.advancement('fishing', icon('tfc:metal/fishing_rod/copper'), 'Fisherman', 'Hook a fish with a fishing rod', 'hunter', generic('tfc:hooked_entity', {'entity': {'type': '#tfc:small_fish'}}))
     world.advancement('advanced_fishing', icon('tfc:metal/fishing_rod/red_steel'), 'Master Fisherman', 'Hook a dolphin or an orca with a fishing rod', 'fishing', generic('tfc:hooked_entity', {'entity': {'type': '#tfc:needs_large_fishing_bait'}}), frame='goal')
-    world.advancement('all_fish', icon('tfc:food/rainbow_trout'), 'Gone Fishing', 'Obtain every small fish, a shellfish, and some calamari', 'fishing', multiple_all(*[inventory_changed('tfc:food/%s' % f, name=f) for f in ADVANCEMENT_FISH]), requirements=[[f] for f in ADVANCEMENT_FISH])
+    world.advancement('all_fish', food_icon('tfc:food/rainbow_trout'), 'Gone Fishing', 'Obtain every small fish, a shellfish, and some calamari', 'fishing', multiple_all(*[inventory_changed('tfc:food/%s' % f, name=f) for f in ADVANCEMENT_FISH]), requirements=[[f] for f in ADVANCEMENT_FISH])
     world.advancement('greatest_hunter', icon('tfc:metal/javelin/red_steel'), 'Greatest Hunter', 'Hit a rabbit from 50m away with a javelin', 'hunter', generic('tfc:stab_entity', {'entity': {'type': 'tfc:rabbit', 'distance': {'horizontal': {'min': 50}}}}))
     world.advancement('artist', icon('minecraft:red_dye'), 'Artist', 'Procure all 16 colors of dye', 'root', multiple_all(*[inventory_changed('minecraft:%s_dye' % c, name=c) for c in COLORS]), requirements=[[c] for c in COLORS], frame='goal')
-    world.advancement('familiarity', icon('tfc:food/wheat_grain'), 'A New Friend', 'Feed an animal some food to familiarize it', 'root', generic('tfc:fed_animal', {'entity': {'type': '#tfc:animals'}}))
+    world.advancement('familiarity', food_icon('tfc:food/wheat_grain'), 'A New Friend', 'Feed an animal some food to familiarize it', 'root', generic('tfc:fed_animal', {'entity': {'type': '#tfc:animals'}}))
     world.advancement('powderkeg', icon('tfc:powderkeg'), 'Big Boom', 'Light a powderkeg', 'root', generic('tfc:lit', {'ingredient': ['tfc:powderkeg']}))
     world.advancement('full_powderkeg', icon('minecraft:gunpowder'), 'Pakratt', 'Light a fully loaded powderkeg', 'powderkeg', generic('tfc:full_powderkeg', None))
     world.advancement('gemologist', icon('tfc:gem/amethyst'), 'Gemologist', 'Find every gem ore in TFC', 'nugget', multiple_all(*[inventory_changed('tfc:ore/%s' % g, name=g) for g in GEMS]), requirements=[[g] for g in GEMS], frame='goal')
@@ -158,6 +158,10 @@ def consume_item(item: str, name: str = 'item_consumed') -> Json:
 
 def icon(name: str) -> Json:
     return {'id': name}
+
+def food_icon(name: str) -> Json:
+    return {'id': name, 'components': {'tfc:food': {'creation_date': -3}}}
+
 
 def biome(biome_name: str) -> Json:
     return location({'biomes': 'tfc:%s' % biome_name}, biome_name)
