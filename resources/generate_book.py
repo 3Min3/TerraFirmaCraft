@@ -756,6 +756,8 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             entity('tfc:mule' + ANIMAL_NBT, 'A mule.', '', scale=0.6),
             text('$(thing)Horses$() spawn in plains with $(l:the_world/climate#temperature)temperature$() of at least -15°C, and between 130 and 400mm of $(l:the_world/climate#rainfall)rainfall$(). They are a kind of $(l:mechanics/animal_husbandry#horses)Equine$(). They eat $(thing)grains$() and $(thing)fruits$(). They have 1 child, are pregnant for 19 days, and reach adulthood in 80 days. They can have children 6 times.', title='Horses').anchor('horse'),
             entity('tfc:horse' + ANIMAL_NBT, 'A horse.', '', scale=0.6),
+            text('$(thing)Frogs$() spawn in $(l:the_world/climate#temperature)temperatures$() above -13°C, and at least 150mm of $(l:the_world/climate#rainfall)rainfall$(). They are can be familiarized, after which they will lay eggs in fresh water at random. They will eat grains, dried seawead, and spider eyes. ', title='Frogs').anchor('frog'),
+            entity('tfc:frog' + ANIMAL_NBT, 'A frog.', '', scale=0.8),
         )),
         entry('pets', 'Pets', 'minecraft:lead', pages=(
             text('$(thing)Pets$() are animals that function quite similar to $(l:mechanics/animal_husbandry)Livestock$(), but have no useful products. Instead, they can obey commands, follow you around your home, control pests, and help you hunt.'),
