@@ -36,6 +36,11 @@ public record MetalItem(
     private static final MetalItem UNKNOWN = new MetalItem("unknown");
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    /**
+     * Classloading to initialize the cache
+     */
+    public static void init() {}
+
     public static MetalItem unknown()
     {
         return UNKNOWN;

@@ -65,6 +65,7 @@ import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.util.DispenserBehaviors;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.InteractionManager;
+import net.dries007.tfc.util.MetalItem;
 import net.dries007.tfc.util.SelfTests;
 import net.dries007.tfc.util.advancements.TFCAdvancements;
 import net.dries007.tfc.util.calendar.CalendarEventHandler;
@@ -210,6 +211,7 @@ public final class TerraFirmaCraft
             IBellowsConsumer.registerDefaultOffsets();
             Wood.registerBlockSetTypes();
             TFCBrain.initializeScheduleContents();
+            MetalItem.init();
 
             TFCBlocks.registerFlowerPotFlowers();
             TFCBlocks.editBlockRequiredTools();
