@@ -13,6 +13,7 @@
     "GameTestInfoMixin",
     "HeightmapMixin",
     "ItemStackMixin",
+    "LavaMixin",
     "LevelAccessorMixin",
     "LevelMixin",
     "MainMixin",
