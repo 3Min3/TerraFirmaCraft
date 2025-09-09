@@ -165,7 +165,12 @@
   },
   "display": {
     "icon": {
-      "id": "tfc:food/orange"
+      "id": "tfc:food/orange",
+      "components": {
+        "tfc:food": {
+          "creation_date": -3
+        }
+      }
     },
     "title": {
       "translate": "tfc.advancements.world.fruit.title"

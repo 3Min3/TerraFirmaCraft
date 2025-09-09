@@ -8,7 +8,12 @@
   },
   "display": {
     "icon": {
-      "id": "tfc:food/rye_bread_sandwich"
+      "id": "tfc:food/rye_bread_sandwich",
+      "components": {
+        "tfc:food": {
+          "creation_date": -3
+        }
+      }
     },
     "title": {
       "translate": "tfc.advancements.world.full_nutrition.title"

@@ -480,8 +480,20 @@ public class TFCTags
         public static final TagKey<Item> TOOLS_SHARP = tag("tools/sharp");
         public static final TagKey<Item> TOOLS_LARGE = tag("tools/large");
         /** Used in advancements **/
+        public static final TagKey<Item> SCRAPED_HIDES = tag("scraped_hide");
         public static final TagKey<Item> TOOLS_STONE = tag("tools/stone");
         public static final TagKey<Item> TOOLS_COPPER = tag("tools/copper");
+        public static final TagKey<Item> TOOLS_BISMUTH_BRONZE = tag("tools/bismuth_bronze");
+        public static final TagKey<Item> TOOLS_BLACK_BRONZE = tag("tools/black_bronze");
+        public static final TagKey<Item> TOOLS_BRONZE = tag("tools/bronze");
+        public static final TagKey<Item> TOOLS_WROUGHT_IRON = tag("tools/wrought_iron");
+        public static final TagKey<Item> TOOLS_STEEL = tag("tools/steel");
+        public static final TagKey<Item> TOOLS_BLACK_STEEL = tag("tools/black_steel");
+        public static final TagKey<Item> TOOLS_RED_STEEL = tag("tools/red_steel");
+        public static final TagKey<Item> TOOLS_BLUE_STEEL = tag("tools/blue_steel");
+
+        public static final TagKey<Item> METAL_ORES = tag("metal_ores");
+        public static final TagKey<Item> MUD_BRICK_ITEMS = tag("mud_brick_items");
 
         // Damage Types
         public static final TagKey<Item> DEALS_SLASHING_DAMAGE = tag("deals_slashing_damage");
@@ -586,6 +598,7 @@ public class TFCTags
 
         /** Used in advancements **/
         public static final TagKey<Item> UNFIRED_POTTERY = tag("unfired_pottery");
+        public static final TagKey<Item> METAL_PLATED_BLOCKS = tag("metal_plated_blocks");
 
 
         /**
@@ -664,6 +677,21 @@ public class TFCTags
         public static final TagKey<EntityType<?>> BIRD_PREY = tag("bird_prey");
         public static final TagKey<EntityType<?>> LARGE_PREY = tag("large_prey");
         public static final TagKey<EntityType<?>> NOT_RAMMED_BY_RAMMERS = tag("not_rammed_by_rammers");
+        public static final TagKey<EntityType<?>> WATER_AMBIENT = tag("water_ambient");
+        public static final TagKey<EntityType<?>> BEARS = tag("bears");
+        public static final TagKey<EntityType<?>> CANINE_PREDATORS = tag("canine_predators");
+        public static final TagKey<EntityType<?>> BIG_CATS = tag("big_cats");
+        public static final TagKey<EntityType<?>> LAND_PREDATORS = tag("land_predators");
+        public static final TagKey<EntityType<?>> WATER_CREATURES = tag("water_creatures");
+        public static final TagKey<EntityType<?>> AMPHIBIOUS_CREATURES = tag("water_creatures");
+        public static final TagKey<EntityType<?>> DAIRY_ANIMALS = tag("dairy_animals");
+        public static final TagKey<EntityType<?>> OVIPAROUS_ANIMALS = tag("oviparous_animals");
+        public static final TagKey<EntityType<?>> SHEARABLE_ANIMALS = tag("shearable_animals");
+        public static final TagKey<EntityType<?>> RIDEABLE_ANIMALS = tag("rideable_animals");
+        public static final TagKey<EntityType<?>> WILD_PREY_ANIMALS = tag("wild_prey_animals");
+        public static final TagKey<EntityType<?>> PETS = tag("pets");
+        public static final TagKey<EntityType<?>> FARM_ANIMALS = tag("farm_animals");
+        public static final TagKey<EntityType<?>> ANIMALS = tag("animals");
 
         // ===== Data Generated ====== //
 

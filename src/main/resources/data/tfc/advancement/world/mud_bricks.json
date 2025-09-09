@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:world/root",
   "criteria": {
-    "mud_bricks": {
+    "mud_brick_items": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:mud_bricks"
+            "items": "#tfc:mud_brick_items"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "mud_bricks"
+      "mud_brick_items"
     ]
   ]
 }

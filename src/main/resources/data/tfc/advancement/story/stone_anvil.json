@@ -5,7 +5,7 @@
     "special_condition": {
       "trigger": "tfc:rock_anvil",
       "conditions": {
-        "ingredient": "#tfc:rock_anvils"
+        "ingredient": "#tfc:anvils"
       }
     }
   },

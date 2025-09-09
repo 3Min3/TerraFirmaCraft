@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/black_steel",
   "criteria": {
-    "metal_item/blue_steel": {
+    "tools/blue_steel": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:metal_item/blue_steel"
+            "items": "#tfc:tools/blue_steel"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "metal_item/blue_steel"
+      "tools/blue_steel"
     ]
   ]
 }

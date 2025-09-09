@@ -46,6 +46,7 @@ import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.component.food.FoodData;
 import net.dries007.tfc.common.component.food.FoodTrait;
 import net.dries007.tfc.common.component.food.FoodTraits;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Food;
 import net.dries007.tfc.common.items.HideItemType;
 import net.dries007.tfc.common.items.Powder;
@@ -90,6 +91,7 @@ public interface CraftingRecipes extends Recipes
             "bucket",
             "campfire",
             "chest",
+            "minecart",
             "chest_minecart",
             "coast_armor_trim_smithing_template",
             "composter",
@@ -143,6 +145,7 @@ public interface CraftingRecipes extends Recipes
             "suspicious_stew",
             "tide_armor_trim_smithing_template",
             "tinted_glass",
+            "tnt",
             "torch",
             "trapped_chest",
             "turtle_helmet",
@@ -369,10 +372,16 @@ public interface CraftingRecipes extends Recipes
                 .shapeless(blocks.apply(SoilBlockType.COARSE_DIRT), 2);
 
             for (int n = 1; n <= 8; n++)
-                recipe("" + n)
+            {
+                recipe("freshwater" + n)
                     .input(FluidContentIngredient.of(Fluids.WATER, 100))
                     .input(blocks.apply(SoilBlockType.DIRT), n)
                     .shapeless(blocks.apply(SoilBlockType.MUD), n);
+                recipe("saltwater" + n)
+                    .input(FluidContentIngredient.of(TFCFluids.SALT_WATER.getSource(), 100))
+                    .input(blocks.apply(SoilBlockType.DIRT), n)
+                    .shapeless(blocks.apply(SoilBlockType.MUD), n);
+            }
         }
 
         addTools(RockCategory.ItemType.AXE_HEAD, RockCategory.ItemType.AXE);
@@ -647,14 +656,6 @@ public interface CraftingRecipes extends Recipes
             .input('I', ingredientOf(Metal.STEEL, Metal.ItemType.SHEET))
             .pattern("I I", " C ")
             .shaped(Items.HOPPER, 2);
-        replace("minecart")
-            .input('X', ingredientOf(Metal.WROUGHT_IRON, Metal.ItemType.SHEET))
-            .pattern("X X", "XXX")
-            .shaped(Items.MINECART, 2);
-        recipe()
-            .input('X', ingredientOf(Metal.STEEL, Metal.ItemType.SHEET))
-            .pattern("X X", "XXX")
-            .shaped(Items.MINECART, 4);
         replace("observer")
             .input('C', Tags.Items.COBBLESTONES_NORMAL)
             .input('R', Tags.Items.DUSTS_REDSTONE)
@@ -1098,7 +1099,7 @@ public interface CraftingRecipes extends Recipes
             .input(TFCTags.Items.GEM_POWDERS)
             .shapeless(TFCItems.SANDPAPER);
         recipe()
-            .input(TFCTags.Items.MUD_BRICKS)
+            .input(TFCTags.Items.MUD_BRICK_ITEMS)
             .input(TFCItems.DAUB)
             .shapeless(TFCBlocks.SMOOTH_MUD_BRICKS);
         recipe()

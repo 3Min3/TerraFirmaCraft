@@ -2,32 +2,32 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/copper_age",
   "criteria": {
-    "metal_item/bronze": {
+    "tools/bronze": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:metal_item/bronze"
+            "items": "#tfc:tools/bronze"
           }
         ]
       }
     },
-    "metal_item/bismuth_bronze": {
+    "tools/bismuth_bronze": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:metal_item/bismuth_bronze"
+            "items": "#tfc:tools/bismuth_bronze"
           }
         ]
       }
     },
-    "metal_item/black_bronze": {
+    "tools/black_bronze": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:metal_item/black_bronze"
+            "items": "#tfc:tools/black_bronze"
           }
         ]
       }
@@ -51,9 +51,9 @@
   },
   "requirements": [
     [
-      "metal_item/bronze",
-      "metal_item/bismuth_bronze",
-      "metal_item/black_bronze"
+      "tools/bronze",
+      "tools/bismuth_bronze",
+      "tools/black_bronze"
     ]
   ]
 }

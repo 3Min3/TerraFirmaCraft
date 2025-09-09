@@ -2,77 +2,7 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:world/fishing",
   "criteria": {
-    "food/bluegill": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "tfc:food/bluegill"
-          }
-        ]
-      }
-    },
-    "food/crappie": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "tfc:food/crappie"
-          }
-        ]
-      }
-    },
-    "food/lake_trout": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "tfc:food/lake_trout"
-          }
-        ]
-      }
-    },
-    "food/largemouth_bass": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "tfc:food/largemouth_bass"
-          }
-        ]
-      }
-    },
-    "food/rainbow_trout": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "tfc:food/rainbow_trout"
-          }
-        ]
-      }
-    },
-    "food/salmon": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "tfc:food/salmon"
-          }
-        ]
-      }
-    },
-    "food/smallmouth_bass": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "tfc:food/smallmouth_bass"
-          }
-        ]
-      }
-    },
-    "food/cod": {
+    "cod": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -82,7 +12,7 @@
         ]
       }
     },
-    "food/calamari": {
+    "calamari": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -92,7 +22,17 @@
         ]
       }
     },
-    "food/tropical_fish": {
+    "shellfish": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/shellfish"
+          }
+        ]
+      }
+    },
+    "tropical_fish": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -101,11 +41,86 @@
           }
         ]
       }
+    },
+    "bluegill": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/bluegill"
+          }
+        ]
+      }
+    },
+    "crappie": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/crappie"
+          }
+        ]
+      }
+    },
+    "lake_trout": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/lake_trout"
+          }
+        ]
+      }
+    },
+    "largemouth_bass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/largemouth_bass"
+          }
+        ]
+      }
+    },
+    "rainbow_trout": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/rainbow_trout"
+          }
+        ]
+      }
+    },
+    "salmon": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/salmon"
+          }
+        ]
+      }
+    },
+    "smallmouth_bass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:food/smallmouth_bass"
+          }
+        ]
+      }
     }
   },
   "display": {
     "icon": {
-      "id": "tfc:food/rainbow_trout"
+      "id": "tfc:food/rainbow_trout",
+      "components": {
+        "tfc:food": {
+          "creation_date": -3
+        }
+      }
     },
     "title": {
       "translate": "tfc.advancements.world.all_fish.title"
@@ -113,7 +128,7 @@
     "description": {
       "translate": "tfc.advancements.world.all_fish.description"
     },
-    "frame": "goal",
+    "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false,
@@ -121,16 +136,37 @@
   },
   "requirements": [
     [
-      "food/bluegill",
-      "food/crappie",
-      "food/lake_trout",
-      "food/largemouth_bass",
-      "food/rainbow_trout",
-      "food/salmon",
-      "food/smallmouth_bass",
-      "food/cod",
-      "food/calamari",
-      "food/tropical_fish"
+      "cod"
+    ],
+    [
+      "calamari"
+    ],
+    [
+      "shellfish"
+    ],
+    [
+      "tropical_fish"
+    ],
+    [
+      "bluegill"
+    ],
+    [
+      "crappie"
+    ],
+    [
+      "lake_trout"
+    ],
+    [
+      "largemouth_bass"
+    ],
+    [
+      "rainbow_trout"
+    ],
+    [
+      "salmon"
+    ],
+    [
+      "smallmouth_bass"
     ]
   ]
 }
