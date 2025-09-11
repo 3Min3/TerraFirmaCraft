@@ -139,7 +139,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'dormant_shield_volcano', 'extreme_hills', hot_spring_features=True, shield_volcano_features=True)
     biome(rm, 'extinct_shield_volcano', 'extreme_hills', hot_spring_features='empty', shield_volcano_features=True)
     biome(rm, 'ancient_shield_volcano', 'extreme_hills', shield_volcano_features=True)
-    biome(rm, 'sunken_shield_volcano', 'extreme_hills', shield_volcano_features=True)
+    biome(rm, 'sunken_shield_volcano', 'extreme_hills', shield_volcano_features=True, reef_features=True)
     biome(rm, 'shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
     biome(rm, 'old_shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
 
@@ -1101,16 +1101,12 @@ def generate(rm: ResourceManager):
     }), decorate_square(), decorate_heightmap('world_surface_wg'))
 
     for coral in ('tree', 'mushroom', 'claw'):
-        configured_placed_feature(rm, 'coral_%s' % coral, 'tfc:coral_%s' % coral, {})
+        configured_placed_feature(rm, 'coral_%s' % coral, 'tfc:coral_%s' % coral, {}, decorate_climate(12, 50), ('minecraft:noise_based_count', {
+            'noise_to_count_ratio': 7,
+            'noise_factor': 160.0,
+            'noise_offset': 1
+        }), decorate_square(), decorate_heightmap('ocean_floor_wg'))
         rm.placed_feature_tag('feature/corals', 'tfc:coral_%s' % coral)
-
-    configured_placed_feature(rm, 'coral_reef', 'minecraft:simple_random_selector', {
-        'features': '#tfc:feature/corals'
-    }, ('minecraft:noise_based_count', {
-        'noise_to_count_ratio': 20,
-        'noise_factor': 200,
-        'noise_offset': 1
-    }), decorate_square(), decorate_climate(min_temp=12, max_temp=50, fuzzy=True), decorate_heightmap('ocean_floor_wg'))
 
     configured_placed_feature(rm, 'tide_pool', 'tfc:tide_pool', {}, decorate_chance(5), decorate_count(10), decorate_square(), decorate_heightmap('ocean_floor_wg'), decorate_biome())
     rm.placed_feature('big_tide_pool', 'tfc:tide_pool', decorate_chance(15), decorate_count(40), decorate_square(), decorate_heightmap('ocean_floor_wg'), decorate_biome())
@@ -1887,7 +1883,9 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
     spawners['monster'] = [entity for entity in VANILLA_MONSTERS.values()]
 
     if reef_features:
-        large_features.append('tfc:coral_reef')
+        large_features.append('tfc:coral_mushroom')
+        large_features.append('tfc:coral_tree')
+        large_features.append('tfc:coral_claw')
 
     # Continental / Land Features
     # Exclude these features from salt flat biomes
