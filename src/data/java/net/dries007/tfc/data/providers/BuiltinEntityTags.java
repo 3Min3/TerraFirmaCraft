@@ -44,6 +44,7 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
 
         tag(SPAWNS_ON_COLD_BLOCKS)
             .add(
+                TFCEntities.SEAL.get(),
                 TFCEntities.PENGUIN.get(),
                 TFCEntities.POLAR_BEAR.get()
             );
@@ -105,6 +106,7 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
         tag(AMPHIBIOUS_CREATURES)
             .add(TFCEntities.TURTLE.get())
             .add(TFCEntities.PENGUIN.get())
+            .add(TFCEntities.SEAL.get())
             .add(TFCEntities.FROG.get());
 
         tag(BEARS)

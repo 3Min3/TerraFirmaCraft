@@ -378,6 +378,7 @@ public class TFCTags
         public static final TagKey<Item> PENGUIN_FOOD = tag("penguin_food");
         public static final TagKey<Item> TURTLE_FOOD = tag("turtle_food");
         public static final TagKey<Item> FROG_FOOD = tag("frog_food");
+        public static final TagKey<Item> SEAL_FOOD = tag("seal_food");
         public static final TagKey<Item> RABBIT_FOOD = tag("rabbit_food");
 
         // Compost

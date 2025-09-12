@@ -268,9 +268,6 @@ public class TFCTurtleModel extends HierarchicalAnimatedModel<AmphibiousAnimal>
         this.leftFrontLeg = root.getChild("left_front_leg");
     }
 
-    /**
-     * Limb swing based on the vanilla turtle. Since we don't want the turtle to have a 'walking' animation.
-     */
     @Override
     public void setupAnim(AmphibiousAnimal animal, float limbSwing, float limbSwingAmount, float ageInTicks, float headYaw, float headPitch)
     {
