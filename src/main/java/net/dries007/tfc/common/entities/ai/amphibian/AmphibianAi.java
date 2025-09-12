@@ -16,6 +16,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
@@ -43,7 +44,8 @@ public class AmphibianAi
     public static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
         MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_ADULT,
         MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.HUNTED_RECENTLY,
-        MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.HOME, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.IS_TEMPTED, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, MemoryModuleType.BREED_TARGET, MemoryModuleType.IS_PANICKING
+        MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.HOME, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.IS_TEMPTED, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS,
+        MemoryModuleType.BREED_TARGET, MemoryModuleType.IS_PANICKING
     );
 
     public static Brain<?> makeBrain(Brain<? extends AmphibiousAnimal> brain)
@@ -95,7 +97,7 @@ public class AmphibianAi
                     Pair.of(RandomStroll.stroll(0.15F, false), 2),
                     Pair.of(SetWalkTargetFromLookTarget.create(AmphibianAi::canSetWalkTargetFromLookTarget, AmphibianAi::getSpeedModifier, 3), 3),
                     Pair.of(new DoNothing(30, 60), 3),
-                    Pair.of(StrollToPoi.create(MemoryModuleType.HOME, 0.5f, 5, 100), 3)
+                    Pair.of(AmphibiousStrollToPoi.create(MemoryModuleType.HOME, AmphibianAi::getSpeedModifier, 5, 100), 3)
                 )
             ))
         ));
