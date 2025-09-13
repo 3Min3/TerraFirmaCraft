@@ -82,12 +82,6 @@ public class DeadDoubleCropBlock extends DeadCropBlock
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
-        return super.useItemOn(stack, state, level, state.getValue(PART) == Part.TOP ? pos.below() : pos, player, hand, hitResult);
-    }
-
-    @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
     {
         WildDoubleCropBlock.onPlayerWillDestroy(level, pos, state, player);
