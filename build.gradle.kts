@@ -29,7 +29,7 @@ val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
     val modReplacementProperties = mapOf(
         "modId" to modId,
         "modVersion" to modVersion,
-        "minecraftVersionRange" to "[$minecraftVersion,)",
+        "minecraftVersionRange" to "[$minecraftVersion]",
         "neoForgeVersionRange" to "[$neoForgeVersion,)",
         "jeiVersionRange" to "[$jeiVersion,)"
     )
