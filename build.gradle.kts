@@ -39,6 +39,10 @@ val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
     into(layout.buildDirectory.dir("generated/sources/modMetadata"))
 }
 
+tasks.named("processResources") {
+    notCompatibleWithConfigurationCache("Uses unserializable objects (JsonSlurper, outputs.files)")
+}
+
 
 base {
     archivesName.set("TerraFirmaCraft-NeoForge-$minecraftVersion")
