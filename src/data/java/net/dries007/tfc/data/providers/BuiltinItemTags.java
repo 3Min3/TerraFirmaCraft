@@ -364,7 +364,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCBlocks.PLANTS.get(Plant.MUSSELS).get())
             .add(TFCBlocks.PLANTS.get(Plant.BARNACLES).get());
         tag(METAL_PLATED_BLOCKS)
-            .addAll(TFCBlocks.METALS);
+            .add(TFCBlocks.METALS, Metal.BlockType.BLOCK);
 
         // Vanilla Armor Tags
         tag(ItemTags.HEAD_ARMOR).add(TFCItems.METAL_ITEMS, Metal.ItemType.HELMET);
