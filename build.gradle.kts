@@ -192,7 +192,7 @@ abstract class MinifyJsonTask : DefaultTask() {
                 val parsed = jsonSlurper.parse(file)
                 val minified = JsonOutput.toJson(parsed)
                     .replace("\"__comment__\":\"This file was automatically created by mcresources\",", "")
-                file.writeText(minified) // ✅ overwrite in place
+                file.writeText(minified)
             } catch (e: Exception) {
                 logger.error("JSON Error in ${file.path}", e)
                 throw e
