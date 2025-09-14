@@ -39,11 +39,6 @@ val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
     into(layout.buildDirectory.dir("generated/sources/modMetadata"))
 }
 
-tasks.named("processResources") {
-    notCompatibleWithConfigurationCache("Uses unserializable objects (JsonSlurper, outputs.files)")
-}
-
-
 base {
     archivesName.set("TerraFirmaCraft-NeoForge-$minecraftVersion")
     group = "net.dries007.tfc"
@@ -175,32 +170,55 @@ license {
     exclude("net/dries007/tfc/world/noise/FastNoiseLite.java") // Fast Noise
 }
 
-tasks {
-    processResources {
-        if (modIsInCI) {
-            doLast {
-                val jsonMinifyStart: Long = System.currentTimeMillis()
-                var jsonMinified: Long = 0
-                var jsonBytesBefore: Long = 0
-                var jsonBytesAfter: Long = 0
+abstract class MinifyJsonTask : DefaultTask() {
 
-                fileTree(mapOf("dir" to outputs.files.asPath, "include" to "**/*.json")).forEach {
-                    jsonMinified++
-                    jsonBytesBefore += it.length()
-                    try {
-                        it.writeText(JsonOutput.toJson(JsonSlurper().parse(it)).replace("\"__comment__\":\"This file was automatically created by mcresources\",", ""))
-                    } catch (e: Exception) {
-                        println("JSON Error in ${it.path}")
-                        throw e
-                    }
+    @get:InputDirectory
+    abstract val dir: DirectoryProperty
 
-                    jsonBytesAfter += it.length()
-                }
-                println("Minified $jsonMinified json files. Reduced ${jsonBytesBefore / 1024} kB to ${(jsonBytesAfter / 1024)} kB. Took ${System.currentTimeMillis() - jsonMinifyStart} ms")
+    @TaskAction
+    fun minify() {
+        val jsonSlurper = JsonSlurper()
+        var jsonMinified = 0
+        var jsonBytesBefore = 0L
+        var jsonBytesAfter = 0L
+        val start = System.currentTimeMillis()
+
+        dir.get().asFileTree.matching {
+            include("**/*.json")
+        }.forEach { file ->
+            jsonMinified++
+            jsonBytesBefore += file.length()
+            try {
+                val parsed = jsonSlurper.parse(file)
+                val minified = JsonOutput.toJson(parsed)
+                    .replace("\"__comment__\":\"This file was automatically created by mcresources\",", "")
+                file.writeText(minified) // ✅ overwrite in place
+            } catch (e: Exception) {
+                logger.error("JSON Error in ${file.path}", e)
+                throw e
             }
+            jsonBytesAfter += file.length()
         }
+
+        logger.lifecycle(
+            "Minified $jsonMinified JSON files. Reduced ${jsonBytesBefore / 1024} kB → ${(jsonBytesAfter / 1024)} kB. Took ${System.currentTimeMillis() - start} ms"
+        )
+    }
+}
+
+if (modIsInCI) {
+    tasks.register<MinifyJsonTask>("minifyJson") {
+        // `processResources` writes into build/resources/<sourceSet>
+        dir.set(layout.buildDirectory.dir("resources/main"))
     }
 
+    tasks.named<ProcessResources>("processResources") {
+        finalizedBy("minifyJson") // run AFTER processResources
+    }
+}
+
+
+tasks {
     test {
         useJUnitPlatform()
     }
