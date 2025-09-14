@@ -126,7 +126,7 @@ public enum Crop implements StringRepresentable
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
             requiresStick ?
                 self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()) :
-                self -> new DeadCropBlock(dead(), self.getClimateRange()),
+                self -> new DeadDoubleCropBlock(dead(), self.getClimateRange()),
             self -> new WildDoubleCropBlock(dead().randomTicks())
         );
     }
@@ -139,7 +139,7 @@ public enum Crop implements StringRepresentable
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
             requiresStick ?
                 self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()) :
-                self -> new DeadCropBlock(dead(), self.getClimateRange()),
+                self -> new DeadDoubleCropBlock(dead(), self.getClimateRange()),
             self -> new WildDoubleCropBlock(dead().randomTicks())
         );
     }
