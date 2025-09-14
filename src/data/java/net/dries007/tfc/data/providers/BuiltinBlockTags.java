@@ -416,7 +416,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(SUPPORTS_LANDSLIDE).addTags(FARMLANDS, PATHS);
         tag(NOT_SOLID_SUPPORTING).addTags(STONES_SMOOTH);
         tag(TOUGHNESS_1).add(TFCBlocks.CHARCOAL_PILE, TFCBlocks.CHARCOAL_FORGE);
-        tag(TOUGHNESS_2).addTag(Tags.Blocks.STONES);
+        tag(TOUGHNESS_2).addTag(Tags.Blocks.STONES).addTag(Tags.Blocks.COBBLESTONES);
         tag(TOUGHNESS_3).add(Blocks.BEDROCK);
         tag(BREAKS_WHEN_ISOLATED).addTag(STONES_RAW);
         tag(FALLEN_LEAVES).add(TFCBlocks.WOODS, Wood.BlockType.FALLEN_LEAVES);

@@ -2,7 +2,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 plugins {
-    id("net.neoforged.moddev") version "2.0.91"
+    id("net.neoforged.moddev") version "2.0.107"
     id("net.neoforged.licenser") version "0.7.2"
 }
 
@@ -31,12 +31,17 @@ val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
         "modVersion" to modVersion,
         "minecraftVersionRange" to "[$minecraftVersion]",
         "neoForgeVersionRange" to "[$neoForgeVersion,)",
+        "patchouliVersionRange" to "[$patchouliVersion,)",
         "jeiVersionRange" to "[$jeiVersion,)"
     )
     inputs.properties(modReplacementProperties)
     expand(modReplacementProperties)
     from("src/main/templates")
     into(layout.buildDirectory.dir("generated/sources/modMetadata"))
+}
+
+neoForge {
+    version = neoForgeVersion // this is here because declaring a neoForge version enables 'additionalRuntimeClasspath'
 }
 
 base {
@@ -84,39 +89,7 @@ sourceSets {
     create("data")
 }
 
-dependencies {
-    // EMI
-    compileOnly("dev.emi:emi-neoforge:${emiVersion}:api")
-    //runtimeOnly("dev.emi:emi-neoforge:${emiVersion}")
-
-    // JEI
-    compileOnly("mezz.jei:jei-${minecraftVersion}-common-api:${jeiVersion}")
-    compileOnly("mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}")
-    runtimeOnly("mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}")
-
-    // Patchouli
-    // We need to compile against the full JAR, not just the API, because we do some egregious hacks.
-    implementation("vazkii.patchouli:Patchouli:$patchouliVersion")
-
-    // Jade / The One Probe
-    implementation(group = "curse.maven", name = "jade-324717", version = "6853386")
-    compileOnly(group = "mcjty.theoneprobe", name = "theoneprobe", version = "1.21_neo-12.0.4-6")
-
-    // ModernFix - useful at runtime for significant memory savings in TFC in dev (see i.e. wall block shape caches)
-    runtimeOnly(group = "curse.maven", name = "modernfix-790626", version = "6766126")
-
-    // Data
-    "dataImplementation"(sourceSets["main"].output)
-
-    // Test
-    // Use JUnit at runtime, plus depend on data to allow us to mock certain data without having to load a server
-    testImplementation(sourceSets["data"].output)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
-}
-
 neoForge {
-    version = neoForgeVersion
     addModdingDependenciesTo(sourceSets["data"])
     validateAccessTransformers = true
 
@@ -130,6 +103,7 @@ neoForge {
             // Only JBR allows enhanced class redefinition, so ignore the option for any other JDKs
             jvmArguments.addAll("-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-ea")
             systemProperty("tfc.enableDebugSelfTests", "true")
+            systemProperty("neoforge.enabledGameTestNamespaces", "tfc")
         }
         register("client") {
             client()
@@ -145,11 +119,19 @@ neoForge {
             sourceSet = sourceSets["data"]
             programArguments.addAll("--all", "--mod", modId, "--output", file(modDataOutput).absolutePath, "--existing",  file("src/main/resources").absolutePath)
         }
+        register("gameTestServer") {
+            type = "gameTestServer"
+            sourceSet = sourceSets["test"]
+            gameDirectory = file("run/gametest")
+            programArgument("--nogui")
+        }
+
     }
 
     mods {
         create(modId) {
             sourceSet(sourceSets.main.get())
+            sourceSet(sourceSets.test.get())
             sourceSet(sourceSets["data"])
         }
     }
@@ -160,6 +142,40 @@ neoForge {
     }
 
     ideSyncTask(generateModMetadata)
+}
+
+dependencies {
+    // EMI
+    compileOnly("dev.emi:emi-neoforge:${emiVersion}:api")
+    //runtimeOnly("dev.emi:emi-neoforge:${emiVersion}")
+
+    // JEI
+    compileOnly("mezz.jei:jei-${minecraftVersion}-common-api:${jeiVersion}")
+    compileOnly("mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}")
+    runtimeOnly("mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}")
+
+    // Patchouli
+    // We need to compile against the full JAR, not just the API, because we do some egregious hacks.
+    implementation("vazkii.patchouli:Patchouli:$patchouliVersion")
+    "dataImplementation"("vazkii.patchouli:Patchouli:$patchouliVersion")
+
+    // Jade / The One Probe
+    implementation(group = "curse.maven", name = "jade-324717", version = "6853386")
+    compileOnly(group = "mcjty.theoneprobe", name = "theoneprobe", version = "1.21_neo-12.0.4-6")
+
+    // ModernFix - useful at runtime for significant memory savings in TFC in dev (see i.e. wall block shape caches)
+    runtimeOnly(group = "curse.maven", name = "modernfix-790626", version = "6766126")
+
+    // Data
+    "dataImplementation"(sourceSets["main"].output)
+
+    // Test
+    // Use JUnit at runtime, plus depend on data to allow us to mock certain data without having to load a server
+    testImplementation(sourceSets["data"].output)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
+
+    "additionalRuntimeClasspath"("org.junit.jupiter:junit-jupiter:5.10.3")
+    "additionalRuntimeClasspath"("org.junit.platform:junit-platform-launcher:1.10.3")
 }
 
 // Automatically apply a license header when running checkLicense / updateLicense
