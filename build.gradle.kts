@@ -221,6 +221,13 @@ if (modIsInCI) {
 tasks {
     test {
         useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")  // show failures in console
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+            showExceptions = true
+            showCauses = true
+            showStackTraces = true
+        }
     }
 
     jar {
