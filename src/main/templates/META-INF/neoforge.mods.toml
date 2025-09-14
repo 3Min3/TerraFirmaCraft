@@ -16,7 +16,7 @@ issueTrackerURL = "https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues"
 # Dependencies
 [[dependencies.tfc]]
     modId = "patchouli"
-    type = "optional"
+    type = "required"
     versionRange = "[1.21.1-92-NEOFORGE,)"
     ordering = "NONE"
     side = "BOTH"
