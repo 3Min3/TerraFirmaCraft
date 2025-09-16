@@ -26,7 +26,7 @@ jobs:
       with:
         arguments: build
       env:
-        VERSION: indev-test
+        VERSION: 0.0.0
     - name: Create Test Directory
       run: |
         mkdir -p run/gametest
