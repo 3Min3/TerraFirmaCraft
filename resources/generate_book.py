@@ -1368,7 +1368,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             ),
 
             # Legumes
-            text(f'{detail_crop("cassava")}Cassava is a single block crop. Soybean seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.', title='Cassava').link('tfc:seeds/cassava').link('tfc:food/cassava').anchor('cassava'),
+            text(f'{detail_crop("cassava")}Cassava is a single block crop. Cassava seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.', title='Cassava').link('tfc:seeds/cassava').link('tfc:food/cassava').anchor('cassava'),
             multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/oxisol', 'tfc:crop/cassava[age=%d]' % i) for i in range(6)]),
             text(f'{detail_crop("green_bean")}Green Beans is a climbing two block tall crop. Green Bean seeds can be planted on farmland, will grow two blocks tall if a stick is present, and will produce $(thing)Green Beans$() and $(thing)Green Bean Seeds$() as a product.', title='Green Beans').link('tfc:seeds/green_bean').link('tfc:food/green_bean').anchor('green_bean'),
             multimultiblock('The stick is required in order for the crop to fully grow.', *[multiblock('', '', False, (('X',), ('Y',), ('Z',), ('0',)), {

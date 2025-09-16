@@ -926,7 +926,7 @@
     {
       "type": "patchouli:text",
       "anchor": "cassava",
-      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): 10 - 47 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 45 - 100 %$(br)$(bold)Category$(): Legume$(br)$(br)$(bold)$(b)N: +50 $(bold)$(6)P: 40 $(bold)$(d)K: 20$()$(br)Cassava is a single block crop. Soybean seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.",
+      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): 10 - 47 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 45 - 100 %$(br)$(bold)Category$(): Legume$(br)$(br)$(bold)$(b)N: +50 $(bold)$(6)P: 40 $(bold)$(d)K: 20$()$(br)Cassava is a single block crop. Cassava seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.",
       "title": "Cassava"
     },
     {

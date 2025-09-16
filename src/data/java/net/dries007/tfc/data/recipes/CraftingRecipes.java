@@ -195,11 +195,11 @@ public interface CraftingRecipes extends Recipes
             .input(FluidContentIngredient.of(Fluids.WATER, 100))
             .shapeless(Items.CLAY_BALL, 4);
 
-        for (int n = 1; n <= 8; n++)
+        for (int n = 2; n <= 8; n++)
             recipe("" + n)
                 .input(TFCBlocks.HARDENED_CLAY, n)
                 .input(FluidContentIngredient.of(Fluids.WATER, 1000))
-                .shapeless(Items.CLAY, n * 4);
+                .shapeless(Items.CLAY_BALL, n * 4);
 
         TFCItems.GEMS.forEach((gem, item) -> recipe()
             .damageInputs()
@@ -364,7 +364,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input(blocks.apply(SoilBlockType.MUD))
                 .input(TFCItems.STRAW)
-                .shapeless(blocks.apply(SoilBlockType.DRYING_BRICKS));
+                .shapeless(blocks.apply(SoilBlockType.DRYING_BRICKS), 4);
             recipe().to2x2(soil.mudBrick(), blocks.apply(SoilBlockType.MUD_BRICKS), 1);
             addDecorations(blocks.apply(SoilBlockType.MUD_BRICKS), TFCBlocks.MUD_BRICK_DECORATIONS.get(soil));
             // Mud Bricks have 2x2 crafting recipes as alternatives - but allow making slabs/stairs (not walls) before wood (saws)
