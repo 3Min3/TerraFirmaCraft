@@ -413,7 +413,8 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     @Override
     public void addExhaustion(float exhaustion)
     {
-        food.addExhaustion(exhaustion);
+        // Exhaustion from all vanilla sources is reduced
+        food.addExhaustion(EXHAUSTION_MULTIPLIER * exhaustion);
     }
 
     @Override
