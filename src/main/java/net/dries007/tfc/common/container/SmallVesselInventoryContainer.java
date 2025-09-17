@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.ItemHandlerCopySlot;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.component.food.FoodCapability;
@@ -81,10 +82,10 @@ public class SmallVesselInventoryContainer extends ItemStackContainer
     {
         if (vessel != null)
         {
-            addSlot(new ImmutableItemHandlerSlot(vessel, 0, 71, 23));
-            addSlot(new ImmutableItemHandlerSlot(vessel, 1, 89, 23));
-            addSlot(new ImmutableItemHandlerSlot(vessel, 2, 71, 41));
-            addSlot(new ImmutableItemHandlerSlot(vessel, 3, 89, 41));
+            addSlot(new ItemHandlerCopySlot(vessel, 0, 71, 23));
+            addSlot(new ItemHandlerCopySlot(vessel, 1, 89, 23));
+            addSlot(new ItemHandlerCopySlot(vessel, 2, 71, 41));
+            addSlot(new ItemHandlerCopySlot(vessel, 3, 89, 41));
         }
     }
 }

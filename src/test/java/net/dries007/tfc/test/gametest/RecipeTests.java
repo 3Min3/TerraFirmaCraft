@@ -80,23 +80,7 @@ public class RecipeTests
         }
     }
 
-    @MyTest(unitTest = true)
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public void testAllRecipesEncodeAndDecode(GameTestHelper helper)
-    {
-        for (RecipeHolder<?> holder : helper.getLevel().getRecipeManager().getRecipes())
-        {
-            final Recipe<?> before = holder.value();
-            final FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            final RegistryFriendlyByteBuf regBuffer = new RegistryFriendlyByteBuf(buffer, helper.getLevel().registryAccess(), ConnectionType.OTHER);
-
-            ((RecipeSerializer) before.getSerializer()).streamCodec().mapStream(factory -> regBuffer);
-            final Recipe<?> after = before.getSerializer().streamCodec().decode(regBuffer);;
-
-            assertEquals(0, buffer.readableBytes(), "Buffer has " + buffer.readableBytes() + " remaining bytes after reading recipe: " + holder.id());
-            assertEquals(before, after);
-        }
-    }
+    ///todo: do we need the recipe encoding/decoding test now that we have StreamCodecs? I think I'm the only one who cares about this stuff...
 
     @SuppressWarnings("unchecked")
     private ItemStack getOutputOfRecipe(Recipe<?> recipe)

@@ -165,10 +165,12 @@ public class Vessel implements IMold, ItemContainer, FluidContainer, HeatContain
     {
         if (isInventory())
         {
-            updateWith(vessel.with(slot, stack.copy()));
+            updateWith(vessel.with(slot, FoodCapability.applyTrait(stack.copy(), FoodTraits.PRESERVED).copy()));
         }
     }
 
+    // todo: this is not called *at all* by container insert methods. so we handle in setSTackInSlot. is that fine?
+    // i think this was just an oversight by alcatraz. Still, it's weird af.
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
     {
