@@ -544,6 +544,7 @@
   "config.jade.plugin_tfc.hot_poured_glass": "Горячее литое стекло",
   "config.jade.plugin_tfc.shelf": "Полка",
   "config.jade.plugin_tfc.placed_item": "Размещённый предмет",
+  "config.jade.plugin_tfc.mold_table": "Mold Table",
   "config.jade.plugin_tfc.animal": "Животное",
   "config.jade.plugin_tfc.frog": "Лягушка",
   "config.jade.plugin_tfc.horse": "Лошадь",

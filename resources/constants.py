@@ -1449,6 +1449,7 @@ DEFAULT_LANG = {
     'config.jade.plugin_tfc.hot_poured_glass': 'Hot Poured Glass',
     'config.jade.plugin_tfc.shelf': 'Shelf',
     'config.jade.plugin_tfc.placed_item': 'Placed Item',
+    'config.jade.plugin_tfc.mold_table': 'Mold Table',
 
     'config.jade.plugin_tfc.animal': 'Animal',
     'config.jade.plugin_tfc.frog': 'Frog',
