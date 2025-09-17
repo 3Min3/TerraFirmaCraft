@@ -75,7 +75,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     private ChiselMode chiselMode = ChiselMode.SMOOTH.value();
     private NutritionData nutrition = new NutritionData(0.5f, 0f); // Nutrition information
 
-    private boolean modified = false;
+    private boolean modified = true;
 
     public PlayerInfo(Player player)
     {
@@ -114,6 +114,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     @Override
     public float getIntoxication()
     {
+        if (intoxicationTick == Long.MIN_VALUE) return 0;
         return (float) Math.max(0, intoxicationTick - calendar().getTicks()) / TFCConfig.SERVER.maxIntoxicationTicks.get();
     }
 
@@ -206,7 +207,10 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         addThirst(food.water());
         addIntoxication(food.intoxication());
 
-        nutrition.addNutrients(food);
+        if (!player.level().isClientSide)
+        {
+            nutrition.addNutrients(food);
+        }
 
         if (player instanceof ServerPlayer serverPlayer && nutrition.getAverageNutrition() >= 0.999)
         {
@@ -290,7 +294,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
             if (difficulty == Difficulty.PEACEFUL)
             {
                 // Copied from vanilla's food stats, so we consume food in peaceful mode (would normally be part of the super.tick call)
-                if (food.getExhaustionLevel() > 4.0F)
+                if (food.getExhaustionLevel() > 4.0F && getSaturationLevel() <= 0)
                 {
                     setFoodLevel(Math.max(getFoodLevel() - 1, 0));
                 }
@@ -409,7 +413,8 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     @Override
     public void addExhaustion(float exhaustion)
     {
-        food.addExhaustion(exhaustion);
+        // Exhaustion from all vanilla sources is reduced
+        food.addExhaustion(EXHAUSTION_MULTIPLIER * exhaustion);
     }
 
     @Override
@@ -424,11 +429,19 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         return food.getSaturationLevel();
     }
 
+    /**
+     * This method gets called from both the
+     * client and the server, but the nutrition
+     * logic must only be called from the server
+     */
     @Override
     public void setFoodLevel(int foodLevel)
     {
-        modified = true;
-        nutrition.setHunger(foodLevel);
+        if (!this.player.level().isClientSide)
+        {
+            modified = true;
+            nutrition.setHunger(foodLevel);
+        }
         food.setFoodLevel(foodLevel);
     }
 

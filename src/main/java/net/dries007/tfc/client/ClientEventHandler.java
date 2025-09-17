@@ -86,17 +86,16 @@ import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.extensions.BlowpipeExtension;
 import net.dries007.tfc.client.extensions.FluidRendererExtension;
 import net.dries007.tfc.client.extensions.ItemRendererExtension;
-import net.dries007.tfc.client.extensions.SheetPileExtension;
 import net.dries007.tfc.client.model.ContainedFluidModel;
 import net.dries007.tfc.client.model.DoubleIngotPileBlockModel;
 import net.dries007.tfc.client.model.IngotPileBlockModel;
 import net.dries007.tfc.client.model.PlantBlockModel;
 import net.dries007.tfc.client.model.ScrapingBlockModel;
-import net.dries007.tfc.client.model.SheetPileBlockModel;
 import net.dries007.tfc.client.model.TrimmedItemModel;
 import net.dries007.tfc.client.model.MoldsModelLoader;
 import net.dries007.tfc.client.model.entity.AlpacaModel;
-import net.dries007.tfc.client.model.entity.BearModel;
+import net.dries007.tfc.client.model.entity.BisonModel;
+import net.dries007.tfc.client.model.entity.BlackBearModel;
 import net.dries007.tfc.client.model.entity.BluegillModel;
 import net.dries007.tfc.client.model.entity.BoarModel;
 import net.dries007.tfc.client.model.entity.BongoModel;
@@ -108,6 +107,7 @@ import net.dries007.tfc.client.model.entity.DirewolfModel;
 import net.dries007.tfc.client.model.entity.DogModel;
 import net.dries007.tfc.client.model.entity.DuckModel;
 import net.dries007.tfc.client.model.entity.GazelleModel;
+import net.dries007.tfc.client.model.entity.GrizzlyBearModel;
 import net.dries007.tfc.client.model.entity.GrouseModel;
 import net.dries007.tfc.client.model.entity.HorseChestLayer;
 import net.dries007.tfc.client.model.entity.HorseshoeCrabModel;
@@ -115,18 +115,23 @@ import net.dries007.tfc.client.model.entity.HyenaModel;
 import net.dries007.tfc.client.model.entity.IsopodModel;
 import net.dries007.tfc.client.model.entity.JavelinModel;
 import net.dries007.tfc.client.model.entity.JellyfishModel;
+import net.dries007.tfc.client.model.entity.JerboaModel;
+import net.dries007.tfc.client.model.entity.LemmingModel;
 import net.dries007.tfc.client.model.entity.LionModel;
 import net.dries007.tfc.client.model.entity.LobsterModel;
 import net.dries007.tfc.client.model.entity.ManateeModel;
+import net.dries007.tfc.client.model.entity.MongooseModel;
 import net.dries007.tfc.client.model.entity.MooseModel;
 import net.dries007.tfc.client.model.entity.MuskOxModel;
 import net.dries007.tfc.client.model.entity.OrcaModel;
 import net.dries007.tfc.client.model.entity.PeafowlModel;
 import net.dries007.tfc.client.model.entity.PenguinModel;
 import net.dries007.tfc.client.model.entity.PheasantModel;
+import net.dries007.tfc.client.model.entity.PolarBearModel;
 import net.dries007.tfc.client.model.entity.QuailModel;
 import net.dries007.tfc.client.model.entity.RatModel;
 import net.dries007.tfc.client.model.entity.SabertoothModel;
+import net.dries007.tfc.client.model.entity.LeopardSealModel;
 import net.dries007.tfc.client.model.entity.TFCChickenModel;
 import net.dries007.tfc.client.model.entity.TFCCowModel;
 import net.dries007.tfc.client.model.entity.TFCGoatModel;
@@ -193,11 +198,13 @@ import net.dries007.tfc.client.render.blockentity.WindmillBlockEntityRenderer;
 import net.dries007.tfc.client.render.entity.AnimalRenderer;
 import net.dries007.tfc.client.render.entity.DogRenderer;
 import net.dries007.tfc.client.render.entity.GlowArrowRenderer;
+import net.dries007.tfc.client.render.entity.JerboaRenderer;
+import net.dries007.tfc.client.render.entity.LemmingRenderer;
+import net.dries007.tfc.client.render.entity.MongooseRenderer;
 import net.dries007.tfc.client.render.entity.OctopoteuthisRenderer;
 import net.dries007.tfc.client.render.entity.OviparousRenderer;
 import net.dries007.tfc.client.render.entity.PenguinRenderer;
 import net.dries007.tfc.client.render.entity.RatRenderer;
-import net.dries007.tfc.client.render.entity.SalmonLikeRenderer;
 import net.dries007.tfc.client.render.entity.SimpleMobRenderer;
 import net.dries007.tfc.client.render.entity.TFCBoatRenderer;
 import net.dries007.tfc.client.render.entity.TFCCatRenderer;
@@ -216,11 +223,11 @@ import net.dries007.tfc.client.screen.CharcoalForgeScreen;
 import net.dries007.tfc.client.screen.ClimateScreen;
 import net.dries007.tfc.client.screen.CreateTFCWorldScreen;
 import net.dries007.tfc.client.screen.CrucibleScreen;
+import net.dries007.tfc.client.screen.FireboxScreen;
 import net.dries007.tfc.client.screen.FirepitScreen;
 import net.dries007.tfc.client.screen.GrillScreen;
 import net.dries007.tfc.client.screen.KnappingScreen;
 import net.dries007.tfc.client.screen.LargeVesselScreen;
-import net.dries007.tfc.client.screen.LogPileScreen;
 import net.dries007.tfc.client.screen.MoldLikeAlloyScreen;
 import net.dries007.tfc.client.screen.NestBoxScreen;
 import net.dries007.tfc.client.screen.NutritionScreen;
@@ -405,6 +412,8 @@ public final class ClientEventHandler
         // Grass
         TFCBlocks.SOIL.get(SoilBlockType.GRASS).values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutoutMipped));
         TFCBlocks.SOIL.get(SoilBlockType.CLAY_GRASS).values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutoutMipped));
+        TFCBlocks.SOIL.get(SoilBlockType.DUFF).values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutoutMipped));
+        TFCBlocks.SOIL.get(SoilBlockType.CLAY_DUFF).values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutoutMipped));
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.PEAT_GRASS.get(), cutoutMipped);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.KAOLIN_CLAY_GRASS.get(), cutoutMipped);
 
@@ -464,7 +473,6 @@ public final class ClientEventHandler
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.WATTLE.get(), ghostBlock);
         TFCBlocks.STAINED_WATTLE.values().forEach(wattle -> ItemBlockRenderTypes.setRenderLayer(wattle.get(), ghostBlock));
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.UNSTAINED_WATTLE.get(), cutout);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.SHEET_PILE.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.INGOT_PILE.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.DOUBLE_INGOT_PILE.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.SCRAPING.get(), cutout);
@@ -473,6 +481,8 @@ public final class ClientEventHandler
 
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.COMPOSTER.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.BLOOMERY.get(), cutout);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.FIRE_BRICK_SHELF.get(), cutout);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.FIREPROOF_DOOR.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.ICE_PILE.get(), translucent);
 
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.LARGE_VESSEL.get(), cutout);
@@ -513,7 +523,7 @@ public final class ClientEventHandler
         event.register(TFCContainerTypes.POT.get(), PotScreen::new);
         event.register(TFCContainerTypes.POWDERKEG.get(), PowderkegScreen::new);
         event.register(TFCContainerTypes.CHARCOAL_FORGE.get(), CharcoalForgeScreen::new);
-        event.register(TFCContainerTypes.LOG_PILE.get(), LogPileScreen::new);
+        event.register(TFCContainerTypes.FIREBOX.get(), FireboxScreen::new);
         event.register(TFCContainerTypes.NEST_BOX.get(), NestBoxScreen::new);
         event.register(TFCContainerTypes.CRUCIBLE.get(), CrucibleScreen::new);
         event.register(TFCContainerTypes.BARREL.get(), BarrelScreen::new);
@@ -577,10 +587,11 @@ public final class ClientEventHandler
         event.registerEntityRenderer(TFCEntities.MANATEE.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, ManateeModel::new, "manatee").build());
         event.registerEntityRenderer(TFCEntities.TURTLE.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, TFCTurtleModel::new, "turtle").build());
         event.registerEntityRenderer(TFCEntities.PENGUIN.get(), PenguinRenderer::new);
+        event.registerEntityRenderer(TFCEntities.LEOPARD_SEAL.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, LeopardSealModel::new, "seal").build());
         event.registerEntityRenderer(TFCEntities.FROG.get(), FrogRenderer::new);
-        event.registerEntityRenderer(TFCEntities.POLAR_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BearModel::new, "polar_bear").shadow(0.9f).scale(1.3f).build());
-        event.registerEntityRenderer(TFCEntities.GRIZZLY_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BearModel::new, "grizzly_bear").shadow(0.9f).scale(1.1f).build());
-        event.registerEntityRenderer(TFCEntities.BLACK_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BearModel::new, "black_bear").shadow(0.9f).scale(0.9f).build());
+        event.registerEntityRenderer(TFCEntities.POLAR_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, PolarBearModel::new, "polar_bear").shadow(0.9f).build());
+        event.registerEntityRenderer(TFCEntities.GRIZZLY_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, GrizzlyBearModel::new, "grizzly_bear").shadow(0.9f).scale(1.1f).build());
+        event.registerEntityRenderer(TFCEntities.BLACK_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BlackBearModel::new, "black_bear").shadow(0.9f).scale(0.9f).build());
         event.registerEntityRenderer(TFCEntities.COUGAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CougarModel::new, "cougar").shadow(0.8f).build());
         event.registerEntityRenderer(TFCEntities.PANTHER.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CougarModel::new, "panther").shadow(0.8f).build());
         event.registerEntityRenderer(TFCEntities.LION.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, LionModel::new, "lion").shadow(0.8f).build());
@@ -618,12 +629,15 @@ public final class ClientEventHandler
         event.registerEntityRenderer(TFCEntities.DONKEY.get(), ctx -> new TFCChestedHorseRenderer<>(ctx, 0.87F, RenderHelpers.layerId("donkey"), "donkey"));
         event.registerEntityRenderer(TFCEntities.HORSE.get(), TFCHorseRenderer::new);
         event.registerEntityRenderer(TFCEntities.RAT.get(), RatRenderer::new);
+        event.registerEntityRenderer(TFCEntities.JERBOA.get(), JerboaRenderer::new);
+        event.registerEntityRenderer(TFCEntities.LEMMING.get(), LemmingRenderer::new);
+        event.registerEntityRenderer(TFCEntities.MONGOOSE.get(), MongooseRenderer::new);
         event.registerEntityRenderer(TFCEntities.CAT.get(), TFCCatRenderer::new);
         event.registerEntityRenderer(TFCEntities.DOG.get(), DogRenderer::new);
         event.registerEntityRenderer(TFCEntities.BOAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BoarModel::new, "boar").build());
         event.registerEntityRenderer(TFCEntities.WILDEBEEST.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, WildebeestModel::new, "wildebeest").build());
         event.registerEntityRenderer(TFCEntities.MOOSE.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, MooseModel::new, "moose").shadow(1.0f).scale(0.8f).build());
-
+        event.registerEntityRenderer(TFCEntities.BISON.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BisonModel::new, "bison").build());
 
         // BEs
         event.registerBlockEntityRenderer(TFCBlockEntities.FIREPIT.get(), ctx -> new FirepitBlockEntityRenderer<>());
@@ -688,9 +702,10 @@ public final class ClientEventHandler
         event.registerLayerDefinition(RenderHelpers.layerId("manatee"), ManateeModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("turtle"), TFCTurtleModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("penguin"), PenguinModel::createBodyLayer);
-        event.registerLayerDefinition(RenderHelpers.layerId("polar_bear"), BearModel::createBodyLayer);
-        event.registerLayerDefinition(RenderHelpers.layerId("grizzly_bear"), BearModel::createBodyLayer);
-        event.registerLayerDefinition(RenderHelpers.layerId("black_bear"), BearModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("seal"), LeopardSealModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("polar_bear"), PolarBearModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("grizzly_bear"), GrizzlyBearModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("black_bear"), BlackBearModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("cougar"), CougarModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("panther"), CougarModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("lion"), LionModel::createBodyLayer);
@@ -722,11 +737,15 @@ public final class ClientEventHandler
         event.registerLayerDefinition(RenderHelpers.layerId("turkey"), TurkeyModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("peafowl"), PeafowlModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("rat"), RatModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("lemming"), LemmingModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("jerboa"), JerboaModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("mongoose"), MongooseModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("dog"), DogModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("cat"), () -> LayerDefinition.create(OcelotModel.createBodyMesh(CubeDeformation.NONE), 64, 32));
         event.registerLayerDefinition(RenderHelpers.layerId("cat_collar"), () -> LayerDefinition.create(OcelotModel.createBodyMesh(new CubeDeformation(0.01f)), 64, 32));
         event.registerLayerDefinition(RenderHelpers.layerId("boar"), BoarModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("wildebeest"), WildebeestModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("bison"), BisonModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("javelin"), JavelinModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("chest_minecart"), MinecartModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("holding_minecart"), MinecartModel::createBodyLayer);
@@ -783,7 +802,6 @@ public final class ClientEventHandler
         event.register(Helpers.identifier("trim"), new TrimmedItemModel.Loader());
         event.register(Helpers.identifier("ingot_pile"), IngotPileBlockModel.INSTANCE);
         event.register(Helpers.identifier("double_ingot_pile"), DoubleIngotPileBlockModel.INSTANCE);
-        event.register(Helpers.identifier("sheet_pile"), SheetPileBlockModel.INSTANCE);
         event.register(Helpers.identifier("scraping"), ScrapingBlockModel.INSTANCE);
         event.register(Helpers.identifier("plant"), PlantBlockModel.Loader.INSTANCE);
         event.register(Helpers.identifier("mold"), new MoldsModelLoader());
@@ -795,6 +813,7 @@ public final class ClientEventHandler
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
         final BlockColor foliageColor = (state, level, pos, tintIndex) -> TFCColors.getFoliageColor(pos, tintIndex);
         final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
+        final BlockColor waterBlockColor = (state, level, pos, tintIndex) -> TFCColors.getWaterColor(pos);
 
         TFCBlocks.SOIL.get(SoilBlockType.GRASS).values().forEach(reg -> event.register(grassBlockColor, reg.get()));
         TFCBlocks.SOIL.get(SoilBlockType.CLAY_GRASS).values().forEach(reg -> event.register(grassBlockColor, reg.get()));
@@ -804,13 +823,15 @@ public final class ClientEventHandler
         TFCBlocks.PLANTS.forEach((plant, reg) -> {
             if (plant.isBlockTinted())
                 event.register(
-                    plant.isTallGrass() ?
-                        tallGrassColor :
-                        plant.isSeasonal() ?
-                            (state, level, pos, tintIndex) -> TFCColors.getSeasonalFoliageColor(pos, tintIndex, 145) :
-                            plant.isFoliage() ?
-                                foliageColor :
-                                grassColor, reg.get());
+                    plant.usesWaterTint() ?
+                        waterBlockColor :
+                        plant.isTallGrass() ?
+                            tallGrassColor :
+                            plant.isSeasonal() ?
+                                (state, level, pos, tintIndex) -> TFCColors.getSeasonalFoliageColor(pos, tintIndex, 145) :
+                                plant.isFoliage() ?
+                                    foliageColor :
+                                    grassColor, reg.get());
         });
         TFCBlocks.POTTED_PLANTS.forEach((plant, reg) -> {
             if (plant.isFlowerpotTinted())
@@ -841,7 +862,7 @@ public final class ClientEventHandler
 
         TFCBlocks.WILD_CROPS.forEach((crop, reg) -> event.register(grassColor, reg.get()));
 
-        event.register((state, level, pos, tintIndex) -> TFCColors.getWaterColor(pos), TFCBlocks.SALT_WATER.get(), TFCBlocks.SEA_ICE.get(), TFCBlocks.RIVER_WATER.get());
+        event.register(waterBlockColor, TFCBlocks.SALT_WATER.get(), TFCBlocks.SEA_ICE.get(), TFCBlocks.RIVER_WATER.get());
         event.register(blockColor(0x5FB5B8), TFCBlocks.SPRING_WATER.get());
     }
 
@@ -882,7 +903,19 @@ public final class ClientEventHandler
         }
 
         TFCItems.MOLDS.values().forEach(reg -> event.register(ContainedFluidModel.COLOR, reg.get()));
-        event.register(ContainedFluidModel.COLOR, TFCItems.WOODEN_BUCKET.get(), TFCItems.BELL_MOLD.get(), TFCItems.FIRE_INGOT_MOLD.get(), TFCItems.JUG.get(), TFCItems.SILICA_GLASS_BOTTLE.get(), TFCItems.HEMATITIC_GLASS_BOTTLE.get(), TFCItems.VOLCANIC_GLASS_BOTTLE.get(), TFCItems.OLIVINE_GLASS_BOTTLE.get());
+        event.register(
+            ContainedFluidModel.COLOR,
+            TFCItems.WOODEN_BUCKET.get(),
+            TFCItems.RED_STEEL_BUCKET.get(),
+            TFCItems.BLUE_STEEL_BUCKET.get(),
+            TFCItems.BELL_MOLD.get(),
+            TFCItems.FIRE_INGOT_MOLD.get(),
+            TFCItems.JUG.get(),
+            TFCItems.SILICA_GLASS_BOTTLE.get(),
+            TFCItems.HEMATITIC_GLASS_BOTTLE.get(),
+            TFCItems.VOLCANIC_GLASS_BOTTLE.get(),
+            TFCItems.OLIVINE_GLASS_BOTTLE.get()
+        );
     }
 
     public static void registerClientReloadListeners(RegisterClientReloadListenersEvent event)
@@ -923,7 +956,7 @@ public final class ClientEventHandler
         event.registerSpriteSet(TFCParticles.FALLING_LEAF.get(), set -> new FallingLeafParticle.Provider(set, true));
         event.registerSpriteSet(TFCParticles.FEATHER.get(), set -> new LeafParticle.Provider(set, false));
         event.registerSpriteSet(TFCParticles.SPARK.get(), SparkParticle.Provider::new);
-        event.registerSpriteSet(TFCParticles.BUTTERFLY.get(), AnimatedParticle.Provider::new);
+        TFCParticles.BUTTERFLIES.values().forEach(fly -> event.registerSpriteSet(fly.get(), AnimatedParticle.Provider::new));
         event.registerSpriteSet(TFCParticles.FLUID_DRIP.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidHangParticle::new));
         event.registerSpriteSet(TFCParticles.FLUID_FALL.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidFallAndLandParticle::new));
         event.registerSpriteSet(TFCParticles.FLUID_LAND.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidLandParticle::new));
@@ -955,9 +988,6 @@ public final class ClientEventHandler
             TFCItems.BLOWPIPE_WITH_GLASS.get(),
             TFCItems.CERAMIC_BLOWPIPE.get(),
             TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS.get());
-
-        // Blocks
-        event.registerBlock(new SheetPileExtension(TFCBlocks.SHEET_PILE.get()), TFCBlocks.SHEET_PILE.get());
 
         // Fluids
         TFCFluids.METALS.forEach((metal, holder) -> event.registerFluidType(

@@ -216,8 +216,8 @@ def create_bookshelf(wood: str):
     filled = Image.open(templates + 'chiseled_bookshelf_occupied.png').convert('RGBA')
     empty.paste(planks, mask=mask)
     filled.paste(planks, mask=mask)
-    empty.save(path + 'block/wood/planks/%s_bookshelf_empty.png' % wood)
-    filled.save(path + 'block/wood/planks/%s_bookshelf_occupied.png' % wood)
+    empty.save(path + 'block/wood/bookshelf/%s_empty.png' % wood)
+    filled.save(path + 'block/wood/bookshelf/%s_occupied.png' % wood)
 
 def create_sign(wood: str):
     log = Image.open(path + 'block/wood/log/%s' % wood + '.png').convert('RGBA')
@@ -354,13 +354,6 @@ def main():
         for x, y in ((7, 2), (8, 2), (9, 2), (7, 4), (8, 4), (9, 4)):
             img.putpixel((x, y), (0, 0, 0, 0))
         img.save(path + 'item/jar/%s_unsealed.png' % fruit)
-
-        img = Image.open(path + 'block/jar/%s.png' % fruit).convert('RGBA')
-        clr = img.getpixel((0, 0))
-        mask = Image.open(templates + 'jam.png')
-        mask = put_on_all_pixels(mask, clr)
-        mask.save(path + 'item/food/%s_jam.png' % fruit)
-
 
 
 if __name__ == '__main__':

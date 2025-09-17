@@ -37,8 +37,8 @@ public interface HeatRecipes extends Recipes
 
     default void heatRecipes()
     {
-        add("from_stick", Ingredient.of(Tags.Items.RODS_WOODEN), ItemStackProvider.of(Items.TORCH, 2), 60);
-        add("from_bundle", Ingredient.of(TFCItems.STICK_BUNCH), ItemStackProvider.of(Items.TORCH, 18), 60);
+        add("from_stick", Ingredient.of(Tags.Items.RODS_WOODEN), ItemStackProvider.of(TFCItems.TORCH, 2), 60);
+        add("from_bundle", Ingredient.of(TFCItems.STICK_BUNCH), ItemStackProvider.of(TFCItems.TORCH, 18), 60);
         add(Ingredient.of(TFCItems.KAOLIN_CLAY), ItemStackProvider.of(new ItemStack(TFCItems.POWDERS.get(Powder.KAOLINITE)), new ChanceModifier(0.2f)), 500);
 
         add(Items.CLAY, Items.TERRACOTTA, POTTERY);
@@ -116,9 +116,10 @@ public interface HeatRecipes extends Recipes
         add("melt", Ingredient.of(TFCItems.BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.BLOWPIPE), 1500);
         add("melt", Ingredient.of(TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.CERAMIC_BLOWPIPE), 1500);
         add(TFCItems.POWDERS.get(Powder.FLUX), TFCItems.POWDERS.get(Powder.LIME), 840);
+        add(TFCItems.CACTUS_WOOD, TFCItems.DRIED_CACTUS_WOOD, 700);
 
         burnFood("bread", Ingredient.of(TFCTags.Items.BREAD), 700);
-        burnFood("meat", Ingredient.of(TFCTags.Items.MEATS), 900);
+        burnFood("meat", Ingredient.of(TFCTags.Items.COOKED_MEATS), 900);
 
         for (Ore ore : Ore.values())
             if (ore.isGraded())

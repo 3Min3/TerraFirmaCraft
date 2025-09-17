@@ -57,7 +57,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
             while (true)
             {
                 BlockState foundState = level.getBlockState(mutable);
-                if (!foundState.is(TFCBlocks.BANANA_PLANT.get())) break;
+                if (!Helpers.isBlock(foundState, TFCBlocks.BANANA_PLANT.get())) break;
                 level.setBlockAndUpdate(mutable, deadState.setValue(STAGE, foundState.getValue(STAGE)));
                 mutable.move(Direction.DOWN);
             }
@@ -138,7 +138,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
         if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
         {
             Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
-            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth();
+            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
             // if we are not working with a plant that is or should be dormant
             if (!checkAndSetDormant(level, pos, state, currentLifecycle, expectedLifecycle))
             {

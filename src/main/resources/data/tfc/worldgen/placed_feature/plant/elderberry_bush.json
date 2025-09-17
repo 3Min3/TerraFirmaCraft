@@ -8,6 +8,7 @@
       "max_temperature": 33,
       "min_groundwater": 100,
       "max_groundwater": 400,
+      "min_forest": 0,
       "max_forest": 2
     },
     {

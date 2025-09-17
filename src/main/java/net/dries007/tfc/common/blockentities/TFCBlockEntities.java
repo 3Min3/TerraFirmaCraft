@@ -51,7 +51,8 @@ public final class TFCBlockEntities
     public static final Id<BowlBlockEntity> BOWL = register("bowl", BowlBlockEntity::new, Stream.of(TFCBlocks.CERAMIC_BOWL, TFCBlocks.WOODEN_BOWL));
     public static final Id<HotPouredGlassBlockEntity> HOT_POURED_GLASS = register("hot_poured_glass", HotPouredGlassBlockEntity::new, TFCBlocks.HOT_POURED_GLASS);
     public static final Id<GlassBasinBlockEntity> GLASS_BASIN = register("glass_basin", GlassBasinBlockEntity::new, TFCBlocks.GLASS_BASIN);
-    public static final Id<ShelfBlockEntity> SHELF = register("shelf", ShelfBlockEntity::new, woodBlocks(Wood.BlockType.SHELF));
+    public static final Id<ShelfBlockEntity> SHELF = register("shelf", ShelfBlockEntity::new, Stream.concat(Stream.of(TFCBlocks.FIRE_BRICK_SHELF), woodBlocks(Wood.BlockType.SHELF)));
+    public static final Id<FireboxBlockEntity> FIREBOX = register("firebox", FireboxBlockEntity::new, TFCBlocks.FIREBOX);
 
     public static final Id<TickCounterBlockEntity> TICK_COUNTER = register("tick_counter", TickCounterBlockEntity::new, Stream.of(
             woodBlocks(Wood.BlockType.SAPLING),
@@ -125,7 +126,6 @@ public final class TFCBlockEntities
         TFCBlocks.ROCK_ANVILS.values().stream(),
         TFCBlocks.METALS.values().stream().map(m -> m.get(Metal.BlockType.ANVIL)).filter(Objects::nonNull)
     ));
-    public static final Id<SheetPileBlockEntity> SHEET_PILE = register("sheet_pile", SheetPileBlockEntity::new, TFCBlocks.SHEET_PILE);
     public static final Id<IngotPileBlockEntity> INGOT_PILE = register("ingot_pile", IngotPileBlockEntity::new, Stream.of(TFCBlocks.INGOT_PILE, TFCBlocks.DOUBLE_INGOT_PILE));
     public static final Id<BlastFurnaceBlockEntity> BLAST_FURNACE = register("blast_furnace", BlastFurnaceBlockEntity::new, TFCBlocks.BLAST_FURNACE);
     public static final Id<TFCBellBlockEntity> BELL = register("bell", TFCBellBlockEntity::new, Stream.of(TFCBlocks.BRONZE_BELL, TFCBlocks.BRASS_BELL));
