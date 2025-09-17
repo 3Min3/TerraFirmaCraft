@@ -207,11 +207,6 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         addThirst(food.water());
         addIntoxication(food.intoxication());
 
-        if (player instanceof ServerPlayer serverPlayer && nutrition.getAverageNutrition() >= 0.999)
-        {
-            TFCAdvancements.FULL_NUTRITION.trigger(serverPlayer);
-        }
-
         if (food.hunger() > 0)
         {
             // In order to get the exact saturation we want, apply this scaling factor here
@@ -223,6 +218,11 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         {
             nutrition.addNutrients(food);
             nutrition.setHunger(getFoodLevel());
+        }
+
+        if (player instanceof ServerPlayer serverPlayer && nutrition.getAverageNutrition() >= 0.999)
+        {
+            TFCAdvancements.FULL_NUTRITION.trigger(serverPlayer);
         }
 
         modified = true;
