@@ -21,6 +21,7 @@ class Ore(NamedTuple):
     required_tool: str
     tag: str
     dye_color: Optional[str] = None
+    simple_blocks: bool = False
 
 
 class OreGrade(NamedTuple):
@@ -311,8 +312,8 @@ ORES: dict[str, Ore] = {
     'limonite': Ore('cast_iron', True, 'copper', 'iron', 'yellow'),
     'sphalerite': Ore('zinc', True, 'copper', 'zinc', 'gray'),
     'tetrahedrite': Ore('copper', True, 'copper', 'copper', 'gray'),
-    'bituminous_coal': Ore(None, False, 'copper', 'coal'),
-    'lignite': Ore(None, False, 'copper', 'coal'),
+    'bituminous_coal': Ore(None, False, 'copper', 'coal', simple_blocks=True),
+    'lignite': Ore(None, False, 'copper', 'coal', simple_blocks=True),
     'gypsum': Ore(None, False, 'copper', 'gypsum'),
     'graphite': Ore(None, False, 'copper', 'graphite'),
     'sulfur': Ore(None, False, 'copper', 'sulfur'),
@@ -321,7 +322,7 @@ ORES: dict[str, Ore] = {
     'saltpeter': Ore(None, False, 'copper', 'saltpeter'),
     'sylvite': Ore(None, False, 'copper', 'sylvite'),
     'borax': Ore(None, False, 'copper', 'borax'),
-    'halite': Ore(None, False, 'bronze', 'halite'),
+    'halite': Ore(None, False, 'bronze', 'halite', simple_blocks=True),
     'amethyst': Ore(None, False, 'steel', 'amethyst'),  # Mohs: 7
     'diamond': Ore(None, False, 'black_steel', 'diamond'),  # Mohs: 10
     'emerald': Ore(None, False, 'steel', 'emerald'),  # Mohs: 7.5-8
@@ -504,7 +505,7 @@ CROPS: dict[str, Crop] = {
     'onion': Crop('default', 'vegetable', 7, -7.6, 21.2, 100, 390, -7, 31, 15, 85, 40, 40, 40, None, None),
     'potato': Crop('default', 'vegetable', 7, -9.4, 15.8, 200, 420, -9, 27, 35, 90, 40, 20, 60, None, None),
     'squash': Crop('default', 'vegetable', 8, -9.4, 19.4, 90, 390, -9, 30, 15, 85, 25, 45, 50, 3, None),
-    'tomato': Crop('double_stick', 'vegetable', 8, 1.4, 40, 120, 390, 1, 47, 20, 85, 40, 50, 60, 3, None),
+    'tomato': Crop('double_stick', 'vegetable', 8, 1.4, 40, 120, 390, 1, 47, 20, 85, 30, 40, 50, 3, None),
     'red_bell_pepper': Crop('pickable', 'pickable vegetable', 7, 12.2, 40, 190, 450, 12, 47, 30, 95, 30, 40, 50, None, None),
     'yellow_bell_pepper': Crop('pickable', 'pickable vegetable', 7, 12.2, 40, 190, 450, 12, 47, 30, 95, 30, 40, 50, None, None),
     'pumpkin': Crop('spreading', 'spreading vegetable', 8, -9.4, 23., 120, 390, -9, 32, 20, 85, 40, 30, 60, None, None),

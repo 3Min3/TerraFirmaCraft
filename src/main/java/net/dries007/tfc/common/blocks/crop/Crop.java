@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 import net.dries007.tfc.common.blockentities.CropBlockEntity;
-import net.dries007.tfc.common.blockentities.FarmlandBlockEntity.NutrientType;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -56,7 +56,7 @@ public enum Crop implements StringRepresentable
     SQUASH(0.25f, 0.45f, 0.5f, 8), // Default , 8
 
     // Pickable Vegetables
-    TOMATO(0.35f, 0.45f, 0.5f, 4, 4, true, null, () -> TFCItems.FOOD.get(Food.TOMATO)), // Double, Stick, 4 -> 4
+    TOMATO(0.3f, 0.4f, 0.5f, 4, 4, true, null, () -> TFCItems.FOOD.get(Food.TOMATO)), // Double, Stick, 4 -> 4
     RED_BELL_PEPPER(0.3f, 0.4f, 0.5f, 7, () -> TFCItems.FOOD.get(Food.GREEN_BELL_PEPPER), () -> TFCItems.FOOD.get(Food.RED_BELL_PEPPER)), // Pickable, 7
     YELLOW_BELL_PEPPER(0.3f, 0.4f, 0.5f, 7, () -> TFCItems.FOOD.get(Food.GREEN_BELL_PEPPER), () -> TFCItems.FOOD.get(Food.YELLOW_BELL_PEPPER)), // Pickable,
 
@@ -86,7 +86,7 @@ public enum Crop implements StringRepresentable
 
     private static ExtendedProperties dead()
     {
-        return ExtendedProperties.of(MapColor.PLANT).noCollission().randomTicks().strength(0.4F).sound(SoundType.CROP).flammable(60, 30);
+        return ExtendedProperties.of(MapColor.PLANT).noCollission().randomTicks().strength(0.4F).sound(SoundType.CROP).flammable(60, 30).pushReaction(PushReaction.DESTROY);
     }
 
     private final String serializedName;

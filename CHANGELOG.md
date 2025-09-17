@@ -1,18 +1,27 @@
 ### Changes
 
-Your usual hotfix update is here. Sorry if your preferred bug didn't make it in this one, it'll make it into the next one for sure!
-
-- Fix dyed candles not behaving correctly when pushed with pistons.
-- Fix several recipe and tag related issues.
-- Fix fishing not working at all.
-- Fix several issues with JEI screens not working. (#3084)
-- Fix extra products recipes not working. (wool, straw)
-- Added a view to JEI to show extra products of recipes.
-- Fix several field guide errors. (#3086) (#3102)
-- Fix axes being sharp tools. (#3094)
-- Fix hoes not being sharp tools.
-- Fix pit kilns flickering (#3095)
-- Fix goat horns not being able to be knapped (#3097)
-- Fix blocks weathering extremely quickly.
-- Fix the texture mapping on log piles.
-- Numerous behind-the-scenes updates to internals.
+- Fix tomatoes having fruit nutrition. Tweaked the nutrition and fertilizer demands of various vegetables.
+- Fix black dye not being able to be used for scribing.
+- Fix melons not being tagged as a fruit.
+- Fix unfired pots having the wrong item size (#3114)
+- Fix an error in the field guide for crops (#3113)
+- Fix mud bricks recipe not returning the right amount of items (#3116)
+- Fid the hardened clay recipe giving the wrong result.
+- Fix metal item tooltips only showing the result mB of one item.
+- Fix meat being unable to be cooked.
+- Fix the 'A Weird Rock' advancement.
+- Disable rendering the experience number when the experience bar is enabled.
+- More fixes to dead crops.
+- Updated some potted plant models.
+- Fix hunger and thirst depleting too quickly.
+- Fix support beam crafting deleting the saw (#3127)
+- Fix mud bricks not drying (#3130)
+- Fix groundcover not dropping when the block under it is destroyed and the groundcover is also underwater (#3119)
+- Fix jar lid melting duplicating metal.
+- Destroy crops always when pushed by a piston.
+- Updated the flowerbed models.
+- Added tint to buttercups.
+- Reduce how often rivers are cut off by shore biomes.
+- Remove some unused files from the source.
+- Fixed vessels not preserving items.
+- (Internal) fixed the test infrastructure so that it no longer fails.
