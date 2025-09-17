@@ -1793,6 +1793,8 @@
   "tfc.block_entity.trip_hammer": "Тяжёлый молот",
   "tfc.block_entity.windmill": "Ветряная мельница",
   "tfc.block_entity.firebox": "Топка",
+  "tfc.block_entity.mold_table": "Mold Table",
+  "tfc.block_entity.channel": "Channel",
   "block.tfc.rock.aqueduct.granite": "Гранитный акведук",
   "block.tfc.rock.spike.granite": "Гранитный сталагмит",
   "block.tfc.rock.loose.granite": "Камешек гранита",
