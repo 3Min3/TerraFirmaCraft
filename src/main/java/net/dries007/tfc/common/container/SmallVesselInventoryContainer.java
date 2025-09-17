@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.component.food.FoodTraits;
 import net.dries007.tfc.common.component.mold.Vessel;
-import net.dries007.tfc.common.container.slot.ImmutableItemHandlerSlot;
 import net.dries007.tfc.common.items.VesselItem;
 
 public class SmallVesselInventoryContainer extends ItemStackContainer

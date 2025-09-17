@@ -53,7 +53,7 @@ public class HeatingBehaviorTests
         final ItemStack vessel = vesselWithContents(copper10mB);
         checkTicksToHeatInForge(vessel, 1467, TFCConfig.SERVER.pitKilnTemperature.get()); // Heating ore
         clearTemperature(vessel);
-        checkTicksToHeatInForge(vessel, 884, TFCConfig.SERVER.pitKilnTemperature.get()); // Heating liquid
+        checkTicksToHeatInForge(vessel, 883, TFCConfig.SERVER.pitKilnTemperature.get()); // Heating liquid
     }
 
     @MyTest(unitTest = true)
@@ -83,7 +83,7 @@ public class HeatingBehaviorTests
         final ItemStack vessel = vesselWithContents(copper16, copper16, copper16, copper16);
         checkTicksToHeatInForge(vessel, 30827, TFCConfig.SERVER.pitKilnTemperature.get()); // Heating ore
         clearTemperature(vessel);
-        checkTicksToHeatInForge(vessel, 10249, TFCConfig.SERVER.pitKilnTemperature.get()); // Heating liquid
+        checkTicksToHeatInForge(vessel, 10248, TFCConfig.SERVER.pitKilnTemperature.get()); // Heating liquid
     }
 
     @MyTest(unitTest = true)

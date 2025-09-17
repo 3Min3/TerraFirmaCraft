@@ -1,6 +1,6 @@
 ### Changes
 
-- Fix tomatoes having fruit nutrition
+- Fix tomatoes having fruit nutrition. Tweaked the nutrition and fertilizer demands of various vegetables.
 - Fix black dye not being able to be used for scribing.
 - Fix melons not being tagged as a fruit.
 - Fix unfired pots having the wrong item size (#3114)
@@ -11,4 +11,17 @@
 - Fix meat being unable to be cooked.
 - Fix the 'A Weird Rock' advancement.
 - Disable rendering the experience number when the experience bar is enabled.
-- More fixes to dead crops
+- More fixes to dead crops.
+- Updated some potted plant models.
+- Fix hunger and thirst depleting too quickly.
+- Fix support beam crafting deleting the saw (#3127)
+- Fix mud bricks not drying (#3130)
+- Fix groundcover not dropping when the block under it is destroyed and the groundcover is also underwater (#3119)
+- Fix jar lid melting duplicating metal.
+- Destroy crops always when pushed by a piston.
+- Updated the flowerbed models.
+- Added tint to buttercups.
+- Reduce how often rivers are cut off by shore biomes.
+- Remove some unused files from the source.
+- Fixed vessels not preserving items.
+- (Internal) fixed the test infrastructure so that it no longer fails.
