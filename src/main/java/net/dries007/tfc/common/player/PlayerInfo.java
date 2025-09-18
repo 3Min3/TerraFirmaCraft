@@ -29,6 +29,7 @@ import net.dries007.tfc.util.advancements.TFCAdvancements;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.events.NutritionDataSupplierEvent;
 
 /**
  * This is a central spot for all player-specific information that TFC adds or modifies about the vanilla player. It replaces the default
@@ -74,7 +75,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     private long intoxicationTick = Long.MIN_VALUE; // A future tick that the player is intoxicated until
     private long sleepTick = Long.MIN_VALUE; // The last tick this player slept
     private ChiselMode chiselMode = ChiselMode.SMOOTH.value();
-    private INutritionData nutrition = new NutritionData(0.5f, 0f); // Nutrition information
+    private INutritionData nutrition = nutritionDataSupplier.create(0.5f, 0f); // Nutrition information
 
     private boolean modified = true;
 
@@ -466,5 +467,25 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     private ICalendar calendar()
     {
         return Calendars.get(player.level());
+    }
+
+
+    // ===== NutritionDataSupplier Details ===== //
+
+
+    @FunctionalInterface
+    public interface NutritionDataSupplier<T extends INutritionData>
+    {
+        T create(float defaultNutritionValue, float defaultDairyNutritionValue);
+    }
+
+    private static NutritionDataSupplier<INutritionData> nutritionDataSupplier = NutritionData::new;
+
+    /**
+     * Public method to allow addons to easily change out the {@link INutritionData} implementation by posting a {@link NutritionDataSupplierEvent}
+     */
+    public static void setNutritionDataSupplier(NutritionDataSupplierEvent event)
+    {
+        nutritionDataSupplier = event.getSupplier();
     }
 }
