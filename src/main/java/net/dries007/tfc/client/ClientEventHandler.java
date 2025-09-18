@@ -780,7 +780,7 @@ public final class ClientEventHandler
         event.register(CrankshaftBlockEntityRenderer.WHEEL_MODEL);
 
         ResourceManager rm = Minecraft.getInstance().getResourceManager();
-        Map<ResourceLocation, Resource> resources = rm.listResources("models/mold", r -> r.getPath().endsWith(".json")); 
+        Map<ResourceLocation, Resource> resources = rm.listResources("models/block/mold", r -> r.getPath().endsWith(".json")); 
 		for (ResourceLocation model : resources.keySet()) 
         {
             String path = model.getPath();

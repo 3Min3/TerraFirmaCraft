@@ -179,7 +179,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                         ModelResourceLocation modelLocation = RenderHelpers.modelId(
                                 ResourceLocation.fromNamespaceAndPath(
                                         moldLocation.getNamespace(),
-                                        "mold/" + moldLocation.getPath()));
+                                        "block/mold/" + moldLocation.getPath()));
 
                         BakedModel model = Minecraft.getInstance().getModelManager().getModel(modelLocation);
 
