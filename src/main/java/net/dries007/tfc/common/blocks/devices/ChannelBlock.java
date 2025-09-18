@@ -179,23 +179,23 @@ public class ChannelBlock extends ExtendedBlock implements EntityBlockExtension
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos,
-            boolean pIsMoving)
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
+            boolean movedByPiston)
     {
-        boolean flag = pLevel.hasNeighborSignal(pPos) || pLevel.hasNeighborSignal(pPos.above());
-        boolean flag1 = pState.getValue(TRIGGERED);
-        if (flag && !flag1) {
-            activate(pLevel, pPos);
-            pLevel.setBlock(pPos, pState.setValue(TRIGGERED, Boolean.valueOf(true)), 4);
-        } else if (!flag && flag1) {
-            pLevel.setBlock(pPos, pState.setValue(TRIGGERED, Boolean.valueOf(false)), 4);
+        boolean isLocationPowered = level.hasNeighborSignal(pos) || level.hasNeighborSignal(pos.above());
+        boolean isChannelPowered = state.getValue(TRIGGERED);
+        if (isLocationPowered && !isChannelPowered) {
+            activate(level, pos);
+            level.setBlock(pos, state.setValue(TRIGGERED, Boolean.valueOf(true)), 4);
+        } else if (!isLocationPowered && isChannelPowered) {
+            level.setBlock(pos, state.setValue(TRIGGERED, Boolean.valueOf(false)), 4);
         }
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        pBuilder.add(EAST, SOUTH, WEST, NORTH, DOWN, TRIGGERED, WITH_METAL);
+        builder.add(EAST, SOUTH, WEST, NORTH, DOWN, TRIGGERED, WITH_METAL);
     }
 
     /***

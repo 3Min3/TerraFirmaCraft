@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.dries007.tfc.common.blocks.devices.ChannelBlock;
-
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -59,6 +59,9 @@ public class ChannelBlockEntity extends TFCBlockEntity
         return flowSource.isPresent();
     }
 
+    /**
+     * @return The fluid to render. If the channel has no flow, returns the last fluid.
+     */
     public ResourceLocation getFluid()
     {
         return fluid;
@@ -120,7 +123,6 @@ public class ChannelBlockEntity extends TFCBlockEntity
         if (numFlows <= 0)
         {
             flowSource = Optional.empty();
-            fluid = ResourceLocation.fromNamespaceAndPath("", "");
             level.setBlock(worldPosition, getBlockState().setValue(ChannelBlock.WITH_METAL, false), 3);
             markForSync();
         }
@@ -190,7 +192,7 @@ public class ChannelBlockEntity extends TFCBlockEntity
         byte flowSourceDistance = nbt.contains("flowSourceDistance") ? nbt.getByte("flowSourceDistance") : 1;
 
         flowSource = flowSourceByte != NO_FLOW_BYTE
-                ? Optional.of(Pair.of(Direction.values()[flowSourceByte], flowSourceDistance))
+                ? Optional.of(Pair.of(Helpers.DIRECTIONS[flowSourceByte], flowSourceDistance))
                 : Optional.empty();
 
         fluid = ResourceLocation.parse(nbt.getString("texture"));
