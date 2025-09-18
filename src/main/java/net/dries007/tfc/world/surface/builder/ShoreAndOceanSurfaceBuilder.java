@@ -76,7 +76,7 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder
         this.icebergPillarNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-6, 1.0D, 1.0D, 1.0D, 1.0D));
         this.icebergPillarRoofNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-3, 1.0D));
         this.icebergSurfaceNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-6, 1.0D, 1.0D, 1.0D));
-        this.patternedNoise = BiomeNoise.seaIceNoise(seed.next());
+        this.patternedNoise = BiomeNoise.seaIceNoise(seed.forkStable().next());
     }
 
     @Override
@@ -202,7 +202,7 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder
         if (baseNoise > 1.8) // Try to place iceberg if noise is sufficient
         {
             // Scale down and then phase out icebergs near shores
-            final float temperatureFactor = Mth.clampedMap(maxAnnualTemperature, -4, 2, 1, 0);
+            final float temperatureFactor = Mth.clampedMap(maxAnnualTemperature, -1, 2, 1, 0.5f);
             final float depthFactor = Mth.clampedMap(oceanFloorY, seaLevel - 20, seaLevel - 6, 1, 0);
 
             final double pillarNoise = Math.abs(icebergPillarRoofNoise.getValue(x * 1.17, 0, z * 1.17) * 1.5);

@@ -66,7 +66,7 @@ public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
         final int seaLevel = context.getSeaLevel();
         if (startY <= seaLevel)
         {
-            ShoreAndOceanSurfaceBuilder.OLD_SHIELD_VOLCANO.apply(seed);
+            ShoreAndOceanSurfaceBuilder.OLD_SHIELD_VOLCANO.apply(seed).buildSurface(context, startY, endY);
         }
         else if (startY < minFreezingHeight || (hasStonyPeaks && startY > glacierSurfaceHeight + 2.5) || (startY < glacierBaseHeight - 1.5))
         {
