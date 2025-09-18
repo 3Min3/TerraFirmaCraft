@@ -402,6 +402,7 @@ public class TFCTags
 
         public static final TagKey<Item> PLANTS = tag("plants");
         public static final TagKey<Item> WILD_CROPS = tag("wild_crops");
+        public static final TagKey<Item> BAMBOO = tag("bamboo");
 
         /**
          * Colored Tags

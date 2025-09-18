@@ -823,6 +823,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
 
         copy(TFCTags.Blocks.FALLEN_LEAVES, FALLEN_LEAVES);
         copy(TFCTags.Blocks.CLAY_INDICATORS, CLAY_INDICATORS);
+        copy(TFCTags.Blocks.BAMBOO, BAMBOO);
     }
 
     @Override

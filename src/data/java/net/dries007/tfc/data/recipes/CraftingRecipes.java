@@ -81,6 +81,10 @@ public interface CraftingRecipes extends Recipes
         // Removed Crafting Recipes
         remove(
             "anvil",
+            "bamboo_planks",
+            "bamboo_raft",
+            "bamboo_chest_raft",
+            "bamboo_hanging_sign",
             "barrel",
             "beetroot_soup",
             "bolt_armor_trim_smithing_template",
@@ -130,6 +134,7 @@ public interface CraftingRecipes extends Recipes
             "sentry_armor_trim_smithing_template",
             "shaper_armor_trim_smithing_template",
             "silence_armor_trim_smithing_template",
+            "scaffolding",
             "skull_banner_pattern",
             "slime_ball",
             "smoker",
@@ -1150,6 +1155,15 @@ public interface CraftingRecipes extends Recipes
         recipe("from_twigs")
             .input(TFCTags.Items.TWIGS)
             .shapeless(Items.STICK, 1);
+        recipe("from_golden_bamboo")
+            .input('X', TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
+            .pattern("X")
+            .shaped(Items.STICK);
+        recipe("from_golden_bamboo")
+            .input('I', TFCTags.Items.BAMBOO)
+            .input('~', Tags.Items.STRINGS)
+            .pattern("I~I", "I I", "I I")
+            .shaped(Items.SCAFFOLDING);
         recipe().to2x2(TFCItems.STRAW, TFCBlocks.THATCH, 1);
         recipe()
             .input(TFCBlocks.THATCH)
