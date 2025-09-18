@@ -56,7 +56,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
@@ -69,6 +68,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 
+import net.dries007.tfc.common.blocks.devices.ChannelBlock;
 import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.common.entities.GenderedRenderAnimal;
 import net.dries007.tfc.common.entities.livestock.Age;
@@ -778,15 +778,14 @@ public final class RenderHelpers
         switch (dir)
         {
             case UP:  
-                renderBox = Block.box(6.0f,  4.0f, 6.0f,  10.0f, 16.0f, 10.0f);
+                renderBox = ChannelBlock.CHANNEL_FLOW_UP_SHAPE;
                 break;
             case SOUTH: poseStack.mulPose(Axis.YP.rotationDegrees(90f)); // Combined rotation: 270
             case WEST:  poseStack.mulPose(Axis.YP.rotationDegrees(90f)); // Combined rotation: 180
             case NORTH: poseStack.mulPose(Axis.YP.rotationDegrees(90f)); // Combined rotation: 90
-            case EAST:  
-                renderBox = Block.box(
-                    10.0f, 1.0f, 6.0f, 
-                    renderFlowSource ? 22.0f : 17.0f, 4.0f, 10.0f); // Render a longer box that expands to the source channel if renderFlowSource
+            case EAST:
+                // Render a longer box that expands to the source channel if renderFlowSource
+                renderBox = renderFlowSource ? ChannelBlock.CHANNEL_FLOW_EAST_SHAPE_LONG : ChannelBlock.CHANNEL_FLOW_EAST_SHAPE;
                 break;
             default:
                 throw new IllegalArgumentException("Cannot render source from direction DOWN");
@@ -806,7 +805,7 @@ public final class RenderHelpers
                 case UP:
                     RenderHelpers.renderTexturedCuboid(
                         poseStack, buffer, sprite, packedLight, packedOverlay, 
-                        Block.box(6.0f,  0.0f, 6.0f,  10.0f, 16.0f, 10.0f).bounds(),
+                        ChannelBlock.CHANNEL_FLOW_LONG_FALL_SHAPE.bounds(),
                         color
                     );
                     break;
@@ -820,7 +819,6 @@ public final class RenderHelpers
 
     public static void renderChannelFlowCenter(PoseStack poseStack, VertexConsumer buffer, TextureAtlasSprite sprite, int color, int packedLight, int packedOverlay)
     {
-        VoxelShape renderBox = Block.box(6.0f,  1.0f, 6.0f,  10.0f, 4.0f, 10.0f);
-        RenderHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, renderBox.bounds(), color);
+        RenderHelpers.renderTexturedCuboid(poseStack, buffer, sprite, packedLight, packedOverlay, ChannelBlock.CHANNEL_FLOW_CENTER_SHAPE.bounds(), color);
     }
 }

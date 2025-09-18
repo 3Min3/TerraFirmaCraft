@@ -42,6 +42,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ChannelBlock extends ExtendedBlock implements EntityBlockExtension
 {
+    public static final VoxelShape CHANNEL_FLOW_CENTER_SHAPE = Block.box(6.0f,  1.0f, 6.0f,  10.0f, 4.0f, 10.0f);
+    public static final VoxelShape CHANNEL_FLOW_UP_SHAPE = Block.box(6.0f,  4.0f, 6.0f,  10.0f, 16.0f, 10.0f);
+    public static final VoxelShape CHANNEL_FLOW_EAST_SHAPE = Block.box(10.0f, 1.0f, 6.0f, 17.0f, 4.0f, 10.0f);
+    public static final VoxelShape CHANNEL_FLOW_EAST_SHAPE_LONG = Block.box(10.0f, 1.0f, 6.0f, 22.0f, 4.0f, 10.0f);
+    public static final VoxelShape CHANNEL_FLOW_LONG_FALL_SHAPE = Block.box(6.0f,  0.0f, 6.0f,  10.0f, 16.0f, 10.0f);
+
     public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = PipeBlock.PROPERTY_BY_DIRECTION
             .entrySet().stream()
             .filter(facing -> facing.getKey() != Direction.UP).collect(Util.toMap());
