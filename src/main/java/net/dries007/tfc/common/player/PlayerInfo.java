@@ -76,7 +76,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     private long intoxicationTick = Long.MIN_VALUE; // A future tick that the player is intoxicated until
     private long sleepTick = Long.MIN_VALUE; // The last tick this player slept
     private ChiselMode chiselMode = ChiselMode.SMOOTH.value();
-    private INutritionData nutrition = getNutritionDataFromSupplier(0.5f, 0f); // Nutrition information
+    private INutritionData nutrition; // Nutrition information
 
     private boolean modified = true;
 
@@ -84,6 +84,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     {
         this.player = player;
         this.food = player.getFoodData(); // This must be the original food data, we replace it after the player info is created
+        this.nutrition = getNutritionDataFromSupplier(0.5f, 0f, player);
     }
 
     // ===== IPlayerInfo ===== //
@@ -483,9 +484,9 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     /**
      * When constructing the {@link INutritionData}, we post a {@link NutritionDataEvent}, so that addons are able to set their implementation as the one to be used
      */
-    private static INutritionData getNutritionDataFromSupplier(float defaultNutritionValue, float defaultDairyNutritionValue)
+    private static INutritionData getNutritionDataFromSupplier(float defaultNutritionValue, float defaultDairyNutritionValue, Player player)
     {
-        final NutritionDataEvent event = new NutritionDataEvent(NutritionData::new);
+        final NutritionDataEvent event = new NutritionDataEvent(NutritionData::new, player);
         NeoForge.EVENT_BUS.post(event);
         return event.getSupplier().create(defaultNutritionValue, defaultDairyNutritionValue);
     }
