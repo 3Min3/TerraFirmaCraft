@@ -107,8 +107,9 @@ public class NutritionData implements INutritionData
      * <p>
      * If the last meal you ate had hunger, and this one didn't have hunger, we will apply the meal
      * Use case: Milk drinking. We add milk as a meal if and only if you just ate something
+     *
+     * @param data The {@link FoodData} of the eaten food
      */
-    @Override
     public void addNutrients(FoodData data)
     {
         if (data.hunger() > 0 || records.isEmpty() || records.getFirst().hunger() > 0)
@@ -116,6 +117,15 @@ public class NutritionData implements INutritionData
             records.addFirst(data);
             calculateNutrition();
         }
+    }
+
+    /**
+     * Redirects to {@link NutritionData#addNutrients(FoodData data)}
+     */
+    @Override
+    public void addNutrients(FoodData data, int currentHunger)
+    {
+        addNutrients(data);
     }
 
     /**

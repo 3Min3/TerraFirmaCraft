@@ -47,17 +47,11 @@ public interface INutritionData
     void onClientUpdate(float[] nutrients);
 
     /**
-     * Applies nutrients of the food data to the player
-     */
-    void addNutrients(FoodData data);
-
-    /**
      * Applies nutrients of the food data to the player, and incorporates the current hunger level of the player
+     * @param data The {@link FoodData} of the eaten food
+     * @param currentHunger The food level of the player at time of eating. Might not actually be used by an implementation
      */
-    default void addNutrients(FoodData data, int currentHunger)
-    {
-        addNutrients(data);
-    }
+    void addNutrients(FoodData data, int currentHunger);
 
     /**
      * @return The relevant data for computing nutrition values written to an NBT Tag
