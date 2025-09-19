@@ -518,6 +518,8 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
                                     SizedIngredient inputItem = recipe.getInputItem();
                                     SizedFluidIngredient inputFluid = recipe.getInputFluid();
 
+                                    // Evaluates an instant barrel recipe, similar to InstantFluidBarrelRecipe#assembleOutputs
+
                                     // Calculate the multiplier in use for this recipe
                                     int multiplier;
                                     if (inputItem.count() == 0)
