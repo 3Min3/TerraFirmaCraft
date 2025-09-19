@@ -186,9 +186,9 @@ public class ChannelBlock extends ExtendedBlock implements EntityBlockExtension
         boolean isChannelPowered = state.getValue(TRIGGERED);
         if (isLocationPowered && !isChannelPowered) {
             activate(level, pos);
-            level.setBlock(pos, state.setValue(TRIGGERED, Boolean.valueOf(true)), 4);
+            level.setBlock(pos, state.setValue(TRIGGERED, true), 4);
         } else if (!isLocationPowered && isChannelPowered) {
-            level.setBlock(pos, state.setValue(TRIGGERED, Boolean.valueOf(false)), 4);
+            level.setBlock(pos, state.setValue(TRIGGERED, false), 4);
         }
     }
 
