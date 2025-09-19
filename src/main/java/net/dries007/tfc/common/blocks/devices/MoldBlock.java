@@ -46,19 +46,6 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
 
     static final VoxelShape SHAPE = box(0, 0, 0, 16, 5, 16);
 
-    private static BlockState updateConnectedSides(LevelAccessor level, BlockPos pos, BlockState state)
-    {
-        for (final Direction direction : Direction.Plane.HORIZONTAL)
-        {
-            final BlockPos adjacentPos = pos.relative(direction);
-            final BlockState adjacentState = level.getBlockState(adjacentPos);
-            final boolean adjacentChannel = adjacentState.getBlock() instanceof ChannelBlock;
-            state = state.setValue(DirectionPropertyBlock.getProperty(direction), adjacentChannel);
-        }
-
-        return state;
-    }
-
     public MoldBlock(ExtendedProperties properties)
     {
         super(properties);
@@ -96,7 +83,16 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState adjacentState, LevelAccessor level,
             BlockPos pos, BlockPos adjacentPos) {
-        return updateConnectedSides(level, pos, state);
+        // Iterate through neighbors and check if they are connected channels
+        for (final Direction neighborDirection : Direction.Plane.HORIZONTAL)
+        {
+            final BlockPos neighborPos = pos.relative(neighborDirection);
+            final BlockState neighborState = level.getBlockState(neighborPos);
+            final boolean neighborIsChannel = neighborState.getBlock() instanceof ChannelBlock;
+            state = state.setValue(DirectionPropertyBlock.getProperty(neighborDirection), neighborIsChannel);
+        }
+
+        return state;
     }
 
     @Override

@@ -85,41 +85,6 @@ public class ChannelBlock extends ExtendedBlock implements EntityBlockExtension
         }
     }
 
-    private static BlockState updateConnectedSides(LevelAccessor level, BlockPos pos, BlockState state)
-    {
-        for (Direction dir : Helpers.DIRECTIONS)
-        {
-            if (dir == Direction.UP)
-                continue;
-
-            // When going down, allow >1 block distance
-            byte maxDistance = dir == Direction.DOWN ? Byte.MAX_VALUE : 1;
-
-            boolean isAdjacentConnectable = false;
-
-            for (byte i = 1; i < maxDistance + 1; i++)
-            {
-                BlockPos relative = pos.relative(dir, i);
-                BlockState blockState = level.getBlockState(relative);
-                Block block = blockState.getBlock();
-
-                if (block instanceof ChannelBlock || block instanceof CrucibleBlock || block instanceof MoldBlock)
-                {
-                    isAdjacentConnectable = true;
-                    break;
-                }
-                else if (!blockState.isAir())
-                {
-                    break;
-                }
-            }
-
-            state = state.setValue(DirectionPropertyBlock.getProperty(dir), isAdjacentConnectable);
-        }
-
-        return state;
-    }
-
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest,
             FluidState fluid)
@@ -176,7 +141,37 @@ public class ChannelBlock extends ExtendedBlock implements EntityBlockExtension
     public BlockState updateShape(BlockState state, Direction direction, BlockState adjacentState, LevelAccessor level,
             BlockPos pos, BlockPos adjacentPos)
     {
-        return updateConnectedSides(level, pos, state);
+        for (Direction dir : Helpers.DIRECTIONS)
+        {
+            if (dir == Direction.UP)
+                continue;
+
+            // When going down, allow >1 block distance
+            byte maxDistance = dir == Direction.DOWN ? Byte.MAX_VALUE : 1;
+
+            boolean isAdjacentConnectable = false;
+
+            for (byte i = 1; i < maxDistance + 1; i++)
+            {
+                BlockPos relative = pos.relative(dir, i);
+                BlockState blockState = level.getBlockState(relative);
+                Block block = blockState.getBlock();
+
+                if (block instanceof ChannelBlock || block instanceof CrucibleBlock || block instanceof MoldBlock)
+                {
+                    isAdjacentConnectable = true;
+                    break;
+                }
+                else if (!blockState.isAir())
+                {
+                    break;
+                }
+            }
+
+            state = state.setValue(DirectionPropertyBlock.getProperty(dir), isAdjacentConnectable);
+        }
+
+        return state;
     }
 
     @Override
